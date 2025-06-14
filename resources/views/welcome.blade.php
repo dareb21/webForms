@@ -21,11 +21,13 @@
                 <p class="flex text-center justify-center gap-2 py-2 text-white font-bold text-2xl">
                     Ingrese con su correo institucional:
                 </p>
+                <form action="{{route('login')}}">
+                @csrf 
                 <button class="flex items-center justify-center gap-2 border-2 px-30 py-2 rounded-2xl shadow-xl border-amber-600 bg-amber-600 text-white font-bold hover:cursor-pointer">
                     <img src="/img/googlefavicon.ico" alt="Google" class="w-5 h-5">
                     Google
                 </button>
-                
+                </form>
             </div>
             <!-- Texto inferior centrado -->
             <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full text-center">

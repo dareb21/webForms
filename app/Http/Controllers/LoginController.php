@@ -14,22 +14,38 @@ class LoginController extends Controller
      
 public function handdleCallBack()
 {
-    //la logica de para sacar la info del user
+        $googleUser = Socialite::driver('google')->stateless()->user();
+        $account=explode("@", $googleUser->getEmail())[0];  
+       //dd($googleUser->name);
+        //aqui ira la consulta al api para traer la data del user
+            
+        session([
+            'google_user' => [
+            'name' => $googleUser->getName(),
+            'email' => $googleUser->getEmail(),
+            'account'=>$account,
+            'avatar' => $googleUser->getAvatar(),
+                 ]
+        ]);
 
-     try {
-            $googleUser = Socialite::driver('google')->stateless()->user();
-               $email = $googleUser->getEmail();
-                $account=explode("@", $email)[0];
-                
-            // Solo mostrar datos básicos para verificar que funciona
-            return view('inicio', [  //Poner nombre vista x user
-                'name' => $googleUser->getName(),
-                'email' => $googleUser->getEmail(),
-                'avatar' => $googleUser->getAvatar(),
-            ]);
+        return match($googleUser->name){
+           'CARLOS DANIEL PALMA ANTUNEZ' => redirect()->route('studentHome'),
+            'Carlos Palma' =>redirect()->route('directorHome'),
+            'Michelle Medina'=>redirect()->route('deanHome'),
+            'Alexa Gómez'=>redirect()->route('adminHome'),
+            default => abort(401),
+        };
+            
+    
+
+
+
+    /*try {
+       
         } catch (\Exception $e) {
-            return redirect('/login')->with('error', 'Error al autenticar con Google');
-        }
+           return redirect('/login')->with('error', 'Error al autenticar con Google');
+         }
+    */
 }
 
 

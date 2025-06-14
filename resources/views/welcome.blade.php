@@ -7,6 +7,7 @@
 
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
+    <link rel="icon" href="{{ asset('img/usapwhite.png') }}"/>
 </head>
 <body>
     <div class="flex h-screen">

@@ -7,6 +7,7 @@
 
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
+    <link rel="shortcut icon" href="{{ asset('img/usapico.png') }}" type="image/x-icon">
 </head>
 <body>
     <div class="flex h-screen">

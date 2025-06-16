@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('questionOptions', function (Blueprint $table) {
+        Schema::create('question_options', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("questionId");
             $table->text("option");
-            $table->foreign("questionId")->references("id")->on("questionGroups");
+            $table->foreignId('question_group_id')->constrained();
             $table->timestamps();
         });
     }

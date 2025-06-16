@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('responseSubmits', function (Blueprint $table) {
+        Schema::create('response_submits', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("submitId");
-            $table->unsignedBigInteger("optionId");
-            $table->foreign("submitId")->references("id")->on("surveySubmits");
-            $table->foreign("optionId")->references("id")->on("questionOptions");
+            $table->foreignId('survey_submit_id')->constrained();
+            $table->foreignId('question_option_id')->constrained();
             $table->timestamps();
         });
     }

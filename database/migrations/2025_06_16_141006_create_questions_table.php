@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('questionGroups', function (Blueprint $table) {
+        Schema::create('question_groups', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("surveyId");
-            $table->foreign("surveyId")->references("id")->on("surveys");
+             $table->foreignId('survey_id')->constrained();
             $table->timestamps();
         });
     }
-
+//  $table->foreignId('entrega_id')->constrained()->onDelete('cascade');
     /**
      * Reverse the migrations.
      */

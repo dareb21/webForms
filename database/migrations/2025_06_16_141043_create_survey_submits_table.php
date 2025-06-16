@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('surveySubmits', function (Blueprint $table) {
+        Schema::create('survey_submits', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("surveyId");
             $table->date("DateSubmmited");
-            $table->unsignedBigInteger("userId")->nullable();
+            $table->foreignId('survey_id')->constrained();
             $table->timestamps();
         });
     }

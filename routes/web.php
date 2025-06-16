@@ -3,5 +3,5 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('decano.decanoDashboard');
+    return view('estudiante.estudianteDashboard');
 });

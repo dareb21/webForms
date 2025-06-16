@@ -11,7 +11,7 @@
 </head>
 <body class="bg-gray-100">
     <!-- Navbar -->
-    <div class="fixed top-0 left-0 right-0 z-20 h-14 bg-white shadow-md flex items-center justify-between px-4">
+    <div class="fixed top-0 left-0 right-0 z-20 h-14 bg-white border-b-2 border-gray-100 shadow-md flex items-center justify-between px-4">
         <button id="sidebarToggle" class="md:hidden mr-3 focus:outline-none">
             <img src="img/sidebar.png" alt="Menu" class="h-6 w-6 hover:cursor-pointer">
         </button>

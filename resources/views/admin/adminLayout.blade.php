@@ -87,6 +87,22 @@
                 }
             });
 
+            document.addEventListener("DOMContentLoaded", function () {
+                const profileBtn = document.getElementById("profileBtn");
+                const dropdownMenu = document.getElementById("dropdownMenu");
+
+                profileBtn.addEventListener("click", function () {
+                    dropdownMenu.classList.toggle("hidden");
+                });
+
+                // Cerrar dropdown si se hace clic fuera
+                document.addEventListener("click", function (event) {
+                    if (!profileBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                        dropdownMenu.classList.add("hidden");
+                    }
+                });
+            });
+
         </script>
 </body>
 </html>

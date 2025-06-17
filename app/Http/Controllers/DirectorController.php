@@ -12,4 +12,16 @@ class DirectorController extends Controller
         return view("directorDashboard",compact("user"));
         
     }
+
+    public function directorDashboard(){
+      return view('director.directorDashboard');
+    }
+
+    public function directorResults(){
+      return view('director.directorResults');
+    }
+    
+    public function directorStudentView(){
+      return view('director.directorStudentView');
+    }
 }

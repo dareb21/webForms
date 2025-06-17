@@ -15,10 +15,22 @@
         <button id="sidebarToggle" class="md:hidden mr-3 focus:outline-none">
             <img src="img/sidebar.png" alt="Menu" class="h-6 w-6 hover:cursor-pointer">
         </button>
-        <a href="#">
+
+        <a href="{{ route('studentDashboard') }}">
             <img src="img/usapblue.png" alt="logo" class="h-10 w-auto hover:cursor-pointer">
         </a>
-        <img src="img/pfp.jpg" alt="profileImg" class="h-10 w-auto hover:cursor-pointer">
+
+        <!-- PFP Dropdown -->
+        <div class="relative">
+            <img id="profileBtn" src="img/pfp.jpg" alt="profileImg" class="h-10 w-10 rounded-full hover:cursor-pointer border-2 border-gray-300">
+
+            <!-- Dropdown Menu -->
+            <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-30">
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-orange-500 hover:text-white">Nombre</a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-orange-500 hover:text-white">Correo</a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-orange-500 hover:text-white">Cerrar sesión</a>
+            </div>
+        </div>
     </div>
 
     <!-- Sidebar + Contenido -->
@@ -70,6 +82,22 @@
                 }
                 }
             });
+
+            document.addEventListener("DOMContentLoaded", function () {
+            const profileBtn = document.getElementById("profileBtn");
+            const dropdownMenu = document.getElementById("dropdownMenu");
+
+            profileBtn.addEventListener("click", function () {
+                dropdownMenu.classList.toggle("hidden");
+            });
+
+            // Cerrar dropdown si se hace clic fuera
+            document.addEventListener("click", function (event) {
+                if (!profileBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.add("hidden");
+                }
+            });
+        });
 
         </script>
     </div>

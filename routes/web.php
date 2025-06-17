@@ -42,4 +42,13 @@ Route::get('/adminEvaluation', [AdminController::class, "adminEvaluation"])->nam
 Route::get('/adminNewEvaluation', [AdminController::class, "adminNewEvaluation"])->name("adminNewEvaluation");
 Route::get('/adminEvaluationEdit', [AdminController::class, "adminEvaluationEdit"])->name("adminEvaluationEdit");
 Route::get('/adminResults', [AdminController::class, "adminResults"])->name("adminResults");
-Route::get('/adminStudent', [AdminController::class,"adminStudent"])->name("adminStudent");
+Route::get('/adminStudentView', [AdminController::class,"adminStudentView"])->name("adminStudentView");
+
+#Rutas decanos
+Route::get('/deanDashboard', [DeanController::class, "deanDashboard"])->name("deanDashboard");
+Route::get('/deanResults', [DeanController::class, "deanResults"])->name("deanResults");
+
+#Rutas direcotres
+Route::get('/directorDashboard', [DirectorController::class, "directorDashboard"])->name("directorDashboard");
+Route::get('/directorResults', [DirectorController::class, "directorResults"])->name("directorResults");
+Route::get('/directorStudentView', [DirectorController::class, "directorStudentView"])->name("directorStudentView");

@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="{{ asset('img/usapico.png') }}" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>[x-cloak] { display: none !important; }</style>
-
 </head>
 <body class="bg-gray-100">
     <!-- Navbar -->
@@ -18,7 +17,7 @@
             <img src="img/sidebar.png" alt="Menu" class="h-6 w-6 hover:cursor-pointer">
         </button>
 
-        <a href="{{ route('adminDashboard') }}">
+        <a href="{{ route('directorDashboard') }}">
             <img src="img/usapblue.png" alt="logo" class="h-10 w-auto hover:cursor-pointer">
         </a>
 
@@ -46,28 +45,19 @@
 
             <ul class="font-bold space-y-4">
                 <li>
-                    <a href="{{ route('adminDashboard') }}" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
+                    <a href="{{ route('directorDashboard') }}" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
                         <img src="img/home.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200">Inicio
                     </a>
                 </li>
                 <li>
-                    <a href="{{  route('adminEvaluation') }}" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
-                        <img src="img/survey.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200">Evaluaciones
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('adminResults') }}" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
+                    <a href="{{ route('directorResults') }}" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
                         <img src="img/results.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200">Resultados
                     </a>
                 </li>
             </ul>
         </div>
 
-        @yield('content')
-        <!-- Chart.js CDN (único en toda la app, si ya lo tienes no lo repitas) -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="//unpkg.com/alpinejs" defer></script>
-
         <script>
             const sidebar = document.getElementById('sidebar');
             const toggleBtn = document.getElementById('sidebarToggle');
@@ -87,6 +77,22 @@
                 }
             });
 
+            document.addEventListener("DOMContentLoaded", function () {
+                const profileBtn = document.getElementById("profileBtn");
+                const dropdownMenu = document.getElementById("dropdownMenu");
+
+                profileBtn.addEventListener("click", function () {
+                    dropdownMenu.classList.toggle("hidden");
+                });
+
+                // Cerrar dropdown si se hace clic fuera
+                document.addEventListener("click", function (event) {
+                    if (!profileBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                        dropdownMenu.classList.add("hidden");
+                    }
+                });
+            });
         </script>
+        @yield('content')
 </body>
 </html>

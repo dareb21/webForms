@@ -33,7 +33,7 @@ class AdminController extends Controller
       return view('admin.adminResults');
     }
 
-    public function adminStudent(){
+    public function adminStudentView(){
       return view('admin.adminStudentView');
     }
 }

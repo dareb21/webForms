@@ -12,4 +12,12 @@ class DeanController extends Controller
         return view("decanoDashboard",compact("user"));
         
     }
+
+    public function deanDashboard(){
+        return view('dean.deanDashboard');
+    }
+
+    public function deanResults(){
+        return view('dean.deanResults');
+    }
 }

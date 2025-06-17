@@ -1,4 +1,4 @@
-@extends('admin.adminLayout')
+@extends('director.directorLayout')
 @section('content')
 <!-- Main Content -->
 <div class="flex-1 ml-0 md:ml-80 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
@@ -69,11 +69,14 @@
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </td>
+
                         </tr>
                     </tbody>
                 </table>
+                
             </div>
         </div>
     </div>

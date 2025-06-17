@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date("dateStart");
             $table->date("dateEnd");
             $table->string("Author");
+            $table->boolean("status");
             $table->timestamps();
         });
     }

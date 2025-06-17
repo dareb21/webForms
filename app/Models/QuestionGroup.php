@@ -9,6 +9,6 @@ class QuestionGroup extends Model
   
   use HasFactory;
     protected $fillable = [
-        'surveyId',
+        'survey_id',
     ];
 }

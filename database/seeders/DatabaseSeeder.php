@@ -120,6 +120,7 @@ Enrollment::create([
             'dateStart' => '2026-05-12',
             'dateEnd' => '2026-06-12',
             'Author' => 'admin1',
+            'status' =>1,
         ]);
 
         

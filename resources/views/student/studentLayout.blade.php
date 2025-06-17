@@ -30,20 +30,20 @@
             md:translate-x-0
             ">
 
-            <ul class="font-bold space-y-4">
+            <ul class="font-bold space-y-4 ">
                 <li>
-                    <a href="#" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
-                        <img src="img/clase.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200">Clase 1
+                    <a href="{{ route('studentEvaluation') }}" class="group flex items-center p-2 md:p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white border-t-1 border-b-1 md:border-t-0 md:border-b-0 border-orange-500 text-blue-500 md:text-black">
+                        Clase 1
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
-                        <img src="img/clase.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200">Clase 2
+                    <a href="{{ route('studentEvaluation') }}" class="group flex items-center p-2 md:p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white border-t-1 border-b-1 md:border-t-0 md:border-b-0 border-orange-500">
+                        Clase 2
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
-                        <img src="img/clase.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200">Clase 3
+                    <a href="{{ route('studentEvaluation') }}" class="group flex items-center p-2 md:p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white border-t-1 border-b-1 md:border-t-0 md:border-b-0">
+                        Clase 3
                     </a>
                 </li>
             </ul>

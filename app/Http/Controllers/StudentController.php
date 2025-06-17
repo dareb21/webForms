@@ -27,4 +27,19 @@ class StudentController extends Controller
     
     return view("estudiante/estudianteEvaluacion",compact("classes","questions","nameUser","email"));
     }
+
+    public function studentDashboard()
+    {
+        return view('student.studentDashboard');
+    }
+
+    public function studentEvaluation()
+    {
+        return view('student.studentEvaluation');
+    }
+
+    public function studentThanks()
+    {
+        return view('student.thankyouView');
+    }
 }

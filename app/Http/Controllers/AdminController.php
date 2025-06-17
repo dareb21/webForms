@@ -9,17 +9,53 @@ use App\Models\QuestionOption;
 
 class AdminController extends Controller
 {
+
+  public function enableEvaluation()
+  {
+    $survey=Survey::findOrFail(1);
+    if (Survey::where("status",1)->count() == 0)
+    {
+      $survey->status = 1;
+      $survey->save();
+      return redirect()->route("adminEvaluation");
+    }else
+    {
+      return response()->json("Ya hay una en linea");
+    }
+    
+  }
+
+public function UnableEvaluation()
+{
+    $survey=Survey::findOrFail(1);
+    if( $survey->status == 1)
+    {
+      $survey->status = 0;
+      $survey->save();
+      
+    }
+    return redirect()->route("adminEvaluation");
+}
+
+
+
   public function adminDashboard()
     {
         $user = (object) session('google_user');
         return view("admin.adminDashboard",compact("user"));
     }
 
-    
+
   public function adminEvaluation()
     {
+    $collectionStatus = Collect();
     $surveys = Survey::paginate(10); 
-    return view("admin.adminEvaluation",compact("surveys"));
+    foreach ($surveys as $survey) {
+    $status = $survey->status == 1 ? "Activa" : "Inactiva";
+    $collectionStatus->push($status);
+    }
+    
+    return view("admin.adminEvaluation",compact("surveys","collectionStatus"));
     }
 
 
@@ -29,14 +65,30 @@ class AdminController extends Controller
       
       $questionGroups=QuestionGroup::where("survey_id",$survey->id)->get();
 
-      $arrayOptions=[];
+      $collectionOptions = collect();
 
       foreach($questionGroups as $group)
       {
       $options=QuestionOption::select("id","option")->where("question_group_id",$group->id)->get();
-      $arrayOptions[]= $options;
+      $collectionOptions->push($options);
       } 
-      return view("admin.adminEvaluationEdit",compact("survey","arrayOptions","questionGroups"));      
+      return view("admin.adminEvaluationEdit",compact("survey","collectionOptions","questionGroups"));      
+    }
+
+    public function adminEvaluationEdited(Request $request) //$surveyId y request
+    {
+
+      //INCOMPLETO
+      dd($request->all());
+        $survey= Survey::findOrFail(1);
+          foreach($request->questions as $question)
+      {
+      QuestionOptio::where('id', 1)->update([
+    'title' => 'Nuevo título',
+    'description' => 'Descripción actualizada'
+]);
+      }
+
     }
 
    public function adminNewEvaluation()
@@ -54,7 +106,7 @@ class AdminController extends Controller
     $survey->dateEnd = $request->dateEnd;
     //$survey->author = $user->name;
     $survey->author = "admin1";
-    $survey->available = 0;
+    $survey->status = 0;
     $survey->save();
   
     foreach($request->questions as $question)

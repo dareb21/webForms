@@ -42,5 +42,9 @@ Route::get('/adminEvaluation', [AdminController::class, "adminEvaluation"])->nam
 Route::get('/adminNewEvaluation', [AdminController::class, "adminNewEvaluation"])->name("adminNewEvaluation");
 Route::post("/adminNewEvaluation/create",[AdminController::class, "createNewEvaluation"])->name("createNewEvaluation");
 Route::get('/adminEvaluationEdit', [AdminController::class, "adminEvaluationEdit"])->name("adminEvaluationEdit");
+Route::put('/adminEvaluationEdit/edit', [AdminController::class, "adminEvaluationEdited"])->name("adminEvaluationEdited");
+Route::get("/admiEnableEvaluation",[AdminController::class, "enableEvaluation"])->name("enableEvaluation");
+Route::get("/admiUnableEvaluation",[AdminController::class, "UnableEvaluation"])->name("unableEvaluation");
+
 Route::get('/adminResults', [AdminController::class, "adminResults"])->name("adminResults");
 Route::get('/adminStudent', [AdminController::class,"adminStudent"])->name("adminStudent");

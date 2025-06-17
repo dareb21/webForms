@@ -8,72 +8,56 @@
                     EDICIÓN DE EVALUACIONES
                 </h1>
         </div>
+        @php
+            $evaluacion = $survey->revision;
+            $dateStart = $survey->dateStart;
+            $dateEnd = $survey->dateEnd;
+        @endphp
             <div class="flex justify-center gap-x-4 flex-wrap py-4">
                 <label for="">EVALUACION # -</label>
-                <input type="text" class="shadow-md border border-gray-200">
+                <input type="text" value="{{ $evaluacion }}" class="shadow-md border border-gray-200">
                 <label for="">Fecha Inicio -</label>
-                <input type="date" name="" id="" class="shadow-md border border-gray-200">
+                <input type="date" name="" id="" value="{{ $dateStart }}" class="shadow-md border border-gray-200">
                 <label for="">Fecha Cierre -</label>
-                <input type="date" name="" id="" class="shadow-md border border-gray-200">
+                <input type="date" name="" id="" value="{{ $dateEnd }}" class="shadow-md border border-gray-200">
             </div>
+            
             <!-- for each para las preguntas -->
             <div id="grupos-container">
-                <div class="flex flex-col gap-y-4 py-4">
-                    <p class="font-bold text-lg">Grupo 1</p>
-                    <div class="flex items-center gap-x-2 w-full">
-                        <label for="" class="whitespace-nowrap">Pregunta 1 -</label>
-                        <input type="text" class="shadow-md border border-gray-200 flex-1 w-full">
-                    </div>
-                    <div class="flex items-center gap-x-2 w-full">
-                        <label for="" class="whitespace-nowrap">Pregunta 2 -</label>
-                        <input type="text" class="shadow-md border border-gray-200 flex-1 w-full">
-                    </div>
+            @foreach ($questionGroups as $group)
+            @php
+                $groupOptions = $collectionOptions->where('question_group_id', $group->id)->values();
+            @endphp
+
+            <div class="flex flex-col gap-y-4 py-4">
+                <p class="font-bold text-lg">Grupo {{ $group->id }}</p>
+                <div class="flex items-center gap-x-2 w-full">
+                    <label class="whitespace-nowrap">Pregunta 1 -</label>
+                    <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[0]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[0]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">
                 </div>
-                <div class="flex flex-col gap-y-4 py-4">
-                    <p class="font-bold text-lg">Grupo 2</p>
-                    <div class="flex items-center gap-x-2 w-full">
-                        <label for="" class="whitespace-nowrap">Pregunta 1 -</label>
-                        <input type="text" class="shadow-md border border-gray-200 flex-1 w-full">
-                    </div>
-                    <div class="flex items-center gap-x-2 w-full">
-                        <label for="" class="whitespace-nowrap">Pregunta 2 -</label>
-                        <input type="text" class="shadow-md border border-gray-200 flex-1 w-full">
-                    </div>
-                </div>
-                <div class="flex flex-col gap-y-4 py-4">
-                    <p class="font-bold text-lg">Grupo 3</p>
-                    <div class="flex items-center gap-x-2 w-full">
-                        <label for="" class="whitespace-nowrap">Pregunta 1 -</label>
-                        <input type="text" class="shadow-md border border-gray-200 flex-1 w-full">
-                    </div>
-                    <div class="flex items-center gap-x-2 w-full">
-                        <label for="" class="whitespace-nowrap">Pregunta 2 -</label>
-                        <input type="text" class="shadow-md border border-gray-200 flex-1 w-full">
-                    </div>
-                </div>
-                <div class="flex flex-col gap-y-4 py-4">
-                    <p class="font-bold text-lg">Grupo 4</p>
-                    <div class="flex items-center gap-x-2 w-full">
-                        <label for="" class="whitespace-nowrap">Pregunta 1 -</label>
-                        <input type="text" class="shadow-md border border-gray-200 flex-1 w-full">
-                    </div>
-                    <div class="flex items-center gap-x-2 w-full">
-                        <label for="" class="whitespace-nowrap">Pregunta 2 -</label>
-                        <input type="text" class="shadow-md border border-gray-200 flex-1 w-full">
-                    </div>
+                <div class="flex items-center gap-x-2 w-full">
+                    <label class="whitespace-nowrap">Pregunta 2 -</label>
+                    <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[1]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[1]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">
                 </div>
             </div>
+        @endforeach
+    </div>
+
 
             <!-- Botones  -->
             <div class="w-full flex justify-center gap-4 flex-col md:flex-row py-4 bg-white rounded-b-xl mt-8">
-                <a id="agregar-grupo" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded hover:cursor-pointer">AGREGAR</a>
-                <a id="borrar-grupo" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded hover:cursor-pointer">BORRAR</a>
+                <a id="agregar-grupo" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded hover:cursor-pointer">AGREGAR GRUPO</a>
+                <a id="borrar-grupo" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded hover:cursor-pointer">BORRAR GRUPO</a>
             </div>
             <div class="w-full flex justify-center gap-4 flex-col md:flex-row py-4 bg-white rounded-b-xl mt-8">
                 <a href="#" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">GUARDAR</a>
                 <a href="#" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">ACTIVAR</a>
-                <a href="#" class="bg-red-500 hover:bg-blue-700 text-white font-bold py-1 px-6 rounded">DESACTIVAR</a>
-                <a href="#" class="bg-red-500 hover:bg-blue-700 text-white font-bold py-1 px-6 rounded">ELIMINAR</a>
+                <a href="#" class="bg-red-600 hover:bg-blue-700 text-white font-bold py-1 px-6 rounded">DESACTIVAR</a>
+                <form action="{{ route('adminDelete', ['id' => $survey->id]) }}">
+                    <button type="submit" class="bg-red-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">
+                        ELIMINAR
+                    </button>
+                </form>
                 <a href="{{ route('adminEvaluation') }}" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">REGRESAR</a>
             </div>
     </div>

@@ -41,7 +41,8 @@ Route::get('/adminDashboard', [AdminController::class, "adminDashboard"])->name(
 Route::get('/adminEvaluation', [AdminController::class, "adminEvaluation"])->name("adminEvaluation");
 Route::get('/adminNewEvaluation', [AdminController::class, "adminNewEvaluation"])->name("adminNewEvaluation");
 Route::post("/adminNewEvaluation/create",[AdminController::class, "createNewEvaluation"])->name("createNewEvaluation");
-Route::get('/adminEvaluationEdit', [AdminController::class, "adminEvaluationEdit"])->name("adminEvaluationEdit");
+Route::get('/adminEvaluationEdit/{id}', [AdminController::class, "adminEvaluationEdit"])->name("adminEvaluationEdit");
+Route::get('/adminDelete/{id}', [AdminController::class, "adminDelete"])->name("adminDelete");
 Route::get('/adminResults', [AdminController::class, "adminResults"])->name("adminResults");
 Route::get('/adminStudentView', [AdminController::class,"adminStudentView"])->name("adminStudentView");
 

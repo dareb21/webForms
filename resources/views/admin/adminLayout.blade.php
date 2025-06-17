@@ -15,16 +15,16 @@
     <!-- Navbar -->
     <div class="fixed top-0 left-0 right-0 z-20 h-14 bg-white shadow-md border-b-2 border-gray-100 flex items-center justify-between px-4">
         <button id="sidebarToggle" class="md:hidden mr-3 focus:outline-none">
-            <img src="img/sidebar.png" alt="Menu" class="h-6 w-6 hover:cursor-pointer">
+            <img src="{{ asset('img/sidebar.png') }}" alt="Menu" class="h-6 w-6 hover:cursor-pointer">
         </button>
 
         <a href="{{ route('adminDashboard') }}">
-            <img src="img/usapblue.png" alt="logo" class="h-10 w-auto hover:cursor-pointer">
+            <img src="{{ asset('img/usapblue.png') }}" alt="logo" class="h-10 w-auto hover:cursor-pointer">
         </a>
 
         <!-- PFP Dropdown -->
         <div class="relative">
-            <img id="profileBtn" src="img/pfp.jpg" alt="profileImg" class="h-10 w-10 rounded-full hover:cursor-pointer border-2 border-gray-300">
+            <img id="profileBtn" src="{{ asset('img/pfp.jpg') }}" alt="profileImg" class="h-10 w-10 rounded-full hover:cursor-pointer border-2 border-gray-300">
 
             <!-- Dropdown Menu -->
             <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-30">
@@ -47,17 +47,17 @@
             <ul class="font-bold space-y-4">
                 <li>
                     <a href="{{ route('adminDashboard') }}" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
-                        <img src="img/home.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200">Inicio
+                        <img src="{{ asset('img/home.png') }}" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200">Inicio
                     </a>
                 </li>
                 <li>
                     <a href="{{  route('adminEvaluation') }}" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
-                        <img src="img/survey.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200">Evaluaciones
+                        <img src="{{ asset('img/survey.png') }}" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200">Evaluaciones
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('adminResults') }}" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
-                        <img src="img/results.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200">Resultados
+                        <img src="{{ asset('img/results.png') }}" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200">Resultados
                     </a>
                 </li>
             </ul>

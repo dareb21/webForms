@@ -18,21 +18,27 @@
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Fecha de Inicio</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Fecha de Cierre</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Autor</th>
+                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Estado</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Accion</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">
-                                <a href="{{ route('adminEvaluationEdit') }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
-                                    VER/EDITAR
-                                </a>
-                            </td>
-                        </tr>
+                        @foreach ($surveys as $survey)
+                                <tr>
+                                    <td class="border border-gray-400 px-4 py-2 text-center">{{ $survey->revision }}</td>
+                                    <td class="border border-gray-400 px-4 py-2 text-center">{{ $survey->dateStart }}</td>
+                                    <td class="border border-gray-400 px-4 py-2 text-center">{{ $survey->dateEnd }}</td>
+                                    <td class="border border-gray-400 px-4 py-2 text-center">{{ $survey->Author }}</td>
+                                    <td class="border border-gray-400 px-4 py-2 text-center">{{ $survey->status }}</td>
+                                    <td class="border border-gray-400 px-4 py-2 text-center">
+                                        <form action="{{ route('adminEvaluationEdit', ['id' => $survey->id]) }}">
+                                            <button type="submit" class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-3 rounded">
+                                                VER/EDITAR
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

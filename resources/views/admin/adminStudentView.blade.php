@@ -6,7 +6,7 @@
         <div class="flex flex-col items-center">
             <div class="bg-white p-4 text-center text-2xl font-bold">
                 <h1>
-                    EVALUACIONES
+                    EVALUACIONES HECHAS POR ESTUDIANTES
                 </h1>
             </div>
             <!-- Seccion de evaluaciones -->
@@ -74,6 +74,11 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="p-6">
+                <a href="{{ route('adminResults') }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
+                    REGRESAR
+                </a>
             </div>
         </div>
     </div>

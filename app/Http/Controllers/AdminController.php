@@ -23,21 +23,23 @@ class AdminController extends Controller
     }
 
 
-    public function adminEvaluationEdit() //$surveyId
+    public function adminEvaluationEdit($id)
     {
-      $survey=Survey::findOrFail(1);
-      
-      $questionGroups=QuestionGroup::where("survey_id",$survey->id)->get();
+        // Obtener la encuesta
+        $survey = Survey::findOrFail($id);
+        
+        // Obtener los grupos de preguntas asociados a la encuesta
+        $questionGroups = QuestionGroup::where("survey_id", $survey->id)->get();
 
-      $arrayOptions=[];
+        // Obtener todas las opciones asociadas a los grupos, en una sola consulta
+        $collectionOptions = QuestionOption::select("id", "option", "question_group_id")
+            ->whereIn("question_group_id", $questionGroups->pluck("id"))
+            ->get();
 
-      foreach($questionGroups as $group)
-      {
-      $options=QuestionOption::select("id","option")->where("question_group_id",$group->id)->get();
-      $arrayOptions[]= $options;
-      } 
-      return view("admin.adminEvaluationEdit",compact("survey","arrayOptions","questionGroups"));      
+        // Retornar vista con los datos necesarios
+        return view("admin.adminEvaluationEdit", compact("survey", "collectionOptions", "questionGroups"));
     }
+
 
    public function adminNewEvaluation()
    {
@@ -48,30 +50,44 @@ class AdminController extends Controller
 
    public function createNewEvaluation(Request $request)
    {
-    $survey = new Survey;
-    $survey->revision= $request->evaluationName;
-    $survey->dateStart = $request->dateStart;
-    $survey->dateEnd = $request->dateEnd;
-    //$survey->author = $user->name;
-    $survey->author = "admin1";
-    $survey->available = 0;
-    $survey->save();
-  
-    foreach($request->questions as $question)
-    {
-      $group=QuestionGroup::create([
-        "survey_id"=>$survey->id,
-      ]);
-      QuestionOption::create([
-        "option"=>$question["p1"],
-        "question_group_id"=>$group->id,
-      ]);
-       QuestionOption::create([
-        "option"=>$question["p2"],
-        "question_group_id"=>$group->id,
-      ]);
-    }
-    return redirect()->route("adminEvaluation");
-   }
+      $survey = new Survey;
+      $survey->revision= $request->evaluationName;
+      $survey->dateStart = $request->dateStart;
+      $survey->dateEnd = $request->dateEnd;
+      //$survey->author = $user->name;
+      $survey->author = "admin1";
+      $survey->status = 0;
+      $survey->save();
+    
+      foreach($request->questions as $question)
+      {
+        $group=QuestionGroup::create([
+          "survey_id"=>$survey->id,
+        ]);
+        QuestionOption::create([
+          "option"=>$question["p1"],
+          "question_group_id"=>$group->id,
+        ]);
+        QuestionOption::create([
+          "option"=>$question["p2"],
+          "question_group_id"=>$group->id,
+        ]);
+      }
+      return redirect()->route("adminEvaluation");
+  }
+
+  public function adminStudentView(){
+    return view('admin.adminStudentView');
+  }
+
+  public function adminResults(){
+    return view('admin.adminResults');
+  }
+
+  public function adminDelete($id){
+      $survey = Survey::findOrFail($id);
+      $survey->delete(); // Esto solo marca deleted_at, no borra realmente  
+      return view('admin.adminEvaluationEdit');
+  }
 
 }

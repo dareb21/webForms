@@ -8,6 +8,8 @@
     @vite('resources/js/app.js')
     <link rel="shortcut icon" href="{{ asset('img/usapico.png') }}" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>[x-cloak] { display: none !important; }</style>
+
 </head>
 <body class="bg-gray-100">
     <!-- Navbar -->
@@ -52,6 +54,8 @@
         @yield('content')
         <!-- Chart.js CDN (único en toda la app, si ya lo tienes no lo repitas) -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="//unpkg.com/alpinejs" defer></script>
+
         <script>
             const sidebar = document.getElementById('sidebar');
             const toggleBtn = document.getElementById('sidebarToggle');

@@ -29,7 +29,7 @@
                             <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
                             <td class="border border-gray-400 px-4 py-2 text-center">
                                 <a href="{{ route('adminEvaluationEdit') }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
-                                    VER
+                                    VER/EDITAR
                                 </a>
                             </td>
                         </tr>

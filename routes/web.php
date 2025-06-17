@@ -42,3 +42,4 @@ Route::get('/adminEvaluation', [AdminController::class, "adminEvaluation"])->nam
 Route::get('/adminNewEvaluation', [AdminController::class, "adminNewEvaluation"])->name("adminNewEvaluation");
 Route::get('/adminEvaluationEdit', [AdminController::class, "adminEvaluationEdit"])->name("adminEvaluationEdit");
 Route::get('/adminResults', [AdminController::class, "adminResults"])->name("adminResults");
+Route::get('/adminStudent', [AdminController::class,"adminStudent"])->name("adminStudent");

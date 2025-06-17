@@ -8,9 +8,13 @@
                     EDICIÓN DE EVALUACIONES
                 </h1>
         </div>
-            <div class="flex justify-start gap-x-4 flex-wrap py-4">
+            <div class="flex justify-center gap-x-4 flex-wrap py-4">
                 <label for="">EVALUACION # -</label>
                 <input type="text" class="shadow-md border border-gray-200">
+                <label for="">Fecha Inicio -</label>
+                <input type="date" name="" id="" class="shadow-md border border-gray-200">
+                <label for="">Fecha Cierre -</label>
+                <input type="date" name="" id="" class="shadow-md border border-gray-200">
             </div>
             <!-- for each para las preguntas -->
             <div class="flex flex-col gap-y-4 py-4">

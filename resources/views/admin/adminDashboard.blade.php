@@ -31,7 +31,6 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold">Overview</h2>
-                <button class="text-blue-500 border border-blue-500 px-4 py-1 rounded">Export</button>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <!-- Summary Cards -->

@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-class QuestionGroup extends Model
+
+class Course extends Model
 {
-  
   use HasFactory;
-    protected $fillable = [
-        'survey_id',
-    ];
+  protected $fillable=[
+        "name",
+  ];
 }

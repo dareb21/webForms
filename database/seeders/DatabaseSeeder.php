@@ -8,6 +8,8 @@ use App\Models\QuestionGroup;
 use App\Models\QuestionOption;
 use App\Models\SurveySubmit;
 use App\Models\ResponseSubmit;
+use App\Models\Course;
+use App\Models\Enrollment;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -18,13 +20,107 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+      
+        
+        User::create([
+            'name' => 'Alumno 1',
+            'email'=>"a@a.com",
+            'role' => 'student',
+        ]);
 
+        User::create([
+            'name' => 'Alumno 2',
+            'email'=>"b@b.com",
+            'role' => 'student',
+        ]);
+
+        User::create([
+            'name' => 'Alumno 3',
+            'email'=>"c@c.com",
+            'role' => 'student',
+        ]); 
+        User::create([
+            'name' => 'profesor 1',
+            'email'=>"d@.com",
+            'role' => 'professor',
+        ]);
+        User::create([
+            'name' => 'profesor 2',
+            'email'=>"e@e.com",
+            'role' => 'professor',
+        ]);
+        User::create([
+            'name' => 'profesor 3',
+            'email'=>"f@f.com",
+            'role' => 'professor',
+        ]);
+
+        User::create([
+            'name' => 'Director 1',
+            'email'=>"g@g.com",
+            'role' => 'Director',
+        ]);
+
+        User::create([
+            'name' => 'Director 2',
+            'email'=>"h@h.com",
+            'role' => 'Director',
+        ]);
+
+        User::create([
+            'name' => 'Director 3',
+            'email'=>"i@i.com",
+            'role' => 'Director',
+        ]);
+
+        User::create([
+            'name' => 'Admin 1',
+            'email'=>"j@j.com",
+            'role' => 'Admin',
+        ]);
+        
+        User::create([
+            'name' => 'Rector 1',
+            'email'=>"k@k.com",
+            'role' => 'Dean',
+        ]);
+
+        Course::factory(5)->create();
+        Enrollment::create([
+            'course_id' => 1,
+            'user_id' => 1,
+        ]);
+        Enrollment::create([
+            'course_id' => 1,
+            'user_id' => 2,
+        ]);
+        Enrollment::create([
+            'course_id' => 1,
+            'user_id' => 3,
+        ]);
+
+Enrollment::create([
+            'course_id' => 2,
+            'user_id' => 1,
+        ]);
+        Enrollment::create([
+            'course_id' => 5,
+            'user_id' => 3,
+        ]);
+        Enrollment::create([
+            'course_id' => 3,
+            'user_id' => 2,
+        ]);
+Enrollment::create([
+            'course_id' => 2,
+            'user_id' => 2,
+        ]);
         Survey::create([
-            'name' => 'Evaluacion #2 Mayo 2026',
+            'revision' => 'Evaluacion #2 Mayo 2026',
             'dateStart' => '2026-05-12',
             'dateEnd' => '2026-06-12',
             'Author' => 'admin1',
+            'status' =>1,
         ]);
 
         
@@ -72,6 +168,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         SurveySubmit::create([
+            'user_id'=>1,
             'survey_id'=>1,
             'DateSubmmited'=>"2026-05-23",
         ]);

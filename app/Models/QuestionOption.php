@@ -9,7 +9,7 @@ class QuestionOption extends Model
    
   use HasFactory;
     protected $fillable = [
-        'questionId',
+        'question_group_id',
         'option', 
     ];
 }

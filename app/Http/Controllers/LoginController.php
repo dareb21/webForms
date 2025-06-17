@@ -32,7 +32,7 @@ public function handdleCallBack()
            'CARLOS DANIEL PALMA ANTUNEZ' => redirect()->route('studentHome'),
             'Carlos Palma' =>redirect()->route('directorHome'),
             'Michelle Medina'=>redirect()->route('deanHome'),
-            'Alexa Gómez'=>redirect()->route('adminHome'),
+            'Alexa Gómez'=>redirect()->route('adminDashboard'),
             default => abort(401),
         };
             

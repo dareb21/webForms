@@ -13,8 +13,9 @@ class StudentController extends Controller
 {
     public function studentHome()
     {
-    //$user = (object) session('google_user');
-    $survey = Survey::where("status", 1)->first();
+    $id=1;
+     $survey = Survey::findOrFail($id);
+    
     if($survey->status == 1)
     {
     $usuarioFake=User::findOrFail($id);
@@ -38,6 +39,7 @@ $classes = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id
     {
         return response()->json("Algo mal a ocurrido");
     }
+    dd($nameUser,$email,$teacherNames,$courseNames, $questionGroups, $collectionOptions);
     return view("estudiante/estudianteEvaluacion",compact("nameUser,email,teacherNames,courseNames, questionGroups, collectionOptions"));
     }
 

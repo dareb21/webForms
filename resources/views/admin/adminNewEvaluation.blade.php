@@ -10,7 +10,7 @@
     <div class="bg-white rounded-xl shadow-lg p-6 w-full h-full relative pb-24">
         <div class="bg-white p-4 text-center text-2xl font-bold">
                 <h1>
-                    EDICIÓN DE EVALUACIONES
+                    CREACION DE EVALUACIONES
                 </h1>
         </div>
                <form action="{{ route('createNewEvaluation') }}" Method="POST">    

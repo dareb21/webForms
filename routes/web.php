@@ -43,6 +43,10 @@ Route::get('/adminNewEvaluation', [AdminController::class, "adminNewEvaluation"]
 Route::post("/adminNewEvaluation/create",[AdminController::class, "createNewEvaluation"])->name("createNewEvaluation");
 Route::get('/adminEvaluationEdit/{id}', [AdminController::class, "adminEvaluationEdit"])->name("adminEvaluationEdit");
 Route::get('/adminDelete/{id}', [AdminController::class, "adminDelete"])->name("adminDelete");
+Route::put('/adminEvaluationEdit/edit', [AdminController::class, "adminEvaluationEdited"])->name("adminEvaluationEdited");
+Route::get("/admiEnableEvaluation",[AdminController::class, "enableEvaluation"])->name("enableEvaluation");
+Route::get("/admiUnableEvaluation",[AdminController::class, "UnableEvaluation"])->name("unableEvaluation");
+
 Route::get('/adminResults', [AdminController::class, "adminResults"])->name("adminResults");
 Route::get('/adminStudentView', [AdminController::class,"adminStudentView"])->name("adminStudentView");
 

@@ -9,17 +9,53 @@ use App\Models\QuestionOption;
 
 class AdminController extends Controller
 {
+
+  public function enableEvaluation()
+  {
+    $survey=Survey::findOrFail(1);
+    if (Survey::where("status",1)->count() == 0)
+    {
+      $survey->status = 1;
+      $survey->save();
+      return redirect()->route("adminEvaluation");
+    }else
+    {
+      return response()->json("Ya hay una en linea");
+    }
+    
+  }
+
+public function UnableEvaluation()
+{
+    $survey=Survey::findOrFail(1);
+    if( $survey->status == 1)
+    {
+      $survey->status = 0;
+      $survey->save();
+      
+    }
+    return redirect()->route("adminEvaluation");
+}
+
+
+
   public function adminDashboard()
     {
         $user = (object) session('google_user');
         return view("admin.adminDashboard",compact("user"));
     }
 
-    
+
   public function adminEvaluation()
     {
+    $collectionStatus = Collect();
     $surveys = Survey::paginate(10); 
-    return view("admin.adminEvaluation",compact("surveys"));
+    foreach ($surveys as $survey) {
+    $status = $survey->status == 1 ? "Activa" : "Inactiva";
+    $collectionStatus->push($status);
+    }
+    
+    return view("admin.adminEvaluation",compact("surveys","collectionStatus"));
     }
 
 
@@ -50,44 +86,30 @@ class AdminController extends Controller
 
    public function createNewEvaluation(Request $request)
    {
-      $survey = new Survey;
-      $survey->revision= $request->evaluationName;
-      $survey->dateStart = $request->dateStart;
-      $survey->dateEnd = $request->dateEnd;
-      //$survey->author = $user->name;
-      $survey->author = "admin1";
-      $survey->status = 0;
-      $survey->save();
-    
-      foreach($request->questions as $question)
-      {
-        $group=QuestionGroup::create([
-          "survey_id"=>$survey->id,
-        ]);
-        QuestionOption::create([
-          "option"=>$question["p1"],
-          "question_group_id"=>$group->id,
-        ]);
-        QuestionOption::create([
-          "option"=>$question["p2"],
-          "question_group_id"=>$group->id,
-        ]);
-      }
-      return redirect()->route("adminEvaluation");
-  }
-
-  public function adminStudentView(){
-    return view('admin.adminStudentView');
-  }
-
-  public function adminResults(){
-    return view('admin.adminResults');
-  }
-
-  public function adminDelete($id){
-      $survey = Survey::findOrFail($id);
-      $survey->delete(); // Esto solo marca deleted_at, no borra realmente  
-      return view('admin.adminEvaluationEdit');
-  }
+    $survey = new Survey;
+    $survey->revision= $request->evaluationName;
+    $survey->dateStart = $request->dateStart;
+    $survey->dateEnd = $request->dateEnd;
+    //$survey->author = $user->name;
+    $survey->author = "admin1";
+    $survey->status = 0;
+    $survey->save();
+  
+    foreach($request->questions as $question)
+    {
+      $group=QuestionGroup::create([
+        "survey_id"=>$survey->id,
+      ]);
+      QuestionOption::create([
+        "option"=>$question["p1"],
+        "question_group_id"=>$group->id,
+      ]);
+       QuestionOption::create([
+        "option"=>$question["p2"],
+        "question_group_id"=>$group->id,
+      ]);
+    }
+    return redirect()->route("adminEvaluation");
+   }
 
 }

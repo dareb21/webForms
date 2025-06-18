@@ -1,5 +1,10 @@
 @extends('admin.adminLayout')
 @section('content')
+    @php
+    $minimo = 16;
+    $i = 1;
+     @endphp
+
 <!-- Main Content -->
 <div class="flex-1 ml-0 md:ml-80 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="bg-white rounded-xl shadow-lg p-6 w-full h-full relative pb-24">
@@ -13,6 +18,9 @@
             $dateStart = $survey->dateStart;
             $dateEnd = $survey->dateEnd;
         @endphp
+        <form action="{{ route('adminEvaluationEdited') }}" method="POST">    
+                @csrf
+                @method('PUT')
             <div class="flex justify-center gap-x-4 flex-wrap py-4">
                 <label for="">EVALUACION # -</label>
                 <input type="text" value="{{ $evaluacion }}" class="shadow-md border border-gray-200">

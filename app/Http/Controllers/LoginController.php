@@ -17,23 +17,30 @@ class LoginController extends Controller
 public function handdleCallBack()
 {
         $googleUser = Socialite::driver('google')->stateless()->user();
-        $account=explode("@", $googleUser->getEmail())[0];  
+        //$account=explode("@", $googleUser->getEmail())[0];  
        //dd($googleUser->name);
         //aqui ira la consulta al api para traer la data del user
             
-        session([
-            'google_user' => [
-            'name' => $googleUser->getName(),
-            'email' => $googleUser->getEmail(),
-            'account'=>$account,
-            'avatar' => $googleUser->getAvatar(),
-                 ]
-        ]);
         if (str_contains($googleUser->getEmail(), 'a')) {
             $pase=True;
             }
-switch ($pase) {
-    case True:
+
+        switch ($pase) {
+        case True:
+                $classes = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id')
+                ->select('courses.name as course_name')
+                ->where('enrollments.user_id', 1)
+                ->get(); 
+                //$teacherNames = $classes->pluck('teacher_name');  
+                $courseNames = $classes->pluck('course_name');  
+                session([
+                'userInfo' => [
+                   'nameUser' => $googleUser->getName(),
+                    'email' => $googleUser->getEmail(),
+                    'courses'=>$courseNames,
+                    ]
+                 ]);
+            
         return redirect()->route('studentDashboard');
         break;
     

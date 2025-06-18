@@ -16,6 +16,7 @@
         $courses = $userInfo['courses'];
         $nombre = $userInfo['nameUser'];
         $correo = $userInfo['email'];
+        $coursesId = $userInfo['coursesId'];
     @endphp
     <!-- Navbar -->
     <div class="fixed top-0 left-0 right-0 z-20 h-14 bg-white shadow-md border-b-2 border-gray-100 flex items-center justify-between px-4">
@@ -33,8 +34,8 @@
 
             <!-- Dropdown Menu -->
             <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-54 bg-white border border-gray-200 rounded-xl shadow-lg z-30">
-                <a class="block px-4 py-2 text-gray-700 hover:bg-orange-500 hover:text-white">{{ $nombre }}</a>
-                <a class="block px-4 py-2 text-gray-700 hover:bg-orange-500 hover:text-white">{{ $correo }}</a>
+                <a class="block px-4 py-2 text-gray-700" >{{ $nombre }}</a>
+                <a class="block px-4 py-2 text-gray-700" >{{ $correo }}</a>
                 <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-orange-500 hover:text-white">Cerrar sesión</a>
             </div>
         </div>
@@ -53,7 +54,8 @@
                     <li>
                         <form action="{{ route('studentEvaluation') }}">
                             @csrf
-                            <input type="hidden" name="claseId" value="{{ $loop->index }}">
+                            <input type="hidden" name="noClaseId" value="{{ $loop->index }}">
+                            <input type="hidden" name="courseId" value="{{ $coursesId }}">
                             <button type="submit"
                                 class="group flex items-center w-full p-2 md:p-4 px-6 gap-2 hover:cursor-pointer hover:rounded-lg hover:bg-blue-500 hover:text-white border-t-1 border-b-1 md:border-t-0 md:border-b-0 border-orange-500 text-blue-500 md:text-black">
                                 {{ $course }}

@@ -23,7 +23,7 @@ class StudentController extends Controller
 
     public function studentEvaluation(Request $request)
     {
-    
+    $noClaseId = $request->query('noClaseId');
     $claseId = $request->query('claseId');
     $survey = new Survey;
     if($survey->where("status",1)->count() == 1)
@@ -39,7 +39,7 @@ class StudentController extends Controller
             return abort(409,"Lo sentimos, algo no esta funcionando como deberia. Intente mas tarde");
       }
 
-    return view('student.studentEvaluation', compact('claseId'));
+        return view('student.studentEvaluation', compact('noClaseId','coursesId'));
     }
 
     public Function studentSubmit(Request $request)

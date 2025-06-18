@@ -32,24 +32,24 @@
             
             <!-- for each para las preguntas -->
             <div id="grupos-container">
-            @foreach ($questionGroups as $group)
-            @php
-                $groupOptions = $collectionOptions->where('question_group_id', $group->id)->values();
-            @endphp
+                @foreach ($questionGroups as $group)
+                    @php
+                        $groupOptions = $collectionOptions->where('question_group_id', $group->id)->values();
+                    @endphp
 
-            <div class="flex flex-col gap-y-4 py-4">
-                <p class="font-bold text-lg">Grupo {{ $group->id }}</p>
-                <div class="flex items-center gap-x-2 w-full">
-                    <label class="whitespace-nowrap">Pregunta 1 -</label>
-                    <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[0]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[0]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">
-                </div>
-                <div class="flex items-center gap-x-2 w-full">
-                    <label class="whitespace-nowrap">Pregunta 2 -</label>
-                    <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[1]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[1]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">
-                </div>
+                    <div class="flex flex-col gap-y-4 py-4">
+                        <p class="font-bold text-lg">Grupo {{ $group->id }}</p>
+                        <div class="flex items-center gap-x-2 w-full">
+                            <label class="whitespace-nowrap">Pregunta 1 -</label>
+                            <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[0]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[0]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">
+                        </div>
+                        <div class="flex items-center gap-x-2 w-full">
+                            <label class="whitespace-nowrap">Pregunta 2 -</label>
+                            <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[1]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[1]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">
+                        </div>
+                    </div>
+                @endforeach
             </div>
-        @endforeach
-    </div>
 
 
             <!-- Botones  -->

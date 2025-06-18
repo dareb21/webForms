@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
+use App\Models\Enrollment;
+
 
 class LoginController extends Controller
 {
@@ -27,16 +29,18 @@ public function handdleCallBack()
             'avatar' => $googleUser->getAvatar(),
                  ]
         ]);
-
-        return match($googleUser->name){
-           'CARLOS DANIEL PALMA ANTUNEZ' => redirect()->route('studentHome'),
-            'Carlos Palma' =>redirect()->route('directorHome'),
-            'Michelle Medina'=>redirect()->route('deanHome'),
-            'Alexa Gómez'=>redirect()->route('adminDashboard'),
-            default => abort(401),
-        };
-            
+        if (str_contains($googleUser->getEmail(), 'a')) {
+            $pase=True;
+            }
+switch ($pase) {
+    case True:
+        return redirect()->route('studentDashboard');
+        break;
     
+    default:
+        # code...
+        break;
+}
 
 
 

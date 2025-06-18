@@ -12,30 +12,26 @@ use App\Models\Survey;
 
 class StudentController extends Controller
 {
-    public function studentHome()
-    {
-    $usuarioFake=User::findOrFail(1);
+    public function studentEvaluation()
+    { 
     
-     $survey = Survey::where("status",1)->get();
-    if($survey->count() == 1)
+     $survey = new Survey;
+    if($survey->where("status",1)->count() == 1)
     {
      $thisSurvey = $survey->first();    
-    $nameUser=$usuarioFake->name;
-    $email=$usuarioFake->email;
+      $classes = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id')
+                ->join('users', 'courses.user_id', '=', 'users.id')
+                ->select('users.name as teacher_name')
+                ->where('enrollments.user_id', 1)
+                ->get(); 
 
-$classes = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id')
-    ->join('users as teacher', 'courses.user_id', '=', 'teacher.id')
-    ->select('courses.name as course_name', 'teacher.name as teacher_name')
-    ->where('enrollments.user_id', 1)
-    ->get();
-    
+    $teacherNames = $classes->pluck('teacher_name');
     $questionGroups = QuestionGroup::where("survey_id", $thisSurvey->id)->get();
     $collectionOptions = QuestionOption::select("id", "option", "question_group_id")
             ->whereIn("question_group_id", $questionGroups->pluck("id"))
             ->get();
             
-    $teacherNames = $classes->pluck('teacher_name');  
-    $courseNames = $classes->pluck('course_name');   
+    
     }   
     else
     {
@@ -43,7 +39,7 @@ $classes = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id
     }
      
 
-    return view("estudiante/estudianteEvaluacion");
+    return view("estudiante.estudianteEvaluacion",compact("collectionOptions","questionGroups"));
     }
 
     public function studentDashboard()
@@ -51,10 +47,6 @@ $classes = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id
         return view('student.studentDashboard');
     }
 
-    public function studentEvaluation()
-    {
-        return view('student.studentEvaluation');
-    }
 
     public function studentThanks()
     {

@@ -31,7 +31,6 @@ public function handdleCallBack()
                 ->select('courses.name as course_name')
                 ->where('enrollments.user_id', 1)
                 ->get(); 
-                //$teacherNames = $classes->pluck('teacher_name');  
                 $courseNames = $classes->pluck('course_name');  
                 session([
                 'userInfo' => [

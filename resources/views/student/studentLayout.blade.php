@@ -10,6 +10,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-gray-100">
+    <!-- Variables Sesiones -->
+    @php
+        $userInfo = session('userInfo');
+        $courses = $userInfo['courses'];
+        $nombre = $userInfo['nameUser'];
+        $correo = $userInfo['email'];
+    @endphp
     <!-- Navbar -->
     <div class="fixed top-0 left-0 right-0 z-20 h-14 bg-white shadow-md border-b-2 border-gray-100 flex items-center justify-between px-4">
         <button id="sidebarToggle" class="md:hidden mr-3 focus:outline-none">
@@ -25,9 +32,9 @@
             <img id="profileBtn" src="img/pfp.jpg" alt="profileImg" class="h-10 w-10 rounded-full hover:cursor-pointer border-2 border-gray-300">
 
             <!-- Dropdown Menu -->
-            <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-30">
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-orange-500 hover:text-white">Nombre</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-orange-500 hover:text-white">Correo</a>
+            <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-54 bg-white border border-gray-200 rounded-xl shadow-lg z-30">
+                <a class="block px-4 py-2 text-gray-700 hover:bg-orange-500 hover:text-white">{{ $nombre }}</a>
+                <a class="block px-4 py-2 text-gray-700 hover:bg-orange-500 hover:text-white">{{ $correo }}</a>
                 <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-orange-500 hover:text-white">Cerrar sesión</a>
             </div>
         </div>
@@ -41,23 +48,19 @@
             transform -translate-x-full transition-transform duration-300 ease-in-out
             md:translate-x-0
             ">
-
             <ul class="font-bold space-y-4 ">
-                <li>
-                    <a href="{{ route('studentEvaluation') }}" class="group flex items-center p-2 md:p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white border-t-1 border-b-1 md:border-t-0 md:border-b-0 border-orange-500 text-blue-500 md:text-black">
-                        Clase 1
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('studentEvaluation') }}" class="group flex items-center p-2 md:p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white border-t-1 border-b-1 md:border-t-0 md:border-b-0 border-orange-500">
-                        Clase 2
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('studentEvaluation') }}" class="group flex items-center p-2 md:p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white border-t-1 border-b-1 md:border-t-0 md:border-b-0">
-                        Clase 3
-                    </a>
-                </li>
+                @foreach ($courses as $course)
+                    <li>
+                        <form action="{{ route('studentEvaluation') }}">
+                            @csrf
+                            <input type="hidden" name="claseId" value="{{ $loop->index }}">
+                            <button type="submit"
+                                class="group flex items-center w-full p-2 md:p-4 px-6 gap-2 hover:cursor-pointer hover:rounded-lg hover:bg-blue-500 hover:text-white border-t-1 border-b-1 md:border-t-0 md:border-b-0 border-orange-500 text-blue-500 md:text-black">
+                                {{ $course }}
+                            </button>
+                        </form>
+                    </li>
+                @endforeach
             </ul>
         </div>
 

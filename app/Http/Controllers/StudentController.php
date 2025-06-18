@@ -11,7 +11,7 @@ use App\Models\Survey;
 
 class StudentController extends Controller
 {
-    public function studentHome()
+    public function studentDashboard()
     {
     $id=1;
      $survey = Survey::findOrFail($id);
@@ -22,7 +22,7 @@ class StudentController extends Controller
     $nameUser=$usuarioFake->name;
     $email=$usuarioFake->email;
 
-$classes = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id')
+    $classes = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id')
     ->join('users as teacher', 'courses.user_id', '=', 'teacher.id')
     ->select('courses.name as course_name', 'teacher.name as teacher_name')
     ->where('enrollments.user_id', $id)
@@ -37,19 +37,20 @@ $classes = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id
     }   
     else
     {
-        return response()->json("Algo mal a ocurrido");
+        return response()->json("Algo mal ha ocurrido");
     }
-    dd($nameUser,$email,$teacherNames,$courseNames, $questionGroups, $collectionOptions);
-    return view("estudiante/estudianteEvaluacion",compact("nameUser,email,teacherNames,courseNames, questionGroups, collectionOptions"));
+        return view("student.studentDashboard",compact("nameUser","email","teacherNames","courseNames", "questionGroups", "collectionOptions"));
     }
 
-    public function studentDashboard()
-    {
-        return view('student.studentDashboard');
-    }
+    // public function studentDashboard()
+    // {
+    //     return view('student.studentDashboard');
+    // }
 
     public function studentEvaluation()
     {
+        
+        //logica para devolver preguntas, docente
         return view('student.studentEvaluation');
     }
 

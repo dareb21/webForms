@@ -52,7 +52,11 @@
                                                 {{ $option->option ?? 'Pregunta sin texto' }}
                                             </td>
                                             <td class="border border-gray-400 px-4 py-2 text-center">
-                                                <input type="checkbox" name="option_{{ $option->id }}" id="option_{{ $option->id }}">
+                                                <input type="checkbox"
+                                                name="option_{{ $option->id }}"
+                                                id="option_{{ $option->id }}"
+                                                class="group-checkbox"
+                                                data-group="{{ $group->id }}">
                                             </td>
                                         </tr>
                                     @endforeach
@@ -79,4 +83,28 @@
                 </div>
             </div>
         </div>
+        <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkboxes = document.querySelectorAll('.group-checkbox');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const group = this.dataset.group;
+
+                const groupCheckboxes = document.querySelectorAll(`.group-checkbox[data-group='${group}']`);
+
+                if (this.checked) {
+                    groupCheckboxes.forEach(cb => {
+                        if (cb !== this) cb.disabled = true;
+                    });
+                } else {
+                    groupCheckboxes.forEach(cb => {
+                        cb.disabled = false;
+                    });
+                }
+            });
+        });
+    });
+</script>
+
 @endsection

@@ -94,11 +94,14 @@ public function UnableEvaluation()
     $survey->author = "admin1";
     $survey->status = 0;
     $survey->save();
-  
+    $i=1;
+    dd($request->all());
+    dd($request->questions);
     foreach($request->questions as $question)
     {
       $group=QuestionGroup::create([
         "survey_id"=>$survey->id,
+        "groupName"=>"Grupo ". $i
       ]);
       QuestionOption::create([
         "option"=>$question["p1"],
@@ -108,6 +111,7 @@ public function UnableEvaluation()
         "option"=>$question["p2"],
         "question_group_id"=>$group->id,
       ]);
+      $i+=1;
     }
     return redirect()->route("adminEvaluation");
    }

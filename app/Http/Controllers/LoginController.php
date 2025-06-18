@@ -17,10 +17,6 @@ class LoginController extends Controller
 public function handdleCallBack()
 {
         $googleUser = Socialite::driver('google')->stateless()->user();
-        //$account=explode("@", $googleUser->getEmail())[0];  
-       //dd($googleUser->name);
-        //aqui ira la consulta al api para traer la data del user
-            
         if (str_contains($googleUser->getEmail(), 'a')) {
             $pase=True;
             }
@@ -48,7 +44,7 @@ public function handdleCallBack()
         break;
     
     default:
-        # code...
+        abort(401);
         break;
 }
 

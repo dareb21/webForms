@@ -7,8 +7,10 @@ use App\Models\Enrollment;
 use App\Models\QuestionOption;
 use App\Models\QuestionGroup;
 use App\Models\SurveySubmit;
+use App\Models\ResponseSubmit;
 use App\Models\User;
 use App\Models\Survey;
+
 
 class StudentController extends Controller
 {
@@ -21,8 +23,8 @@ class StudentController extends Controller
 
     public function studentEvaluation(Request $request)
     {
+    
     $claseId = $request->query('claseId');
-
     $survey = new Survey;
     if($survey->where("status",1)->count() == 1)
     {
@@ -34,11 +36,29 @@ class StudentController extends Controller
         }   
     else
      {
-            return response()->json("Algo mal ha ocurrido");
+            return abort(409,"Lo sentimos, algo no esta funcionando como deberia. Intente mas tarde");
       }
 
     return view('student.studentEvaluation', compact('claseId'));
     }
+
+    public Function studentSubmit(Request $request)
+    {
+        $survey = Survey::select("id")->where("status", 1)->first();
+
+        $surveySubmit=SurveySubmit::create([
+        "DateSubmmited"=>now(),
+        "survey_id"=>$survey->id,
+        "user_id"=>1,
+      ]);
+            foreach ($request->options as $option) {
+                if ($option->value == True )
+                {
+                    
+                }
+            }
+    }
+
 
     public function studentThanks()
     {

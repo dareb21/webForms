@@ -35,6 +35,7 @@ Route::middleware(['role:Alexa Gómez'])->group(function() {
 Route::get('/studentDashboard', [StudentController::class,"studentDashboard"])->name("studentDashboard");
 Route::get('/studentEvaluation', [StudentController::class,"studentEvaluation"])->name("studentEvaluation");
 Route::get('/studentThankyou', [StudentController::class,"studentThanks"])->name("studentThanks");
+Route::get('/studentSubmit', [StudentController::class,"studentSubmit"])->name("studentSubmit");
 
 #Rutas admin
 Route::get('/adminDashboard', [AdminController::class, "adminDashboard"])->name("adminDashboard");

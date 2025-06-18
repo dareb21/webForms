@@ -49,11 +49,13 @@ class StudentController extends Controller
     //     return view('student.studentDashboard');
     // }
 
-    public function studentEvaluation()
+    public function studentEvaluation(Request $request)
     {
         
         //logica para devolver preguntas, docente
-        return view('student.studentEvaluation');
+
+        $claseId = $request->query('claseId');
+        return view('student.studentEvaluation', compact('claseId'));
     }
 
     public function studentThanks()

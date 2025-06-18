@@ -1,5 +1,10 @@
 @extends('student.studentLayout')
 @section('content')
+<!-- Variables Sesiones -->
+    @php
+        $userInfo = session('userInfo');
+        $courses = $userInfo['courses'];
+    @endphp
 <!-- Main Content -->
         <div class="flex-1 ml-0 md:ml-80 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
             <div class="bg-white rounded-xl shadow-lg p-6">
@@ -14,7 +19,7 @@
                         <!-- Primer par: Asignatura -->
                         <div class="flex items-center gap-2">
                             <h1 class="font-bold">ASIGNATURA:</h1>
-                            <h1>MATEMÁTICA FINANCIERA</h1>
+                            <h1>{{ $courses[$claseId] }}</h1>
                         </div>
 
                         <!-- Segundo par: Docente -->

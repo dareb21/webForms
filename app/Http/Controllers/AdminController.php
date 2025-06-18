@@ -112,4 +112,17 @@ public function UnableEvaluation()
     return redirect()->route("adminEvaluation");
    }
 
+   public function adminStudentView(){
+    return view('admin.adminStudentView');
+  }
+
+  public function adminResults(){
+    return view('admin.adminResults');
+  }
+
+  public function adminDelete($id){
+      $survey = Survey::findOrFail($id);
+      $survey->delete(); // Esto solo marca deleted_at, no borra realmente  
+      return view('admin.adminEvaluationEdit');
+  }
 }

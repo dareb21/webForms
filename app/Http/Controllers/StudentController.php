@@ -23,7 +23,6 @@ class StudentController extends Controller
 
     public function studentEvaluation(Request $request)
     {
- 
     $noClaseId = $request->query('noClaseId');
     $coursesId = $request->query('courseId');
     if(!SurveySubmit::where("user_id",1)->where("course_id",$coursesId)->exists())
@@ -61,6 +60,7 @@ class StudentController extends Controller
         "DateSubmmited"=>now(),
         "survey_id"=>$survey->id,
         "user_id"=>1,
+
       ]);
             foreach ($seleccionados as $option) {
                ResponseSubmit::create([

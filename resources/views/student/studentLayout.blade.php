@@ -8,9 +8,6 @@
     @vite('resources/js/app.js')
     <link rel="shortcut icon" href="{{ asset('img/usapico.png') }}" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preload" as="image" href="{{ asset('img/usapico.png') }}">
-    <link rel="preload" as="image" href="{{ asset('img/usapblue.png') }}">
-    <link rel="preload" as="image" href="{{ asset('img/pfp.jpg') }}">
 </head>
 <body class="bg-gray-100">
     <!-- Variables Sesiones -->

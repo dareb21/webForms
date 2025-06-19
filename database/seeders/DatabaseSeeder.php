@@ -180,6 +180,7 @@ Enrollment::create([
         SurveySubmit::create([
             'user_id'=>1,
             'survey_id'=>1,
+            'course_id'=>1,
             'DateSubmmited'=>"2026-05-23",
         ]);
 

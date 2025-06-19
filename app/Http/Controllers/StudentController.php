@@ -23,25 +23,24 @@ class StudentController extends Controller
 
     public function studentEvaluation(Request $request)
     {
+ 
     $noClaseId = $request->query('noClaseId');
     $coursesId = $request->query('courseId');
-    $survey = new Survey;
-    if($survey->where("status",1)->count() == 1)
+    if(!SurveySubmit::where("user_id",1)->where("course_id",$coursesId)->exists())
     {
-        $thisSurvey = $survey->first();    
-        $questionGroups = QuestionGroup::where("survey_id", $thisSurvey->id)->get();
+    $survey = new Survey;
+    $thisSurvey = Survey::where("status", 1)->first();
+    $questionGroups = QuestionGroup::where("survey_id", $thisSurvey->id)->get();
         $collectionOptions = QuestionOption::select("id", "option", "question_group_id")
             ->whereIn("question_group_id", $questionGroups->pluck("id"))
             ->get();    
         return view('student.studentEvaluation', compact('noClaseId','coursesId','collectionOptions','questionGroups'));
         }
-          
-    else
-     {
-            return abort(409,"Lo sentimos, algo no esta funcionando como deberia. Intente mas tarde");
-      }
+        else
+            {
+                return view("student.thankyouView");
+        }
 
-        
     }
 
     public Function studentSubmit(Request $request)

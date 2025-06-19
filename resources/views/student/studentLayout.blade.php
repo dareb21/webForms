@@ -55,7 +55,7 @@
                         <form action="{{ route('studentEvaluation') }}">
                             @csrf
                             <input type="hidden" name="noClaseId" value="{{ $loop->index }}">
-                            <input type="hidden" name="courseId" value="{{ $coursesId }}">
+                            <input type="hidden" name="courseId" value="{{ $coursesId[$loop->index]  }}">
                             <button type="submit"
                                 class="group flex items-center w-full p-2 md:p-4 px-6 gap-2 hover:cursor-pointer hover:rounded-lg hover:bg-blue-500 hover:text-white border-t-1 border-b-1 md:border-t-0 md:border-b-0 border-orange-500 text-blue-500 md:text-black">
                                 {{ $course }}

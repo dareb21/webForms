@@ -181,6 +181,7 @@ Enrollment::create([
             'user_id'=>1,
             'survey_id'=>1,
             'course_id'=>1,
+            'observations'=>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet risus ut felis mollis porta id quis est. Cras vitae enim lectus. Ut non rhoncus est, non maximus urna. Vestibulum ut imperdiet diam. Nullam ligula lacus, maximus nec imperdiet maximus, convallis sit amet nibh. Phasellus aliquam scelerisque urna, id accumsan quam pharetra in. Praesent suscipit condimentum nisi. Ut lacinia facilisis lacus in pellentesque. Curabitur non lacus at orci feugiat pulvinar ac sit amet eros. Aenean interdum maximus nisi, a aliquet eros elementum vitae. Suspendisse venenatis neque at libero pellentesque, in cursus eros dapibus.",
             'DateSubmmited'=>"2026-05-23",
         ]);
 

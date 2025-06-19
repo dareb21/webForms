@@ -42,7 +42,7 @@ class StudentController extends Controller
 
     }
 
-    public Function studentSubmit(Request $request)
+    public Function studentSubmit(Request $request, $courseId)
     {
          $seleccionados = [];
 
@@ -59,7 +59,9 @@ class StudentController extends Controller
         $surveySubmit=SurveySubmit::create([
         "DateSubmmited"=>now(),
         "survey_id"=>$survey->id,
+        "course_id"=>$courseId,
         "user_id"=>1,
+        "observations"=>$request->observaciones,
 
       ]);
             foreach ($seleccionados as $option) {
@@ -68,13 +70,13 @@ class StudentController extends Controller
                 "question_option_id"=>$option,
                ]);
             }
-    return response()->json(["mensaje" => "guardada"]);
+    return redirect()->route("studentThanks");
 
     }
 
-
-    public function studentThanks()
-    {
-        return view('student.thankyouView');
-    }
+public function studentThanks()
+{
+    return view("student.thankyouView");
+}
+  
 }

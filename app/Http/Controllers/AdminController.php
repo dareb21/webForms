@@ -12,24 +12,22 @@ class AdminController extends Controller
 
   public function enableEvaluation($surveyId)
   {
-     // me tienen que pasar el id
-    if (Survey::where("status",$surveyId)->exists())
+  
+    if (Survey::where("status",1)->exists())
     {
       return response()->json("Ya hay una en linea");
     }else
     {
-      Survey::where("id",1)->update([
+      Survey::where("id",$surveyId)->update([
         "status" => 1,    
       ]);
     }
     return redirect()->route("adminEvaluation");
   }
 
-public function UnableEvaluation()
+public function UnableEvaluation($surveyId)
 {
-  //falta que me pasen el id
-  dd();
-    Survey::where("id", 1)->where("status", 1)->update([
+    Survey::where("id", $surveyId)->where("status", 1)->update([
     "status" => 0,
     ]);
     return redirect()->route("adminEvaluation");
@@ -123,6 +121,6 @@ public function UnableEvaluation()
   public function adminDelete($id){
       $survey = Survey::findOrFail($id);
       $survey->delete(); // Esto solo marca deleted_at, no borra realmente  
-      return view('admin.adminEvaluationEdit');
+      return redirect()->route('adminEvaluation');
   }
 }

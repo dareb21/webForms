@@ -26,7 +26,6 @@
 
          <!-- Preguntas -->
             <div id="grupos-container">
-            
                 @for ($i; $i <= $minimo; $i++)
                     <div class="flex flex-col gap-y-4 py-4">
                         <p class="font-bold text-lg">Grupo {{ $i }}</p>
@@ -40,7 +39,7 @@
                         </div>
                     </div>
                 @endfor
-            </div>
+            </div>
                 <button type="submit" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">GUARDAR</button>
             </form>
             <div class="w-full flex justify-center gap-4 flex-col md:flex-row py-4 bg-white rounded-b-xl mt-8">
@@ -59,38 +58,38 @@
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const container = document.getElementById("grupos-container");
-        const agregarBtn = document.getElementById("agregar-grupo");
-        const borrarBtn = document.getElementById("borrar-grupo");
-        let grupoActual = 16;
+    const container = document.getElementById("grupos-container");
+    const agregarBtn = document.getElementById("agregar-grupo");
+    const borrarBtn = document.getElementById("borrar-grupo");
+    let grupoActual = 16;
 
-        agregarBtn.addEventListener("click", function () {
-            grupoActual++;
+    agregarBtn.addEventListener("click", function () {
+        grupoActual++;
 
-            const grupoDiv = document.createElement("div");
-            grupoDiv.className = "flex flex-col gap-y-4 py-4 grupo-dinamico";
-            grupoDiv.innerHTML = `
-                <p class="font-bold text-lg">Grupo ${grupoActual}</p>
-                <div class="flex items-center gap-x-2 w-full">
-                    <label class="whitespace-nowrap">Pregunta 1 -</label>
-                    <input type="text" name="grupos[${grupoActual}][pregunta1]" class="shadow-md border border-gray-200 flex-1 w-full">
-                </div>
-                <div class="flex items-center gap-x-2 w-full">
-                    <label class="whitespace-nowrap">Pregunta 2 -</label>
-                    <input type="text" name="grupos[${grupoActual}][pregunta2]" class="shadow-md border border-gray-200 flex-1 w-full">
-                </div>
-            `;
+        const grupoDiv = document.createElement("div");
+        grupoDiv.className = "flex flex-col gap-y-4 py-4 grupo-dinamico";
+        grupoDiv.innerHTML = `
+            <p class="font-bold text-lg">Grupo ${grupoActual}</p>
+            <div class="flex items-center gap-x-2 w-full">
+                <label for="g${grupoActual}p1" class="whitespace-nowrap">Pregunta 1 -</label>
+                <input type="text" name="questions[${grupoActual}][p1]" id="g${grupoActual}p1" class="shadow-md border border-gray-200 flex-1 w-full">
+            </div>
+            <div class="flex items-center gap-x-2 w-full">
+                <label for="g${grupoActual}p2" class="whitespace-nowrap">Pregunta 2 -</label>
+                <input type="text" name="questions[${grupoActual}][p2]" id="g${grupoActual}p2" class="shadow-md border border-gray-200 flex-1 w-full">
+            </div>
+        `;
 
-            container.appendChild(grupoDiv);
-        });
-
-        borrarBtn.addEventListener("click", function () {
-            const gruposDinamicos = container.querySelectorAll(".grupo-dinamico");
-            if (gruposDinamicos.length > 0) {
-                gruposDinamicos[gruposDinamicos.length - 1].remove();
-                grupoActual--;
-            }
-        });
+        container.appendChild(grupoDiv);
     });
+
+    borrarBtn.addEventListener("click", function () {
+        const gruposDinamicos = container.querySelectorAll(".grupo-dinamico");
+        if (gruposDinamicos.length > 0) {
+            gruposDinamicos[gruposDinamicos.length - 1].remove();
+            grupoActual--;
+        }
+    });
+});
 </script>
 @endsection

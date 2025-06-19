@@ -95,8 +95,6 @@ public function UnableEvaluation()
     $survey->status = 0;
     $survey->save();
     $i=1;
-    dd($request->all());
-    dd($request->questions);
     foreach($request->questions as $question)
     {
       $group=QuestionGroup::create([

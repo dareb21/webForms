@@ -8,21 +8,27 @@
     @vite('resources/js/app.js')
     <link rel="shortcut icon" href="{{ asset('img/usapico.png') }}" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Preload imagenes -->
+    <link rel="preload" as="image" href="{{ asset('img/usapblue.png') }}">
+    <link rel="preload" as="image" href="{{ asset('img/pfp.jpg') }}">
+    <link rel="preload" as="image" href="{{ asset('img/sidebar.png') }}">
+    <link rel="preload" as="image" href="{{ asset('img/home.png') }}">
+    <link rel="preload" as="image" href="{{ asset('img/results.png') }}">
 </head>
 <body class="bg-gray-100">
     <!-- Navbar -->
     <div class="fixed top-0 left-0 right-0 z-20 h-14 bg-white shadow-md border-b-2 border-gray-100 flex items-center justify-between px-4">
         <button id="sidebarToggle" class="md:hidden mr-3 focus:outline-none">
-            <img src="img/sidebar.png" alt="Menu" class="h-6 w-6 hover:cursor-pointer">
+            <img src="{{ asset('img/sidebar.png') }}" alt="Menu" class="h-6 w-6 hover:cursor-pointer" loading="lazy">
         </button>
 
         <a href="{{ route('deanDashboard') }}">
-            <img src="img/usapblue.png" alt="logo" class="h-10 w-auto hover:cursor-pointer">
+            <img src="{{ asset('img/usapblue.png') }}" alt="logo" class="h-10 w-auto hover:cursor-pointer" loading="lazy">
         </a>
 
         <!-- PFP Dropdown -->
         <div class="relative">
-            <img id="profileBtn" src="img/pfp.jpg" alt="profileImg" class="h-10 w-10 rounded-full hover:cursor-pointer border-2 border-gray-300">
+            <img id="profileBtn" src="{{ asset('img/pfp.jpg') }}" alt="profileImg" class="h-10 w-10 rounded-full hover:cursor-pointer border-2 border-gray-300" loading="lazy">
 
             <!-- Dropdown Menu -->
             <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-30">
@@ -45,12 +51,12 @@
             <ul class="font-bold space-y-4">
                 <li>
                     <a href="{{ route('deanDashboard') }}" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
-                        <img src="img/home.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200">Inicio
+                        <img src="img/home.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200"  loading="eager">Inicio
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('deanResults') }}" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
-                        <img src="img/results.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200">Resultados
+                        <img src="img/results.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200" loading="eager">Resultados
                     </a>
                 </li>
             </ul>

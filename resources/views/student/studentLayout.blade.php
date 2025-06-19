@@ -9,7 +9,7 @@
 
     <link rel="icon" href="{{ asset('img/usapico.png') }}" type="image/x-icon">
 
-    <!-- Preload imágenes críticas -->
+    <!-- Preload imagenes -->
     <link rel="preload" as="image" href="{{ asset('img/usapblue.png') }}">
     <link rel="preload" as="image" href="{{ asset('img/pfp.jpg') }}">
     <link rel="preload" as="image" href="{{ asset('img/sidebar.png') }}">

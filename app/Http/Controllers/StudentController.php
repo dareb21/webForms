@@ -23,7 +23,6 @@ class StudentController extends Controller
     {
         $noClaseId = $request->query('noClaseId');
         $coursesId = $request->query('courseId');
-
         $survey = new Survey;
 
         if ($survey->where("status", 1)->count() == 1) {

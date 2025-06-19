@@ -12,28 +12,25 @@ class AdminController extends Controller
 
   public function enableEvaluation()
   {
-    $survey=Survey::findOrFail(1);
-    if (Survey::where("status",1)->count() == 0)
-    {
-      $survey->status = 1;
-      $survey->save();
-      return redirect()->route("adminEvaluation");
-    }else
+     // me tienen que pasar el id
+    if (Survey::where("status",1)->exists())
     {
       return response()->json("Ya hay una en linea");
+    }else
+    {
+      Survey::where("id",1)->update([
+        "status" => 1,    
+      ]);
     }
-    
+    return redirect()->route("adminEvaluation");
   }
 
 public function UnableEvaluation()
 {
-    $survey=Survey::findOrFail(1);
-    if( $survey->status == 1)
-    {
-      $survey->status = 0;
-      $survey->save();
-      
-    }
+  //falta que me pasen el id
+    Survey::where("id", 1)->where("status", 1)->update([
+    "status" => 0,
+    ]);
     return redirect()->route("adminEvaluation");
 }
 
@@ -48,13 +45,13 @@ public function UnableEvaluation()
 
   public function adminEvaluation()
     {
+      
     $collectionStatus = Collect();
     $surveys = Survey::paginate(10); 
     foreach ($surveys as $survey) {
     $status = $survey->status == 1 ? "Activa" : "Inactiva";
     $collectionStatus->push($status);
     }
-    
     return view("admin.adminEvaluation",compact("surveys","collectionStatus"));
     }
 
@@ -95,7 +92,7 @@ public function UnableEvaluation()
     $survey->status = 0;
     $survey->save();
     $i=1;
-    foreach($request->questions as $question)
+        foreach($request->questions as $question)
     {
       $group=QuestionGroup::create([
         "survey_id"=>$survey->id,

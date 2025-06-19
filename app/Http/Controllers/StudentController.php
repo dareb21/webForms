@@ -23,7 +23,6 @@ class StudentController extends Controller
 
     public function studentEvaluation(Request $request)
     {
- 
     $noClaseId = $request->query('noClaseId');
     $coursesId = $request->query('courseId');
     if(!SurveySubmit::where("user_id",1)->where("course_id",$coursesId)->exists())
@@ -43,7 +42,7 @@ class StudentController extends Controller
 
     }
 
-    public Function studentSubmit(Request $request)
+    public Function studentSubmit(Request $request, $courseId)
     {
          $seleccionados = [];
 
@@ -60,7 +59,10 @@ class StudentController extends Controller
         $surveySubmit=SurveySubmit::create([
         "DateSubmmited"=>now(),
         "survey_id"=>$survey->id,
+        "course_id"=>$courseId,
         "user_id"=>1,
+        "observations"=>$request->observaciones,
+
       ]);
             foreach ($seleccionados as $option) {
                ResponseSubmit::create([
@@ -68,13 +70,13 @@ class StudentController extends Controller
                 "question_option_id"=>$option,
                ]);
             }
-    return response()->json(["mensaje" => "guardada"]);
+    return redirect()->route("studentThanks");
 
     }
 
-
-    public function studentThanks()
-    {
-        return view('student.thankyouView');
-    }
+public function studentThanks()
+{
+    return view("student.thankyouView");
+}
+  
 }

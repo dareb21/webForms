@@ -12,5 +12,7 @@ class SurveySubmit extends Model
         'survey_id',
         'DateSubmmited',
         'user_id',
+        'course_id',
+        'observations',
     ];
 }

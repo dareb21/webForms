@@ -27,7 +27,7 @@
         </header>
 
         <!-- Formulario de preguntas -->
-        <form action="{{ route('studentSubmit') }}" method="POST" class="max-w-5xl mx-auto">
+        <form action="{{ route('studentSubmit', ['courseId' => $coursesId]) }}" method="POST" class="max-w-5xl mx-auto">
             @csrf
             <div class="overflow-x-auto">
                 <table class="table-auto border border-gray-400 w-full text-left">

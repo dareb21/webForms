@@ -38,7 +38,7 @@
                     @endphp
 
                     <div class="flex flex-col gap-y-4 py-4">
-                        <p class="font-bold text-lg">Grupo {{ $group->id }}</p>
+                        <p class="font-bold text-lg">{{ $group->groupName }}</p>
                         <div class="flex items-center gap-x-2 w-full">
                             <label class="whitespace-nowrap">Pregunta 1 -</label>
                             <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[0]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[0]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">
@@ -58,9 +58,9 @@
                 <a id="borrar-grupo" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded hover:cursor-pointer">BORRAR GRUPO</a>
             </div>
             <div class="w-full flex justify-center gap-4 flex-col md:flex-row py-4 bg-white rounded-b-xl mt-8">
-                <a href="#" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">GUARDAR</a>
-                <a href="#" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">ACTIVAR</a>
-                <a href="#" class="bg-red-600 hover:bg-blue-700 text-white font-bold py-1 px-6 rounded">DESACTIVAR</a>
+                <a href="" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">GUARDAR</a>
+                <a href="{{route('enableEvaluation')}}" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">ACTIVAR</a>
+                <a href="{{route('unableEvaluation')}}" class="bg-red-600 hover:bg-blue-700 text-white font-bold py-1 px-6 rounded">DESACTIVAR</a>
                 <form action="{{ route('adminDelete', ['id' => $survey->id]) }}">
                     <button type="submit" class="bg-red-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">
                         ELIMINAR

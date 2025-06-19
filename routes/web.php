@@ -44,10 +44,10 @@ Route::get('/adminEvaluation', [AdminController::class, "adminEvaluation"])->nam
 Route::get('/adminNewEvaluation', [AdminController::class, "adminNewEvaluation"])->name("adminNewEvaluation");
 Route::post("/adminNewEvaluation/create",[AdminController::class, "createNewEvaluation"])->name("createNewEvaluation");
 Route::get('/adminEvaluationEdit/{id}', [AdminController::class, "adminEvaluationEdit"])->name("adminEvaluationEdit");
-Route::get('/adminDelete/{id}', [AdminController::class, "adminDelete"])->name("adminDelete");
+Route::get('/adminDelete/{surveyId}', [AdminController::class, "adminDelete"])->name("adminDelete");
 Route::put('/adminEvaluationEdit/edit', [AdminController::class, "adminEvaluationEdited"])->name("adminEvaluationEdited");
-Route::get("/admiEnableEvaluation",[AdminController::class, "enableEvaluation"])->name("enableEvaluation");
-Route::get("/admiUnableEvaluation",[AdminController::class, "UnableEvaluation"])->name("unableEvaluation");
+Route::get("/admiEnableEvaluation/{surveyId}",[AdminController::class, "enableEvaluation"])->name("enableEvaluation");
+Route::get("/admiUnableEvaluation/{surveyId}",[AdminController::class, "UnableEvaluation"])->name("unableEvaluation");
 
 Route::get('/adminResults', [AdminController::class, "adminResults"])->name("adminResults");
 Route::get('/adminStudentView', [AdminController::class,"adminStudentView"])->name("adminStudentView");

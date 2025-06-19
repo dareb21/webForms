@@ -23,11 +23,11 @@
                 @csrf
                 @method('PUT')
             <div class="flex justify-center gap-x-4 flex-wrap py-4">
-                <label for="">EVALUACION # -</label>
+                <label for="">EVALUACION # </label>
                 <input type="text" value="{{ $evaluacion }}" class="shadow-md border border-gray-200">
-                <label for="">Fecha Inicio -</label>
+                <label for="">Fecha Inicio :  </label>
                 <input type="date" name="" id="" value="{{ $dateStart }}" class="shadow-md border border-gray-200">
-                <label for="">Fecha Cierre -</label>
+                <label for="">Fecha Cierre </label>
                 <input type="date" name="" id="" value="{{ $dateEnd }}" class="shadow-md border border-gray-200">
             </div>
             
@@ -60,25 +60,15 @@
             </div>
             <div class="w-full flex justify-center gap-4 flex-col md:flex-row py-4 bg-white rounded-b-xl mt-8">
                 <a href="" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">GUARDAR</a>
-                <form action="{{ route('enableEvaluation', $surveyId) }}">
-                    @csrf
-                    <button type="submit" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">
-                        ACITVAR
-                    </button>
-                </form>
-                <form action="{{ route('unableEvaluation'), $surveyId }}">
-                    @csrf
-                    <button type="submit" class="bg-red-600 hover:bg-blue-700 text-white font-bold py-1 px-6 rounded">
+                    <a href="{{ route('enableEvaluation', ['surveyId' => $surveyId]) }}" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">
+                        ACTIVAR
+                    </a>
+                <a href="{{ route('unableEvaluation', ['surveyId' => $surveyId]) }}" class="bg-red-600 hover:bg-blue-700 text-white font-bold py-1 px-6 rounded">
                         DESACTIVAR
-                    </button>
-                </form>
-
-                <form action="{{ route('adminDelete', $surveyId) }}">
-                    @csrf
-                    <button type="submit" class="bg-red-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">
-                        ELIMINAR
-                    </button>
-                </form>
+                </a>
+                <a href="{{ route('adminDelete', ['surveyId' => $surveyId]) }}"class="bg-red-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">
+                                            ELIMINAR
+                </a>
                 <a href="{{ route('adminEvaluation') }}" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">REGRESAR</a>
             </div>
     </div>

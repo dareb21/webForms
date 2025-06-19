@@ -36,6 +36,7 @@ Route::get('/studentDashboard', [StudentController::class,"studentDashboard"])->
 Route::get('/studentEvaluation', [StudentController::class,"studentEvaluation"])->name("studentEvaluation");
 Route::post('/studentSubmit', [StudentController::class,"studentSubmit"])->name("studentSubmit");
 Route::get('/studentThankyou', [StudentController::class,"studentThanks"])->name("studentThanks");
+Route::get('/studentSubmit', [StudentController::class,"studentSubmit"])->name("studentSubmit");
 
 #Rutas admin
 Route::get('/adminDashboard', [AdminController::class, "adminDashboard"])->name("adminDashboard");

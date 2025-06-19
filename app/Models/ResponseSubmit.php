@@ -9,7 +9,7 @@ class ResponseSubmit extends Model
   
   use HasFactory;
     protected $fillable = [
-        'submitId',
-        'optionId',
+        'survey_submit_id',
+        'question_option_id',
     ];
 }

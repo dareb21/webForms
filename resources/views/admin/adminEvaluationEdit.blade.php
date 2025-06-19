@@ -17,6 +17,7 @@
             $evaluacion = $survey->revision;
             $dateStart = $survey->dateStart;
             $dateEnd = $survey->dateEnd;
+            $surveyId = $survey->id;
         @endphp
         <form action="{{ route('adminEvaluationEdited') }}" method="POST">    
                 @csrf
@@ -59,9 +60,21 @@
             </div>
             <div class="w-full flex justify-center gap-4 flex-col md:flex-row py-4 bg-white rounded-b-xl mt-8">
                 <a href="" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">GUARDAR</a>
-                <a href="{{route('enableEvaluation')}}" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">ACTIVAR</a>
-                <a href="{{route('unableEvaluation')}}" class="bg-red-600 hover:bg-blue-700 text-white font-bold py-1 px-6 rounded">DESACTIVAR</a>
-                <form action="{{ route('adminDelete', ['id' => $survey->id]) }}">
+                <form action="{{ route('enableEvaluation', $surveyId) }}">
+                    @csrf
+                    <button type="submit" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">
+                        ACITVAR
+                    </button>
+                </form>
+                <form action="{{ route('unableEvaluation'), $surveyId }}">
+                    @csrf
+                    <button type="submit" class="bg-red-600 hover:bg-blue-700 text-white font-bold py-1 px-6 rounded">
+                        DESACTIVAR
+                    </button>
+                </form>
+
+                <form action="{{ route('adminDelete', $surveyId) }}">
+                    @csrf
                     <button type="submit" class="bg-red-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">
                         ELIMINAR
                     </button>

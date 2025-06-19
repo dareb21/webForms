@@ -10,10 +10,10 @@ use App\Models\QuestionOption;
 class AdminController extends Controller
 {
 
-  public function enableEvaluation()
+  public function enableEvaluation($surveyId)
   {
      // me tienen que pasar el id
-    if (Survey::where("status",1)->exists())
+    if (Survey::where("status",$surveyId)->exists())
     {
       return response()->json("Ya hay una en linea");
     }else
@@ -28,6 +28,7 @@ class AdminController extends Controller
 public function UnableEvaluation()
 {
   //falta que me pasen el id
+  dd();
     Survey::where("id", 1)->where("status", 1)->update([
     "status" => 0,
     ]);

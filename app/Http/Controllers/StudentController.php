@@ -23,10 +23,10 @@ class StudentController extends Controller
 
     public function studentEvaluation(Request $request)
     {
-    $thisSurvey = Survey::where("status", 1)->first();    
+    $thisSurvey = Survey::where("status", 1)->first();
     $noClaseId = $request->query('noClaseId');
     $coursesId = $request->query('courseId');
-    if(!SurveySubmit::where("user_id",1)->where("course_id",$coursesId)->where("survey_id",$thisSurvey)->exists())
+    if(!SurveySubmit::where("user_id",1)->where("course_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
     {
     $survey = new Survey;
     $questionGroups = QuestionGroup::where("survey_id", $thisSurvey->id)->get();

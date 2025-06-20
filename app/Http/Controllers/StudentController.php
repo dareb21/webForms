@@ -20,7 +20,6 @@ class StudentController extends Controller
     return view("student.studentDashboard");
     }
 
-
     public function studentEvaluation(Request $request)
     {
     $noClaseId = $request->query('noClaseId');

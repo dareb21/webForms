@@ -7,7 +7,10 @@
   @vite('resources/css/app.css')
   @vite('resources/js/app.js')
   <link rel="shortcut icon" href="{{ asset('img/usapico.png') }}" type="image/x-icon">
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
   <style>[x-cloak] { display: none !important; }</style>
 
   <!-- Preload imágenes necesarias -->

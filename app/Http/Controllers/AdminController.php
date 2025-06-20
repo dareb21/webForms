@@ -15,7 +15,7 @@ class AdminController extends Controller
   
     if (Survey::where("status",1)->exists())
     {
-      return response()->json("Ya hay una en linea");
+      return redirect()->back()->with('alert','Ya hay una evaluacion Activa');
     }else
     {
       Survey::where("id",$surveyId)->update([

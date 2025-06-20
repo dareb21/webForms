@@ -5,6 +5,17 @@
     $i = 1;
      @endphp
 
+    @if (session('alert'))
+        <script>
+            Swal.fire({
+                title: "Advertencia",
+                text: {!! json_encode(session('alert')) !!},
+                icon: "warning"
+            });
+        </script>
+    @endif
+
+
 <!-- Main Content -->
 <div class="flex-1 ml-0 md:ml-80 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="bg-white rounded-xl shadow-lg p-6 w-full h-full relative pb-24">
@@ -52,26 +63,43 @@
                 @endforeach
             </div>
 
+            <!-- Botones -->
+            <div class="w-full flex flex-col items-center md:flex-row md:justify-center gap-4 py-4 bg-white rounded-b-xl mt-8">
+                <a id="agregar-grupo" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded hover:cursor-pointer">
+                    AGREGAR GRUPO
+                </a>
+                <a id="borrar-grupo" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded hover:cursor-pointer">
+                    BORRAR GRUPO
+                </a>
+            </div>
 
-            <!-- Botones  -->
-            <div class="w-full flex justify-center gap-4 flex-col md:flex-row py-4 bg-white rounded-b-xl mt-8">
-                <a id="agregar-grupo" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded hover:cursor-pointer">AGREGAR GRUPO</a>
-                <a id="borrar-grupo" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded hover:cursor-pointer">BORRAR GRUPO</a>
-            </div>
-            <div class="w-full flex justify-center gap-4 flex-col md:flex-row py-4 bg-white rounded-b-xl mt-8">
-                <button type="submit" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">GUARDAR</button>
-                </form>
-                    <a href="{{ route('enableEvaluation', ['surveyId' => $surveyId]) }}" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">
-                        ACTIVAR
-                    </a>
-                <a href="{{ route('unableEvaluation', ['surveyId' => $surveyId]) }}" class="bg-red-600 hover:bg-blue-700 text-white font-bold py-1 px-6 rounded">
-                        DESACTIVAR
+            <div class="w-full flex flex-col lg:flex-row justify-center gap-4 mt-8">
+            <!-- Primer grupo de botones -->
+            <div class="text-center w-full lg:w-auto flex flex-col items-center md:flex-row md:justify-center gap-1 py-4 bg-white rounded-b-xl">
+                <a href="" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
+                    GUARDAR
                 </a>
-                <a href="{{ route('adminDelete', ['surveyId' => $surveyId]) }}"class="bg-red-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">
-                                            ELIMINAR
+                <a href="{{ route('adminEvaluation') }}" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
+                    REUTILIZAR
                 </a>
-                <a href="{{ route('adminEvaluation') }}" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">REGRESAR</a>
+                <a href="{{ route('enableEvaluation', ['surveyId' => $surveyId]) }}" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
+                    ACTIVAR
+                </a>
             </div>
+
+            <!-- Segundo grupo de botones -->
+            <div class="text-center w-full lg:w-auto flex flex-col items-center md:flex-row md:justify-center gap-1 py-4 bg-white rounded-b-xl">
+                <a href="{{ route('unableEvaluation', ['surveyId' => $surveyId]) }}" class="w-30 bg-red-600 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">
+                    DESACTIVAR
+                </a>
+                <a href="{{ route('adminDelete', ['surveyId' => $surveyId]) }}" class="w-30 bg-red-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
+                    ELIMINAR
+                </a>
+                <a href="{{ route('adminEvaluation') }}" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
+                    REGRESAR
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 <script>
@@ -121,5 +149,4 @@
         });
     });
 </script>
-
 @endsection

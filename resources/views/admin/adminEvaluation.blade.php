@@ -29,7 +29,7 @@
                                     <td class="border border-gray-400 px-4 py-2 text-center">{{ $survey->dateStart }}</td>
                                     <td class="border border-gray-400 px-4 py-2 text-center">{{ $survey->dateEnd }}</td>
                                     <td class="border border-gray-400 px-4 py-2 text-center">{{ $survey->Author }}</td>
-                                    <td class="border border-gray-400 px-4 py-2 text-center">{{ $survey->status }}</td>
+                                    <td class="border border-gray-400 px-4 py-2 text-center">{{ $survey->status == 1 ? "Activa" : "Inactiva"; }}</td>
                                     <td class="border border-gray-400 px-4 py-2 text-center">
                                         <form action="{{ route('adminEvaluationEdit', ['id' => $survey->id]) }}">
                                             <button type="submit" class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-3 rounded">

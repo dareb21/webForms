@@ -1,7 +1,7 @@
 @extends('admin.adminLayout')
 @section('content')
 <!-- Main Content -->
-        <div class="flex-1 ml-0 md:ml-80 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+    <div class="flex-1 h-full md:ml-64 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
 
         <!-- Top Stats -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">

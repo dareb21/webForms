@@ -1,7 +1,7 @@
 @extends('admin.adminLayout')
 @section('content')
 <!-- Main Content -->
-<div class="flex-1 ml-0 md:ml-80 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+<div class="flex-1 ml-0 md:ml-64 p-6 h-full bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="bg-white rounded-xl shadow-lg p-6 w-full h-full">
         <div class="flex flex-col items-center">
             <div class="bg-white p-4 text-center text-2xl font-bold">
@@ -9,8 +9,42 @@
                     RESULTADOS DE EVALUACIONES
                 </h1>
             </div>
-            <!-- Seccion de evaluaciones -->
+
+            <!-- Búsqueda -->
+            <div class="flex justify-center gap-x-4 flex-wrap py-4">
+                <h1 class="font-bold">Búsqueda</h1>
+                <input type="text" name="deanSearch" id="deanSearch" class="shadow-md border border-gray-200">
+                <select name="deanSearchSelect" id="deanSearchSelect" class="shadow-md border border-gray-200">
+                    <option value="0" disabled selected hidden></option>
+                    <option value="catedratico">Catedrático</option>
+                    <option value="escuela">Escuela</option>
+                    <option value="clase">Clase</option>
+                </select>
+            </div>
+            
+            <!-- Segmentación por años y períodos -->
             <div class="w-full h-full mt-6 overflow-x-auto">
+                <div class="w-full flex flex-col items-start pt-3">
+                    <div class="flex gap-x-4 flex-wrap py-4">  
+                    <label for="anualYear">Año</label>
+                    <select name="anualYear" id="anualYear" class="shadow-md border border-gray-200">
+                        <option value="anualY1">2025</option>
+                        <option value="anualY2">2024</option>
+                        <option value="anualY2">2023</option>
+                    </select>
+                    <label for="anualPeriod">Período</label>
+                    <select name="anualPeriod" id="anualPeriod" class="shadow-md border border-gray-200">
+                        <option value="anualP1">Total</option>
+                        <option value="anualP2">Período 1</option>
+                        <option value="anualP3">Período 2</option>
+                        <option value="anualP4">Período 3</option>
+                    </select>
+                    <button class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
+                        Buscar
+                    </button>
+                </div>
+
+            <!-- Seccion de evaluaciones -->
                 <table class="table-auto border border-gray-400 w-full min-w-[600px] text-left">
                     <thead>
                         <tr>

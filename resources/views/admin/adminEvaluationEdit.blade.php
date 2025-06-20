@@ -17,7 +17,7 @@
 
 
 <!-- Main Content -->
-<div class="flex-1 ml-0 md:ml-80 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+<div class="flex-1 ml-0 md:ml-64 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="bg-white rounded-xl shadow-lg p-6 w-full h-full relative pb-24">
         <div class="bg-white p-4 text-center text-2xl font-bold">
                 <h1>
@@ -112,7 +112,7 @@
             const titulos = container.querySelectorAll("p.font-bold.text-lg");
             let max = 0;
             titulos.forEach(titulo => {
-                const match = titulo.textContent.match(/Grupo\s+(\d+)/);
+                const match = titulo.textContent.match(/Indicador\s+(\d+)/);
                 if (match) {
                     const num = parseInt(match[1]);
                     if (num > max) max = num;
@@ -127,7 +127,7 @@
             const grupoDiv = document.createElement("div");
             grupoDiv.className = "flex flex-col gap-y-4 py-4 grupo-dinamico";
             grupoDiv.innerHTML = `
-                <p class="font-bold text-lg">Grupo ${nuevoNumeroGrupo}</p>
+                <p class="font-bold text-lg">Indicador ${nuevoNumeroGrupo}</p>
                 <div class="flex items-center gap-x-2 w-full">
                     <label class="whitespace-nowrap">Pregunta 1 -</label>
                     <input type="text" name="grupos[${nuevoNumeroGrupo}][pregunta1]" class="shadow-md border border-gray-200 flex-1 w-full">

@@ -41,17 +41,17 @@
                                 <tr>
                                     @if ($loop->first)
                                         <th
-                                            class="border border-gray-400 text-center bg-blue-600 text-white px-4 py-2 align-middle"
+                                            class="border border-gray-400 text-center bg-blue-600 text-white w-24 md:w-36 px-4 py-2 align-middle"
                                             rowspan="{{ $groupOptions->count() }}"
                                             scope="rowgroup"
                                         >
-                                            Grupo {{ $group->id }}
+                                            {{ $group->groupName }}
                                         </th>
                                     @endif
                                     <td class="border border-gray-400 px-4 py-2 text-center">
                                         {{ $option->option ?? 'Pregunta sin texto' }}
                                     </td>
-                                    <td class="border border-gray-400 px-4 py-2 text-center">
+                                    <td class="border border-gray-400 w-12 md:w-20 px-4 py-2 text-center">
                                         <input
                                             type="checkbox"
                                             name="option_{{ $option->id }}"

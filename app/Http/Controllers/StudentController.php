@@ -25,7 +25,7 @@ class StudentController extends Controller
     $thisSurvey = Survey::where("status", 1)->first();
     if(is_null($thisSurvey))
     {
-        return response()->json("NO hay encuestas activas por el momento");
+        return view("student.studentInactiveEvaluation");
     }
 
     $noClaseId = $request->query('noClaseId');

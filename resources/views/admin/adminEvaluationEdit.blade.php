@@ -19,7 +19,7 @@
             $dateEnd = $survey->dateEnd;
             $surveyId = $survey->id;
         @endphp
-        <form action="{{ route('adminEvaluationEdited') }}" method="POST">    
+        <form action="{{ route('adminUpdateOrReuse',['surveyId'=>$surveyId]) }}" method="POST">    
                 @csrf
                 @method('PUT')
             <div class="flex justify-center gap-x-4 flex-wrap py-4">
@@ -59,7 +59,8 @@
                 <a id="borrar-grupo" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded hover:cursor-pointer">BORRAR GRUPO</a>
             </div>
             <div class="w-full flex justify-center gap-4 flex-col md:flex-row py-4 bg-white rounded-b-xl mt-8">
-                <a href="" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">GUARDAR</a>
+                <button type="submit" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">GUARDAR</button>
+                </form>
                     <a href="{{ route('enableEvaluation', ['surveyId' => $surveyId]) }}" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded">
                         ACTIVAR
                     </a>

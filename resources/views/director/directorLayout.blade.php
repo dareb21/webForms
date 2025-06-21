@@ -1,104 +1,121 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evaluacion Docente</title>
-    @vite('resources/css/app.css')
-    @vite('resources/js/app.js')
-    <link rel="shortcut icon" href="{{ asset('img/usapico.png') }}" type="image/x-icon">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>[x-cloak] { display: none !important; }</style>
-    <!-- Preload imagenes -->
-    <link rel="preload" as="image" href="{{ asset('img/usapblue.png') }}">
-    <link rel="preload" as="image" href="{{ asset('img/pfp.jpg') }}">
-    <link rel="preload" as="image" href="{{ asset('img/sidebar.png') }}">
-    <link rel="preload" as="image" href="{{ asset('img/home.png') }}">
-    <link rel="preload" as="image" href="{{ asset('img/results.png') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluación Docente</title>
+
+  @vite('resources/css/app.css')
+  @vite('resources/js/app.js')
+
+  <link rel="shortcut icon" href="{{ asset('img/usapico.png') }}" type="image/x-icon" />
+
+  <link rel="preload" as="image" href="{{ asset('img/usapblue.png') }}">
+  <link rel="preload" as="image" href="{{ asset('img/pfp.jpg') }}">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 <body class="bg-gray-100">
-    <!-- Navbar -->
-    <div class="fixed top-0 left-0 right-0 z-20 h-14 bg-white shadow-md border-b-2 border-gray-100 flex items-center justify-between px-4">
-        <button id="sidebarToggle" class="md:hidden mr-3 focus:outline-none">
-            <img src="{{ asset('img/sidebar.png') }}" alt="Menu" class="h-6 w-6 hover:cursor-pointer" loading="lazy">
-        </button>
 
-        <a href="{{ route('directorDashboard') }}">
-            <img src="{{ asset('img/usapblue.png') }}" alt="logo" class="h-10 w-auto hover:cursor-pointer" loading="lazy">
-        </a>
+<!-- Botón para mostrar sidebar en móviles -->
+<div class="md:hidden fixed top-0 left-0 z-50">
+  <button id="sidebarToggle" class="p-2 bg-white rounded shadow">
+    <!-- Ícono menú -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+</div>
 
-        <!-- PFP Dropdown -->
-        <div class="relative">
-            <img id="profileBtn" src="{{ asset('img/pfp.jpg') }}" alt="profileImg" class="h-10 w-10 rounded-full hover:cursor-pointer border-2 border-gray-300" loading="lazy">
-
-            <!-- Dropdown Menu -->
-            <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-30">
-                <a href="#" class="block px-4 py-2 text-gray-700 ">Nombre</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 ">Correo</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-orange-500 hover:text-white">Cerrar sesión</a>
-            </div>
-        </div>
+<!-- Sidebar + Contenido -->
+<div class="flex h-screen relative">
+  <!-- Sidebar -->
+  <div id="sidebar" class="fixed top-0 left-0 h-full w-60 p-3 space-y-2 bg-white z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div class="flex items-center p-2 space-x-4">
+      <img src="{{ asset('img/pfp.jpg') }}" alt="" class="w-12 h-12 rounded-full bg-gray-300" />
+      <div>
+        <h2 class="text-lg font-semibold">Director USAP</h2>
+        <span class="text-sm font-light">director@usap.edu</span>
+      </div>
     </div>
 
-    <!-- Sidebar + Contenido -->
-    <div class="pt-14 flex">
-        <!-- Sidebar -->
-        <div id="sidebar" class="
-            fixed top-14 left-0 h-[calc(100vh-4rem)] w-80 py-8 bg-white shadow- p-4 z-30
-            transform -translate-x-full transition-transform duration-300 ease-in-out
-            md:translate-x-0
-            ">
+    <div class="divide-y divide-gray-300">
+      <ul class="pt-2 pb-4 space-y-1 text-sm">
+        <li class="hover:bg-blue-700 hover:text-white">
+          <a href="{{ route('directorDashboard') }}" class="group flex items-center p-2 space-x-3 rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+              class="w-5 h-5 fill-current text-gray-600 transition duration-300 group-hover:invert">
+              <path d="M68.983,382.642l171.35,98.928a32.082,32.082,0,0,0,32,0l171.352-98.929a32.093,32.093,0,0,0,16-27.713V157.071a32.092,32.092,0,0,0-16-27.713L272.334,30.429a32.086,32.086,0,0,0-32,0L68.983,129.358a32.09,32.09,0,0,0-16,27.713V354.929A32.09,32.09,0,0,0,68.983,382.642ZM272.333,67.38l155.351,89.691V334.449L272.333,246.642ZM256.282,274.327l157.155,88.828-157.1,90.7L99.179,363.125ZM84.983,157.071,240.333,67.38v179.2L84.983,334.39Z"/>
+            </svg>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="hover:bg-blue-700 hover:text-white">
+          <a href="{{ route('directorResults') }}" class="group flex items-center p-2 space-x-3 rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+              class="w-5 h-5 fill-current text-gray-600 transition duration-300 group-hover:invert">
+              <path d="M479.6,399.716l-81.084-81.084-62.368-25.767A175.014,175.014,0,0,0,368,192c0-97.047-78.953-176-176-176S16,94.953,16,192,94.953,368,192,368a175.034,175.034,0,0,0,101.619-32.377l25.7,62.2L400.4,478.911a56,56,0,1,0,79.2-79.195ZM48,192c0-79.4,64.6-144,144-144s144,64.6,144,144S271.4,336,192,336,48,271.4,48,192ZM456.971,456.284a24.028,24.028,0,0,1-33.942,0l-76.572-76.572-23.894-57.835L380.4,345.771l76.573,76.572A24.028,24.028,0,0,1,456.971,456.284Z"/>
+            </svg>
+            <span>Resultados</span>
+          </a>
+        </li>
+      </ul>
 
-            <ul class="font-bold space-y-4">
-                <li>
-                    <a href="{{ route('directorDashboard') }}" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
-                        <img src="img/home.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200"  loading="eager">Inicio
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('directorResults') }}" class="group flex items-center p-4 px-6 gap-2 hover:rounded-lg hover:bg-blue-500 hover:text-white">
-                        <img src="img/results.png" alt="" class="w-5 h-5 group-hover:invert group-hover:brightness-0 group-hover:contrast-200" loading="eager">Resultados
-                    </a>
-                </li>
-            </ul>
-        </div>
+      <ul class="pt-4 pb-2 space-y-1 text-sm">
+        <li class="hover:bg-orange-600 hover:text-white">
+          <a href="#" class="group flex items-center p-2 space-x-3 rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+              class="w-5 h-5 fill-current text-gray-600 transition duration-300 group-hover:invert">
+              <path d="M440,424V88H352V13.005L88,58.522V424H16v32h86.9L352,490.358V120h56V456h88V424ZM320,453.642,120,426.056V85.478L320,51Z"/>
+              <rect width="32" height="64" x="256" y="232"/>
+            </svg>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </div>
 
-        <script src="//unpkg.com/alpinejs" defer></script>
-        <script>
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('sidebarToggle');
+    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+      <img src="{{ asset('img/usapblue.png') }}" alt="Logo" class="h-14">
+    </div>
+  </div>
 
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('-translate-x-full');
-            });
+  <!-- Contenido -->
+  <main class="flex-1 p-2 h-full bg-gray-200 overflow-auto min-h-screen">
+    @yield('content')
+  </main>
+</div>
 
-            // Opcional: cerrar sidebar si haces clic fuera, solo en móvil
-            document.addEventListener('click', (e) => {
-                if (window.innerWidth < 768) {
-                if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
-                    if (!sidebar.classList.contains('-translate-x-full')) {
-                    sidebar.classList.add('-translate-x-full');
-                    }
-                }
-                }
-            });
+<script src="//unpkg.com/alpinejs" defer></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const sidebar = document.getElementById("sidebar");
+    const toggle = document.getElementById("sidebarToggle");
 
-            document.addEventListener("DOMContentLoaded", function () {
-                const profileBtn = document.getElementById("profileBtn");
-                const dropdownMenu = document.getElementById("dropdownMenu");
+    function openSidebar() {
+      sidebar.classList.remove("-translate-x-full");
+      toggle.classList.add("hidden");
+    }
 
-                profileBtn.addEventListener("click", function () {
-                    dropdownMenu.classList.toggle("hidden");
-                });
+    function closeSidebar() {
+      sidebar.classList.add("-translate-x-full");
+      toggle.classList.remove("hidden");
+    }
 
-                // Cerrar dropdown si se hace clic fuera
-                document.addEventListener("click", function (event) {
-                    if (!profileBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                        dropdownMenu.classList.add("hidden");
-                    }
-                });
-            });
-        </script>
-        @yield('content')
+    toggle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      openSidebar();
+    });
+
+    document.addEventListener("click", function (e) {
+      if (window.innerWidth < 768) {
+        if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+          closeSidebar();
+        }
+      }
+    });
+  });
+</script>
 </body>
 </html>

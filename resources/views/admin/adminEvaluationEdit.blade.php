@@ -15,7 +15,6 @@
         </script>
     @endif
 
-
 <!-- Main Content -->
 <div class="flex-1 ml-0 md:ml-64 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="bg-white rounded-xl shadow-lg p-6 w-full h-full relative pb-24">

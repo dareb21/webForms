@@ -60,3 +60,4 @@ Route::get('/deanResults', [DeanController::class, "deanResults"])->name("deanRe
 Route::get('/directorDashboard', [DirectorController::class, "directorDashboard"])->name("directorDashboard");
 Route::get('/directorResults', [DirectorController::class, "directorResults"])->name("directorResults");
 Route::get('/directorStudentView', [DirectorController::class, "directorStudentView"])->name("directorStudentView");
+Route::get('/directorSchools', [DirectorController::class, "directorSchools"])->name("directorSchools");

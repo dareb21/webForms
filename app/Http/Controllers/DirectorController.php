@@ -26,4 +26,8 @@ class DirectorController extends Controller
     public function directorStudentView(){
       return view('director.directorStudentView');
     }
+
+    public function directorSchools(){
+      return view('director.directorSchools');
+    }
 }

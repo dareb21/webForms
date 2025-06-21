@@ -107,8 +107,11 @@ public function UnableEvaluation($surveyId)
     return redirect()->route("adminEvaluation");
    }
 
-public function adminEvaluationEdited( $surveyId)
+public function adminEvaluationEdited()
 {
+  $request = (object) session('datos');
+  session()->forget('datos');
+
   $thisSurvey = Survey::findOrFail($surveyId);
   $dateNow = Carbon::now('etc/GMT+6');
 
@@ -120,62 +123,74 @@ public function adminEvaluationEdited( $surveyId)
 
 }
 
-public function reUseSurvey(Request $request,$surveyId)
+public function reUseSurvey()
 {
+    $request = (object) session('datos');
+    session()->forget('datos');
+  $thisSurvey = Survey::findOrFail($request->survey_id);
 
-  $thisSurvey = Survey::findOrFail($surveyId);
-  DD($request->evaluationStart, $thisSurvey->dateStart);
-
-  $sameName = $thisSurvey->revision == $request->evaluationName;
-  $sameDateStart=$thisSurvey->dateStart == $request->evaluationStart;
+  $sameName = $thisSurvey->revision == $request->revision;
+  $sameDateStart=$thisSurvey->dateStart == $request->dateStart;
   $sameDateEnd=$thisSurvey->dateEnd == $request->dateEnd;
   
   if ($sameDateEnd ||$sameDateStart || $sameName)
   {
-    return redirect()->back()->with('alert','El encabezado no es permitido.');
+    return response()->json("no joda");
+    //return redirect()->back()->with('alert','El encabezado no es permitido.');
   }
+  
   $survey = new Survey;
-  $survey->revision= $request->evaluationName;
+  $survey->revision= $request->revision;
   $survey->dateStart = $request->dateStart;
   $survey->dateEnd = $request->dateEnd;
   $survey->author = "admin1";
   $survey->status = 0;
   $survey->save();
 
-  foreach($request->questions as $question)
-  {
-    $group=QuestionGroup::create([
-        "survey_id"=>$survey->id,
-        "groupName"=>"Indicador ". $i
-      ]);
-      QuestionOption::create([
-        "option"=>$question["p1"],
-        "question_group_id"=>$group->id,
-      ]);
-       QuestionOption::create([
-        "option"=>$question["p2"],
-        "question_group_id"=>$group->id,
-      ]);
-      $i+=1; 
+  $groups = QuestionGroup::join("question_options","question_groups.id","=","question_options.question_group_id")
+  ->join("surveys","question_groups.survey_id","=","surveys.id")
+  ->select("question_options.option as Options")
+  ->where("surveys.id",$thisSurvey->id)
+  ->get();
+  $k=0;
+  for ($i=1; $i<=(count($groups)/2);$i++)
+{
+  $questionGroup = new QuestionGroup;
+  $questionOption = new QuestionOption;
 
-  }
+  $questionGroup->survey_id = $survey->id;
+  $questionGroup->groupName = "Indicador ".$i;
+  $questionGroup->save();
 
-$questionOptions = QuestionOption::where("survey_id",$questionGroups->id)->get();
-  
-
+  $questionOption->option = $groups[$k]->Options;
+  $questionOption->question_group_id= $questionGroup->id;
+  $questionOption->save();
+  $k+=1;
+  $questionOption = new QuestionOption;
+   $questionOption->option = $groups[$k]->Options;
+  $questionOption->question_group_id= $questionGroup->id;
+  $questionOption->save();
+  $k+=1;
+}
+return redirect()->back();
 }
 
-public function adminUpdateOrReuse(Request $request,$surveyId)
+
+
+public function adminUpdateOrReuse(Request $request)
 {
-$accion = $request->input('accion');
+$action = $request->input('btn');
+switch ($action){
+  case "reuse":
+        return redirect()->route("reUseSurvey")->with(['datos' => $request->all()]);
+  case "update":
 
-    if ($accion === 'guardar') {
-        return redirect()->route('ruta.guardar')->with('mensaje', 'Guardado');
-    }
+                break;
+  default:
+        return response()->json("algo salio mal");
+}
 
-    if ($accion === 'enviar') {
-        return redirect()->route('ruta.enviar')->with('mensaje', 'Enviado');
-    }
+
 }
 
 

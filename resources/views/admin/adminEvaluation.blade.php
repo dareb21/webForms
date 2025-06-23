@@ -1,7 +1,7 @@
 @extends('admin.adminLayout')
 @section('content')
 <!-- Main Content -->
-<div class="flex-1 ml-0 md:ml-80 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+<div class="flex-1 h-full md:ml-64 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="bg-white rounded-xl shadow-lg p-6 w-full h-full">
         <div class="flex flex-col items-center">
             <div class="bg-white p-4 text-center text-2xl font-bold">
@@ -9,6 +9,19 @@
                     EVALUACIONES
                 </h1>
             </div>
+
+            <!-- Búsqueda -->
+            <div class="flex justify-center gap-x-4 flex-wrap py-4">
+                <h1 class="font-bold">Búsqueda</h1>
+                <input type="text" name="deanSearch" id="deanSearch" class="shadow-md border border-gray-200">
+                <select name="deanSearchSelect" id="deanSearchSelect" class="shadow-md border border-gray-200">
+                    <option value="0" disabled selected hidden></option>
+                    <option value="revision">Revisión</option>
+                    <option value="autor">Autor</option>
+                    <option value="fechaInicio">Fecha Inicio</option>
+                </select>
+            </div>
+
             <!-- Seccion de evaluaciones -->
             <div class="w-full h-full mt-6 overflow-x-auto">
                 <table class="table-auto border border-gray-400 w-full min-w-[600px] text-left">

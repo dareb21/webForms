@@ -1,12 +1,15 @@
 @extends('director.directorLayout')
 @section('content')
 <!-- Main Content -->
-<div class="flex-1 ml-0 md:ml-80 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+<div class="flex-1 ml-0 md:ml-64 h-full p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="bg-white rounded-xl shadow-lg p-6 w-full h-full">
         <div class="flex flex-col items-center">
             <div class="bg-white p-4 text-center text-2xl font-bold">
                 <h1>
-                    EVALUACIONES
+                    EVALUACIONES DE CLASE TAL
+                </h1>
+                <h1 class="text-xl mt-4">
+                    CATEDRÁTICO TAL
                 </h1>
             </div>
             <!-- Seccion de evaluaciones -->
@@ -15,20 +18,14 @@
                     <thead>
                         <tr>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Estudiante</th>
-                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Catedrático</th>
-                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Clase</th>
-                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Sección</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Puntuación</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Accion</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
+                            <td class="border border-gray-400 px-4 py-2 text-center">Luis Fuentes</td>
+                            <td class="border border-gray-400 px-4 py-2 text-center">{{ rand(0,20) }}</td>
                             <!-- Agrega este bloque dentro de tu <td> en la tabla -->
                             <td class="border border-gray-400 px-4 py-2 text-center">
                                 <div x-data="{ open: false }" class="relative">
@@ -76,7 +73,11 @@
                         </tr>
                     </tbody>
                 </table>
-                
+            </div>
+            <div class="p-6 flex justify-center">
+                <a href="{{ route('directorResults') }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
+                    REGRESAR
+                </a>
             </div>
         </div>
     </div>

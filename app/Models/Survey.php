@@ -16,5 +16,6 @@ class Survey extends Model
         'dateStart',
         'dateEnd',
         'Author',
+        'term',
     ];
 }

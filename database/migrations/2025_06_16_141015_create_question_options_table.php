@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('question_options', function (Blueprint $table) {
             $table->id();
             $table->text("option");
-            
+            $table->integer("calification");
             $table->foreignId('question_group_id')->constrained();
             $table->timestamps();
         });

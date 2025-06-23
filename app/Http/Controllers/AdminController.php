@@ -128,12 +128,12 @@ public function UnableEvaluation($surveyId)
     $survey->revision= $request->evaluationName;
     $survey->dateStart = $request->dateStart;
     $survey->dateEnd = $request->dateEnd;
-    //$survey->author = $user->name;
+    $survey->term = $request->term;
     $survey->author = "admin1";
     $survey->status = 0;
-    $survey->term = 1;
     $survey->save();
     $i=1;
+    $k=1;
         foreach($request->questions as $question)
     {
       $group=QuestionGroup::create([
@@ -142,13 +142,16 @@ public function UnableEvaluation($surveyId)
       ]);
       QuestionOption::create([
         "option"=>$question["p1"],
+        "calification"=>$request->cal[$k]["c1"],
         "question_group_id"=>$group->id,
       ]);
        QuestionOption::create([
         "option"=>$question["p2"],
+        "calification"=>$request->cal[$k]["c2"],
         "question_group_id"=>$group->id,
       ]);
       $i+=1;
+      $k+=1;
     }
     return redirect()->route("adminEvaluation");
    }

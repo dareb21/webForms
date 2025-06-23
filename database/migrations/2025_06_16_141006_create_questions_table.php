@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('question_groups', function (Blueprint $table) {
             $table->id();
             $table->string("groupName");
+            $table->integer("calification");
             $table->foreignId('survey_id')->constrained();
             $table->timestamps();
         });
     }
-//  $table->foreignId('entrega_id')->constrained()->onDelete('cascade');
     /**
      * Reverse the migrations.
      */

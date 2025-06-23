@@ -29,16 +29,16 @@
             $dateEnd = $survey->dateEnd;
             $surveyId = $survey->id;
         @endphp
-        <form action="{{ route('adminEvaluationEdited') }}" method="POST">    
+        <form action="{{ route('adminUpdateOrReuse',['surveyId'=>$surveyId]) }}" method="POST">    
                 @csrf
-                @method('PUT')
+               
             <div class="flex justify-center gap-x-4 flex-wrap py-4">
                 <label for="">EVALUACION # </label>
-                <input type="text" value="{{ $evaluacion }}" class="shadow-md border border-gray-200">
+                <input type="text" name="revision" value="{{ $evaluacion }}" class="shadow-md border border-gray-200">
                 <label for="">Fecha Inicio :  </label>
-                <input type="date" name="" id="" value="{{ $dateStart }}" class="shadow-md border border-gray-200">
+                <input type="date" name="dateStart" id="" value="{{ $dateStart }}" class="shadow-md border border-gray-200">
                 <label for="">Fecha Cierre </label>
-                <input type="date" name="" id="" value="{{ $dateEnd }}" class="shadow-md border border-gray-200">
+                <input type="date" name="dateEnd" id="" value="{{ $dateEnd }}" class="shadow-md border border-gray-200">
             </div>
             
             <!-- for each para las preguntas -->
@@ -78,9 +78,9 @@
                 <a href="" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
                     GUARDAR
                 </a>
-                <a href="{{ route('adminEvaluation') }}" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
-                    REUTILIZAR
-                </a>
+               <input type="hidden" name="survey_id" value="{{$surveyId}}">
+            <button type="submit" name="btn"  value="reuse" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">REUTILIZAR</button>
+        </form>
                 <a href="{{ route('enableEvaluation', ['surveyId' => $surveyId]) }}" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
                     ACTIVAR
                 </a>

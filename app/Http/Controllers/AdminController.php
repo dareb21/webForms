@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Survey;
 use App\Models\QuestionGroup;
 use App\Models\QuestionOption;
-
+use Carbon\Carbon;
 class AdminController extends Controller
 {
 
@@ -24,6 +24,8 @@ class AdminController extends Controller
     }
     return redirect()->route("adminEvaluation");
   }
+
+
 
 public function UnableEvaluation($surveyId)
 {
@@ -45,13 +47,8 @@ public function UnableEvaluation($surveyId)
   public function adminEvaluation()
     {
       
-    $collectionStatus = Collect();
     $surveys = Survey::paginate(10); 
-    foreach ($surveys as $survey) {
-    $status = $survey->status == 1 ? "Activa" : "Inactiva";
-    $collectionStatus->push($status);
-    }
-    return view("admin.adminEvaluation",compact("surveys","collectionStatus"));
+    return view("admin.adminEvaluation",compact("surveys"));
     }
 
 
@@ -109,6 +106,93 @@ public function UnableEvaluation($surveyId)
     }
     return redirect()->route("adminEvaluation");
    }
+
+public function adminEvaluationEdited()
+{
+  $request = (object) session('datos');
+  session()->forget('datos');
+
+  $thisSurvey = Survey::findOrFail($surveyId);
+  $dateNow = Carbon::now('etc/GMT+6');
+
+  if ($dateNow > $thisSurvey->dateStart)
+  {
+   return redirect()->back()->with('alert','El periodo evaluacion ya inicio y no puede modificar.');
+  }
+// Logica para editar
+
+}
+
+public function reUseSurvey()
+{
+    $request = (object) session('datos');
+    session()->forget('datos');
+  $thisSurvey = Survey::findOrFail($request->survey_id);
+
+  $sameName = $thisSurvey->revision == $request->revision;
+  $sameDateStart=$thisSurvey->dateStart == $request->dateStart;
+  $sameDateEnd=$thisSurvey->dateEnd == $request->dateEnd;
+  
+  if ($sameDateEnd ||$sameDateStart || $sameName)
+  {
+    return response()->json("no joda");
+    //return redirect()->back()->with('alert','El encabezado no es permitido.');
+  }
+  
+  $survey = new Survey;
+  $survey->revision= $request->revision;
+  $survey->dateStart = $request->dateStart;
+  $survey->dateEnd = $request->dateEnd;
+  $survey->author = "admin1";
+  $survey->status = 0;
+  $survey->save();
+
+  $groups = QuestionGroup::join("question_options","question_groups.id","=","question_options.question_group_id")
+  ->join("surveys","question_groups.survey_id","=","surveys.id")
+  ->select("question_options.option as Options")
+  ->where("surveys.id",$thisSurvey->id)
+  ->get();
+  $k=0;
+  for ($i=1; $i<=(count($groups)/2);$i++)
+{
+  $questionGroup = new QuestionGroup;
+  $questionOption = new QuestionOption;
+
+  $questionGroup->survey_id = $survey->id;
+  $questionGroup->groupName = "Indicador ".$i;
+  $questionGroup->save();
+
+  $questionOption->option = $groups[$k]->Options;
+  $questionOption->question_group_id= $questionGroup->id;
+  $questionOption->save();
+  $k+=1;
+  $questionOption = new QuestionOption;
+   $questionOption->option = $groups[$k]->Options;
+  $questionOption->question_group_id= $questionGroup->id;
+  $questionOption->save();
+  $k+=1;
+}
+return redirect()->back();
+}
+
+
+
+public function adminUpdateOrReuse(Request $request)
+{
+$action = $request->input('btn');
+switch ($action){
+  case "reuse":
+        return redirect()->route("reUseSurvey")->with(['datos' => $request->all()]);
+  case "update":
+
+                break;
+  default:
+        return response()->json("algo salio mal");
+}
+
+
+}
+
 
    public function adminStudentView(){
     return view('admin.adminStudentView');

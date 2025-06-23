@@ -10,22 +10,12 @@
                 </h1>
             </div>
 
-            <!-- Búsqueda -->
-            <div class="flex justify-center gap-x-4 flex-wrap py-4">
-                <h1 class="font-bold">Búsqueda</h1>
-                <input type="text" name="deanSearch" id="deanSearch" class="shadow-md border border-gray-200">
-                <select name="deanSearchSelect" id="deanSearchSelect" class="shadow-md border border-gray-200">
-                    <option value="0" disabled selected hidden></option>
-                    <option value="catedratico">Catedrático</option>
-                    <option value="escuela">Escuela</option>
-                    <option value="clase">Clase</option>
-                </select>
-            </div>
-            
             <!-- Segmentación por años y períodos -->
             <div class="w-full h-full mt-6 overflow-x-auto">
                 <div class="w-full flex flex-col items-start pt-3">
                     <div class="flex gap-x-4 flex-wrap py-4">  
+                    <label for="catedraticoBusqueda">Búsqueda por nombre </label>
+                    <input type="text" name="catedraticoBusqueda" id="catedraticoBusqueda" class="shadow-sm ml-2 border-1 border-gray-200">
                     <label for="anualYear">Año</label>
                     <select name="anualYear" id="anualYear" class="shadow-md border border-gray-200">
                         <option value="anualY1">2025</option>
@@ -43,7 +33,7 @@
                         Buscar
                     </button>
                 </div>
-
+            
             <!-- Seccion de evaluaciones -->
                 <table class="table-auto border border-gray-400 w-full min-w-[600px] text-left">
                     <thead>

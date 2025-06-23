@@ -64,11 +64,11 @@
 
             <!-- Botones -->
             <div class="w-full flex flex-col items-center md:flex-row md:justify-center gap-4 py-4 bg-white rounded-b-xl mt-8">
-                <a id="agregar-grupo" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded hover:cursor-pointer">
-                    AGREGAR GRUPO
+                <a id="agregar-grupo" class="w-auto h-auto text-center bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded hover:cursor-pointer">
+                    AGREGAR
                 </a>
-                <a id="borrar-grupo" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded hover:cursor-pointer">
-                    BORRAR GRUPO
+                <a id="borrar-grupo" class="w-auto h-auto bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded hover:cursor-pointer">
+                    BORRAR
                 </a>
             </div>
 

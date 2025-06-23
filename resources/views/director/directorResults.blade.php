@@ -60,7 +60,7 @@
                                             <span class="md:ml-4"><strong>Clase {{ $j }}:</strong> Desarrollo de apps web {{ $j }}</span>
                                             <span><strong>Calificación:</strong> {{ rand(10, 20) }}</span>
                                             <span>
-                                                <strong>Evaluación detallada &rarr; </strong>
+                                                <strong>Evaluaciones estudiantes &rarr; </strong>
                                                 <a href="{{ route('directorStudentView') }}" class="p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition mt-2 md:mt-0">
                                                     <strong>Ver más</strong>
                                                 </a>

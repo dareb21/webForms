@@ -23,8 +23,8 @@
                         <input type="text" name="evaluationName" class="shadow-md border border-gray-200 w-full md:w-auto">
                     </div>
                     <div class="flex flex-col md:flex-row items-center gap-2">
-                        <label for="period" class="md:pr-5">Período -</label>
-                        <select name="period" id="period" class="shadow-md border border-gray-200 w-full md:w-auto text-center">
+                        <label for="term" class="md:pr-5">Período -</label>
+                        <select name="term" id="term" class="shadow-md border border-gray-200 w-full md:w-auto text-center">
                             <option value="p1">Período 1</option>
                             <option value="p2">Período 2</option>
                             <option value="p3">Período 3</option>

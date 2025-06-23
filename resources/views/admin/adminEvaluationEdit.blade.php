@@ -33,11 +33,11 @@
                 @csrf
                
             <div class="flex justify-center gap-x-4 flex-wrap py-4">
-                <label for="">EVALUACION # </label>
+                <label for="">EVALUACION -</label>
                 <input type="text" name="revision" value="{{ $evaluacion }}" class="shadow-md border border-gray-200">
-                <label for="">Fecha Inicio :  </label>
+                <label for="">Fecha Inicio -</label>
                 <input type="date" name="dateStart" id="" value="{{ $dateStart }}" class="shadow-md border border-gray-200">
-                <label for="">Fecha Cierre </label>
+                <label for="">Fecha Cierre -</label>
                 <input type="date" name="dateEnd" id="" value="{{ $dateEnd }}" class="shadow-md border border-gray-200">
             </div>
             

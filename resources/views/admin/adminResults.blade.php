@@ -42,6 +42,7 @@
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Clase</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Sección</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Calificación</th>
+                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Fecha</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Estudiantes</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Exportar</th>
                         </tr>
@@ -52,6 +53,7 @@
                             <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
                             <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
                             <td class="border border-gray-400 px-4 py-2 text-center">2/20</td>
+                            <td class="border border-gray-400 px-4 py-2 text-center">2025/22/06</td>
                             <td class="border border-gray-400 px-4 py-2 text-center">
                                 <a href="{{ route('adminStudentView') }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
                                     VER

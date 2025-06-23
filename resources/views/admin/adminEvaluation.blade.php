@@ -1,5 +1,16 @@
 @extends('admin.adminLayout')
 @section('content')
+<!-- Sweet Alert -->
+    @if (session('alert'))
+        <script>
+            Swal.fire({
+                title: "Advertencia",
+                text: {!! json_encode(session('alert')) !!},
+                icon: "warning"
+            });
+        </script>
+    @endif
+    
 <!-- Main Content -->
 <div class="flex-1 h-full md:ml-64 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="bg-white rounded-xl shadow-lg p-6 w-full h-full">
@@ -21,7 +32,9 @@
                     <option value="autor">Autor</option>
                     <option value="fechaInicio">Fecha Inicio</option>
                 </select>
-                <button type="submit">Buscar</button>
+                <button type="submit" class="w-30 bg-orange-500 hover:bg-blue-500 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                    Buscar
+                </button>
                 </form>
             </div>
 
@@ -30,7 +43,7 @@
                 <table class="table-auto border border-gray-400 w-full min-w-[600px] text-left">
                     <thead>
                         <tr>
-                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Revisión</th>
+                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white md:w-60">Revisión</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Fecha de Inicio</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Fecha de Cierre</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Autor</th>

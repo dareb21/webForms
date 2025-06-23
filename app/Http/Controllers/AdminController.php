@@ -79,7 +79,7 @@ public function UnableEvaluation($surveyId)
    {
    if (!$request->filled('adminSearch') || !$request->filled('adminSearchSelect')) 
    {
-       return response()->json("favor llenar todos los campos");
+       return redirect()->back()->with('alert','Llene los campos necesarios para la búsqueda.');
     }
 
     switch ($request->adminSearchSelect)
@@ -252,8 +252,7 @@ switch ($action){
     $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-    dd($years);
-    return view('admin.adminResults');
+    return view('admin.adminResults', compact('years'));
   }
 
   public function adminDelete($id){

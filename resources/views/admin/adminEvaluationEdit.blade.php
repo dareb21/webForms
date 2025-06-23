@@ -32,14 +32,35 @@
         <form action="{{ route('adminUpdateOrReuse',['surveyId'=>$surveyId]) }}" method="POST">    
                 @csrf
                
-            <div class="flex justify-center gap-x-4 flex-wrap py-4">
-                <label for="">EVALUACION -</label>
-                <input type="text" name="revision" value="{{ $evaluacion }}" class="shadow-md border border-gray-200">
-                <label for="">Fecha Inicio -</label>
-                <input type="date" name="dateStart" id="" value="{{ $dateStart }}" class="shadow-md border border-gray-200">
-                <label for="">Fecha Cierre -</label>
-                <input type="date" name="dateEnd" id="" value="{{ $dateEnd }}" class="shadow-md border border-gray-200">
-            </div>
+                <div class="flex flex-col md:flex-row justify-center gap-6 py-4 flex-wrap">
+                    <!-- Columna izquierda -->
+                    <div class="flex flex-col gap-4 w-full md:w-auto">
+                        <div class="flex flex-col md:flex-row items-center gap-2">
+                            <label for="evaluationName">Evaluación -</label>
+                            <input type="text" name="evaluationName" value="{{ $evaluacion }}"class="shadow-md border border-gray-200 w-full md:w-auto">
+                        </div>
+                        <div class="flex flex-col md:flex-row items-center gap-2">
+                            <label for="term" class="md:pr-5">Período -</label>
+                            <select name="term" id="term" class="shadow-md border border-gray-200 w-full md:w-auto text-center">
+                                <option value="p1">Período 1</option>
+                                <option value="p2">Período 2</option>
+                                <option value="p3">Período 3</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Columna derecha -->
+                    <div class="flex flex-col gap-4 w-full md:w-auto">
+                        <div class="flex flex-col md:flex-row items-center gap-2">
+                            <label for="dateStart">Fecha Inicio -</label>
+                            <input type="date" name="dateStart" value="{{ $dateStart }}" class="shadow-md border border-gray-200 w-full md:w-auto">
+                        </div>
+                        <div class="flex flex-col md:flex-row items-center gap-2">
+                            <label for="dateEnd">Fecha Cierre -</label>
+                            <input type="date" name="dateEnd" value="{{ $dateEnd }}" class="shadow-md border border-gray-200 w-full md:w-auto">
+                        </div>
+                    </div>
+                </div>
             
             <!-- for each para las preguntas -->
             <div id="grupos-container">

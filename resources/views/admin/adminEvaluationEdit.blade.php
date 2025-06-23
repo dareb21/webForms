@@ -69,17 +69,19 @@
                         $groupOptions = $collectionOptions->where('question_group_id', $group->id)->values();
                     @endphp
 
-                    <div class="flex flex-col gap-y-4 py-4">
+                    <div class="flex flex-col gap-4 py-4">
                         <p class="font-bold text-lg">{{ $group->groupName }}</p>
-                        <div class="flex items-center gap-x-2 w-full">
+                        <div class="flex flex-col md:flex-row items-center gap-2 w-full">
                             <label class="whitespace-nowrap">Pregunta 1 -</label>
                             <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[0]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[0]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">
-                            {{-- <label for="g{{ $i }}c1">Calificación</label>
-                            <input type="number" name="cal[{{ $i }}][c1]" id="g{{ $i }}c1" class="shadow-md border border-gray-200 w-10"> --}}
+                            <label for="g{{ $group->id }}c1">Calificación</label>
+                            <input type="number" name="cal[{{ $group->id }}][c1]" id="g{{ $group->id }}c1" class="shadow-md border border-gray-200 w-10">
                         </div>
-                        <div class="flex items-center gap-x-2 w-full">
+                        <div class="flex flex-col md:flex-row items-center gap-2 w-full">
                             <label class="whitespace-nowrap">Pregunta 2 -</label>
                             <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[1]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[1]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">
+                            <label for="g{{ $group->id }}c2">Calificación</label>
+                            <input type="number" name="cal[{{ $group->id }}][c2]" id="g{{ $group->id }}c2" class="shadow-md border border-gray-200 w-10">
                         </div>
                     </div>
                 @endforeach
@@ -150,13 +152,17 @@
             grupoDiv.className = "flex flex-col gap-y-4 py-4 grupo-dinamico";
             grupoDiv.innerHTML = `
                 <p class="font-bold text-lg">Indicador ${nuevoNumeroGrupo}</p>
-                <div class="flex items-center gap-x-2 w-full">
+                <div class="flex flex-col md:flex-row items-center gap-2 w-full">
                     <label class="whitespace-nowrap">Pregunta 1 -</label>
                     <input type="text" name="grupos[${nuevoNumeroGrupo}][pregunta1]" class="shadow-md border border-gray-200 flex-1 w-full">
+                    <label for="g${nuevoNumeroGrupo}c1">Calificación</label>
+                    <input type="number" name="cal[${nuevoNumeroGrupo}][c1]" id="g${nuevoNumeroGrupo}c1" class="shadow-md border border-gray-200 w-16">
                 </div>
-                <div class="flex items-center gap-x-2 w-full">
+                <div class="flex flex-col md:flex-row items-center gap-2 w-full">
                     <label class="whitespace-nowrap">Pregunta 2 -</label>
                     <input type="text" name="grupos[${nuevoNumeroGrupo}][pregunta2]" class="shadow-md border border-gray-200 flex-1 w-full">
+                    <label for="g${nuevoNumeroGrupo}c1">Calificación</label>
+                    <input type="number" name="cal[${nuevoNumeroGrupo}][c1]" id="g${nuevoNumeroGrupo}c1" class="shadow-md border border-gray-200 w-16">
                 </div>
             `;
 

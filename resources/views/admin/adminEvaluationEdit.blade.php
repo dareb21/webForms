@@ -1,7 +1,7 @@
 @extends('admin.adminLayout')
 @section('content')
     @php
-    $minimo = 16;
+    $minimo = 10;
     $i = 1;
      @endphp
 
@@ -53,6 +53,8 @@
                         <div class="flex items-center gap-x-2 w-full">
                             <label class="whitespace-nowrap">Pregunta 1 -</label>
                             <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[0]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[0]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">
+                            {{-- <label for="g{{ $i }}c1">Calificación</label>
+                            <input type="number" name="cal[{{ $i }}][c1]" id="g{{ $i }}c1" class="shadow-md border border-gray-200 w-10"> --}}
                         </div>
                         <div class="flex items-center gap-x-2 w-full">
                             <label class="whitespace-nowrap">Pregunta 2 -</label>

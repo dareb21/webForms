@@ -132,15 +132,15 @@ Enrollment::create([
 
         
         QuestionGroup::create([
-            'groupName'=>'Grupo 1',
+            'groupName'=>'Indicador 1',
             'survey_id' => 1,
         ]);
         QuestionGroup::create([
-            'groupName'=>'Grupo 2',
+            'groupName'=>'Indicador 2',
             'survey_id' => 1,
         ]);
         QuestionGroup::create([
-            'groupName'=>'Grupo 3',
+            'groupName'=>'Indicador 3',
             'survey_id' => 1,
         ]);
 

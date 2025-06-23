@@ -10,24 +10,24 @@
                 </h1>
             </div>
 
-            <!-- Segmentación por años y períodos -->
+            <!-- Búsqueda segmentada por nombre, años y períodos -->
             <div class="w-full h-full mt-6 overflow-x-auto">
                 <div class="w-full flex flex-col items-start pt-3">
                     <div class="flex gap-x-4 flex-wrap py-4">  
                     <label for="catedraticoBusqueda">Búsqueda por nombre </label>
                     <input type="text" name="catedraticoBusqueda" id="catedraticoBusqueda" class="shadow-sm ml-2 border-1 border-gray-200">
-                    <label for="anualYear">Año</label>
-                    <select name="anualYear" id="anualYear" class="shadow-md border border-gray-200">
-                        <option value="anualY1">2025</option>
-                        <option value="anualY2">2024</option>
-                        <option value="anualY2">2023</option>
+                    <label for="annualYear">Año</label>
+                    <select name="annualYear" id="annualYear" class="shadow-md border border-gray-200">
+                        <option value="annualY1">2025</option>
+                        <option value="annualY2">2024</option>
+                        <option value="annualY2">2023</option>
                     </select>
-                    <label for="anualPeriod">Período</label>
-                    <select name="anualPeriod" id="anualPeriod" class="shadow-md border border-gray-200">
-                        <option value="anualP1">Total</option>
-                        <option value="anualP2">Período 1</option>
-                        <option value="anualP3">Período 2</option>
-                        <option value="anualP4">Período 3</option>
+                    <label for="annualPeriod">Período</label>
+                    <select name="annualPeriod" id="annualPeriod" class="shadow-md border border-gray-200">
+                        <option value="annualT">Anual</option>
+                        <option value="annualP2">Período 1</option>
+                        <option value="annualP3">Período 2</option>
+                        <option value="annualP4">Período 3</option>
                     </select>
                     <button class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
                         Buscar

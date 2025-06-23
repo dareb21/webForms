@@ -39,7 +39,7 @@
             <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-54 bg-white border border-gray-200 rounded-xl shadow-lg z-30">
                 <span class="block px-4 py-2 text-gray-700">{{ $nombre }}</span>
                 <span class="block px-4 py-2 text-gray-700">{{ $correo }}</span>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-orange-500 hover:text-white">Cerrar sesión</a>
+                <a href="{{route('logOut')}}" class="block px-4 py-2 text-gray-700 hover:bg-orange-500 hover:text-white">Cerrar sesión</a>
             </div>
         </div>
     </div>

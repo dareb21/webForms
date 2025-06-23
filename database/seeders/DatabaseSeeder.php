@@ -127,6 +127,7 @@ Enrollment::create([
             'dateStart' => '2026-05-12',
             'dateEnd' => '2026-06-12',
             'Author' => 'admin1',
+            'term' => '1',
             'status' =>1,
         ]);
 
@@ -146,34 +147,40 @@ Enrollment::create([
 
         QuestionOption::create([
             'question_group_id'=>1,
+            'calification'=>10,
             'option'=>"Se donde consultar mi material didactico",
         ]);
         
         QuestionOption::create([
             'question_group_id'=>1,
+            'calification'=>0,
             'option'=>"Tengo que ser autodidacta la mayoria del tiempo",
         ]);
         
         QuestionOption::create([
             'question_group_id'=>2,
+            'calification'=>10,
             'option'=>"Mi profesor me corrige de manera profesional",
         ]);
 
         
         QuestionOption::create([
             'question_group_id'=>2,
+            'calification'=>0,
             'option'=>"Mi profesor me corrige de manera poco profesional",
         ]);
 
         
         QuestionOption::create([
             'question_group_id'=>3,
+            'calification'=>10,
             'option'=>"Mis tareas son revisadas en tiempo y forma con su respectiva retroalimentacion.",
         ]);
 
         
         QuestionOption::create([
             'question_group_id'=>3,
+            'calification'=>0,
             'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
         ]);
 

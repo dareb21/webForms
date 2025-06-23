@@ -13,13 +13,16 @@
             <!-- Búsqueda -->
             <div class="flex justify-center gap-x-4 flex-wrap py-4">
                 <h1 class="font-bold">Búsqueda</h1>
-                <input type="text" name="deanSearch" id="deanSearch" class="shadow-md border border-gray-200">
-                <select name="deanSearchSelect" id="deanSearchSelect" class="shadow-md border border-gray-200">
+                <form action="{{ route('adminEvaluationSearch')}}"  method="GET">
+                <input type="text" name="adminSearch" id="adminSearch" class="shadow-md border border-gray-200">
+                <select name="adminSearchSelect" id="adminSearchSelect" class="shadow-md border border-gray-200">
                     <option value="0" disabled selected hidden></option>
                     <option value="revision">Revisión</option>
                     <option value="autor">Autor</option>
                     <option value="fechaInicio">Fecha Inicio</option>
                 </select>
+                <button type="submit">Buscar</button>
+                </form>
             </div>
 
             <!-- Seccion de evaluaciones -->

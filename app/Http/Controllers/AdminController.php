@@ -61,7 +61,7 @@ public function UnableEvaluation($surveyId)
         $questionGroups = QuestionGroup::where("survey_id", $survey->id)->get();
 
         // Obtener todas las opciones asociadas a los grupos, en una sola consulta
-        $collectionOptions = QuestionOption::select("id", "option", "question_group_id")
+        $collectionOptions = QuestionOption::select("id", "option", "question_group_id","calification")
             ->whereIn("question_group_id", $questionGroups->pluck("id"))
             ->get();
 
@@ -75,7 +75,44 @@ public function UnableEvaluation($surveyId)
     return view("admin.adminNewEvaluation");
    }
 
+   public function evaluationSearch(Request $request)
+   {
+   if (!$request->filled('adminSearch') || !$request->filled('adminSearchSelect')) 
+   {
+       return response()->json("favor llenar todos los campos");
+    }
 
+    switch ($request->adminSearchSelect)
+    {
+        case "autor":
+          $searchParameter="Author";
+          $type = "text";
+          break;
+
+        case "revision":
+            $searchParameter="revision";
+            $type = "text";
+          break;
+
+        case "fechaInicio":
+            $searchParameter="dateStart";
+            $type="date";
+          break;
+
+      default:
+          abort(401);
+    }
+    if ($type == "text")
+    {
+         $surveys = Survey::where($searchParameter,"LIKE","%".$request->adminSearch."%")->paginate(10);  
+    }else
+    {
+        $date = Carbon::createFromFormat('d-m-Y', $request->adminSearch)->format('Y-m-d');
+        $surveys = Survey::whereDate($searchParameter,$date)->paginate(10);  
+    }
+       return view("admin.adminEvaluation",compact("surveys"));
+
+   }
 
    public function createNewEvaluation(Request $request)
    {
@@ -86,6 +123,7 @@ public function UnableEvaluation($surveyId)
     //$survey->author = $user->name;
     $survey->author = "admin1";
     $survey->status = 0;
+    //$survey->term = $request->period;
     $survey->save();
     $i=1;
         foreach($request->questions as $question)

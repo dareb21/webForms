@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("revision");
             $table->date("dateStart");
             $table->date("dateEnd");
+            $table->string("term");
             $table->string("Author");
             $table->boolean("status");
             $table->timestamps();

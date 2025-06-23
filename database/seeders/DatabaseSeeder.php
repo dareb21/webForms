@@ -10,6 +10,7 @@ use App\Models\SurveySubmit;
 use App\Models\ResponseSubmit;
 use App\Models\Course;
 use App\Models\Enrollment;
+use App\Models\Teacher;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -87,6 +88,15 @@ class DatabaseSeeder extends Seeder
         Course::create([
             "name"=> "capto rine",
             'user_id'=>5
+        ]);
+        Teacher::create([
+            "teacher_id"=>4,
+        ]);
+        Teacher::create([
+            "teacher_id"=>5,
+        ]);
+        Teacher::create([
+            "teacher_id"=>6,
         ]);
         Course::factory(5)->create();
         Enrollment::create([

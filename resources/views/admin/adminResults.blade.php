@@ -27,21 +27,23 @@
                 <div class="w-full flex flex-col items-start pt-3">
                     <div class="flex gap-x-4 flex-wrap py-4">  
                     <label for="anualYear">Año</label>
+                    <form action="{{ route('adminResultSearch')}}">
                     <select name="anualYear" id="anualYear" class="shadow-md border border-gray-200">
-                        <option value="anualY1">2025</option>
-                        <option value="anualY2">2024</option>
-                        <option value="anualY2">2023</option>
+                        <option value="2025">2025</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
                     </select>
                     <label for="anualPeriod">Período</label>
                     <select name="anualPeriod" id="anualPeriod" class="shadow-md border border-gray-200">
-                        <option value="anualP1">Total</option>
-                        <option value="anualP2">Período 1</option>
-                        <option value="anualP3">Período 2</option>
-                        <option value="anualP4">Período 3</option>
+                        <option value="0">Total</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">P 3</option>
                     </select>
                     <button class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
                         Buscar
                     </button>
+                </form>
                 </div>
 
             <!-- Seccion de evaluaciones -->

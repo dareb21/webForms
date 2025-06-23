@@ -114,6 +114,14 @@ public function UnableEvaluation($surveyId)
 
    }
 
+   public function resultSearch(Request $request)
+   {
+      dd($request->all());
+   }
+
+
+
+
    public function createNewEvaluation(Request $request)
    {
     $survey = new Survey;
@@ -123,7 +131,7 @@ public function UnableEvaluation($surveyId)
     //$survey->author = $user->name;
     $survey->author = "admin1";
     $survey->status = 0;
-    //$survey->term = $request->period;
+    $survey->term = 1;
     $survey->save();
     $i=1;
         foreach($request->questions as $question)
@@ -233,10 +241,15 @@ switch ($action){
 
 
    public function adminStudentView(){
+    
     return view('admin.adminStudentView');
   }
 
   public function adminResults(){
+    $years = Survey::selectRAW("Year(dateStart)")
+    ->distinct()
+    ->get();
+    dd($years);
     return view('admin.adminResults');
   }
 

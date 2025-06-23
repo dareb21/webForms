@@ -53,7 +53,10 @@ Route::get("/admiUnableEvaluation/{surveyId}",[AdminController::class, "UnableEv
 Route::get("/adminReUseSurvey",[AdminController::class, "reUseSurvey"])->name("reUseSurvey");
 Route::get('/adminResults', [AdminController::class, "adminResults"])->name("adminResults");
 Route::get('/adminStudentView', [AdminController::class,"adminStudentView"])->name("adminStudentView");
-Route::get('/adminStudentView/search', [AdminController::class,"evaluationSearch"])->name("adminEvaluationSearch");
+Route::get('/adminEvaluation/search', [AdminController::class,"evaluationSearch"])->name("adminEvaluationSearch");
+Route::get('/adminResults/search', [AdminController::class,"resultSearch"])->name("adminResultSearch");
+
+
 #Rutas decanos
 Route::get('/deanDashboard', [DeanController::class, "deanDashboard"])->name("deanDashboard");
 Route::get('/deanResults', [DeanController::class, "deanResults"])->name("deanResults");

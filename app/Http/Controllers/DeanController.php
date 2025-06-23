@@ -20,4 +20,12 @@ class DeanController extends Controller
     public function deanResults(){
         return view('dean.deanResults');
     }
+
+    public function deanSchools(){
+        return view('dean.deanSchools');
+    }
+
+    public function deanStudentView(){
+        return view('dean.deanStudentView');
+    }
 }

@@ -1,7 +1,7 @@
 @extends('admin.adminLayout')
 @section('content')
     @php
-    $minimo = 16;
+    $minimo = 10;
     $i = 1;
      @endphp
 
@@ -32,14 +32,35 @@
         <form action="{{ route('adminUpdateOrReuse',['surveyId'=>$surveyId]) }}" method="POST">    
                 @csrf
                
-            <div class="flex justify-center gap-x-4 flex-wrap py-4">
-                <label for="">EVALUACION # </label>
-                <input type="text" name="revision" value="{{ $evaluacion }}" class="shadow-md border border-gray-200">
-                <label for="">Fecha Inicio :  </label>
-                <input type="date" name="dateStart" id="" value="{{ $dateStart }}" class="shadow-md border border-gray-200">
-                <label for="">Fecha Cierre </label>
-                <input type="date" name="dateEnd" id="" value="{{ $dateEnd }}" class="shadow-md border border-gray-200">
-            </div>
+                <div class="flex flex-col md:flex-row justify-center gap-6 py-4 flex-wrap">
+                    <!-- Columna izquierda -->
+                    <div class="flex flex-col gap-4 w-full md:w-auto">
+                        <div class="flex flex-col md:flex-row items-center gap-2">
+                            <label for="evaluationName">Evaluación -</label>
+                            <input type="text" name="evaluationName" value="{{ $evaluacion }}"class="shadow-md border border-gray-200 w-full md:w-auto">
+                        </div>
+                        <div class="flex flex-col md:flex-row items-center gap-2">
+                            <label for="term" class="md:pr-5">Período -</label>
+                            <select name="term" id="term" class="shadow-md border border-gray-200 w-full md:w-auto text-center">
+                                <option value="p1">Período 1</option>
+                                <option value="p2">Período 2</option>
+                                <option value="p3">Período 3</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Columna derecha -->
+                    <div class="flex flex-col gap-4 w-full md:w-auto">
+                        <div class="flex flex-col md:flex-row items-center gap-2">
+                            <label for="dateStart">Fecha Inicio -</label>
+                            <input type="date" name="dateStart" value="{{ $dateStart }}" class="shadow-md border border-gray-200 w-full md:w-auto">
+                        </div>
+                        <div class="flex flex-col md:flex-row items-center gap-2">
+                            <label for="dateEnd">Fecha Cierre -</label>
+                            <input type="date" name="dateEnd" value="{{ $dateEnd }}" class="shadow-md border border-gray-200 w-full md:w-auto">
+                        </div>
+                    </div>
+                </div>
             
             <!-- for each para las preguntas -->
             <div id="grupos-container">
@@ -48,15 +69,19 @@
                         $groupOptions = $collectionOptions->where('question_group_id', $group->id)->values();
                     @endphp
 
-                    <div class="flex flex-col gap-y-4 py-4">
+                    <div class="flex flex-col gap-4 py-4">
                         <p class="font-bold text-lg">{{ $group->groupName }}</p>
-                        <div class="flex items-center gap-x-2 w-full">
+                        <div class="flex flex-col md:flex-row items-center gap-2 w-full">
                             <label class="whitespace-nowrap">Pregunta 1 -</label>
                             <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[0]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[0]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">
+                            <label for="g{{ $group->id }}c1">Calificación</label>
+                            <input type="number" name="cal[{{ $group->id }}][c1]" id="g{{ $group->id }}c1" class="shadow-md border border-gray-200 w-10">
                         </div>
-                        <div class="flex items-center gap-x-2 w-full">
+                        <div class="flex flex-col md:flex-row items-center gap-2 w-full">
                             <label class="whitespace-nowrap">Pregunta 2 -</label>
                             <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[1]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[1]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">
+                            <label for="g{{ $group->id }}c2">Calificación</label>
+                            <input type="number" name="cal[{{ $group->id }}][c2]" id="g{{ $group->id }}c2" class="shadow-md border border-gray-200 w-10">
                         </div>
                     </div>
                 @endforeach
@@ -64,11 +89,11 @@
 
             <!-- Botones -->
             <div class="w-full flex flex-col items-center md:flex-row md:justify-center gap-4 py-4 bg-white rounded-b-xl mt-8">
-                <a id="agregar-grupo" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded hover:cursor-pointer">
-                    AGREGAR GRUPO
+                <a id="agregar-grupo" class="w-auto h-auto text-center bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded hover:cursor-pointer">
+                    AGREGAR
                 </a>
-                <a id="borrar-grupo" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-6 rounded hover:cursor-pointer">
-                    BORRAR GRUPO
+                <a id="borrar-grupo" class="w-auto h-auto bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded hover:cursor-pointer">
+                    BORRAR
                 </a>
             </div>
 
@@ -127,13 +152,17 @@
             grupoDiv.className = "flex flex-col gap-y-4 py-4 grupo-dinamico";
             grupoDiv.innerHTML = `
                 <p class="font-bold text-lg">Indicador ${nuevoNumeroGrupo}</p>
-                <div class="flex items-center gap-x-2 w-full">
+                <div class="flex flex-col md:flex-row items-center gap-2 w-full">
                     <label class="whitespace-nowrap">Pregunta 1 -</label>
                     <input type="text" name="grupos[${nuevoNumeroGrupo}][pregunta1]" class="shadow-md border border-gray-200 flex-1 w-full">
+                    <label for="g${nuevoNumeroGrupo}c1">Calificación</label>
+                    <input type="number" name="cal[${nuevoNumeroGrupo}][c1]" id="g${nuevoNumeroGrupo}c1" class="shadow-md border border-gray-200 w-16">
                 </div>
-                <div class="flex items-center gap-x-2 w-full">
+                <div class="flex flex-col md:flex-row items-center gap-2 w-full">
                     <label class="whitespace-nowrap">Pregunta 2 -</label>
                     <input type="text" name="grupos[${nuevoNumeroGrupo}][pregunta2]" class="shadow-md border border-gray-200 flex-1 w-full">
+                    <label for="g${nuevoNumeroGrupo}c1">Calificación</label>
+                    <input type="number" name="cal[${nuevoNumeroGrupo}][c1]" id="g${nuevoNumeroGrupo}c1" class="shadow-md border border-gray-200 w-16">
                 </div>
             `;
 

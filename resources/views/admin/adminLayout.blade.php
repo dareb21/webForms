@@ -78,7 +78,7 @@
 
       <ul class="pt-4 pb-2 space-y-1 text-sm">
         <li class="hover:bg-orange-600 hover:text-white">
-          <a href="#" class="group flex items-center p-2 space-x-3 rounded-md">
+          <a href="{{route('logOut')}}" class="group flex items-center p-2 space-x-3 rounded-md">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
               class="w-5 h-5 fill-current text-gray-600 transition duration-300 group-hover:invert">
               <path d="M440,424V88H352V13.005L88,58.522V424H16v32h86.9L352,490.358V120h56V456h88V424ZM320,453.642,120,426.056V85.478L320,51Z"/>

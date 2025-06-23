@@ -29,7 +29,7 @@ class AdminController extends Controller
 
 public function UnableEvaluation($surveyId)
 {
-    Survey::where("id", $surveyId)->where("status", 1)->update([
+    Survey::where("id", $surveyId)->update([
     "status" => 0,
     ]);
     return redirect()->route("adminEvaluation");
@@ -92,7 +92,7 @@ public function UnableEvaluation($surveyId)
     {
       $group=QuestionGroup::create([
         "survey_id"=>$survey->id,
-        "groupName"=>"Grupo ". $i
+        "groupName"=>"Indicador ". $i
       ]);
       QuestionOption::create([
         "option"=>$question["p1"],

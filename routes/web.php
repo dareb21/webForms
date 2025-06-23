@@ -7,6 +7,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DeanController;
+use App\Http\Controllers\LogOutController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -62,3 +63,6 @@ Route::get('/directorDashboard', [DirectorController::class, "directorDashboard"
 Route::get('/directorResults', [DirectorController::class, "directorResults"])->name("directorResults");
 Route::get('/directorStudentView', [DirectorController::class, "directorStudentView"])->name("directorStudentView");
 Route::get('/directorSchools', [DirectorController::class, "directorSchools"])->name("directorSchools");
+
+#Ruta Log Out
+Route::get("/logOut",[LogOutController::class,"logOut"])->name("logOut");

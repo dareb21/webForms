@@ -82,5 +82,5 @@ public function studentThanks()
 {
     return view("student.thankyouView");
 }
-  
+ 
 }

@@ -100,10 +100,10 @@
             <div class="w-full flex flex-col lg:flex-row justify-center gap-4 mt-8">
             <!-- Primer grupo de botones -->
             <div class="text-center w-full lg:w-auto flex flex-col items-center md:flex-row md:justify-center gap-1 py-4 bg-white rounded-b-xl">
-                <a href="" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
+            <button type="submit" name="btn"  value="update"class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
                     GUARDAR
-                </a>
-               <input type="hidden" name="survey_id" value="{{$surveyId}}">
+                </button>
+              
             <button type="submit" name="btn"  value="reuse" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">REUTILIZAR</button>
         </form>
                 <a href="{{ route('enableEvaluation', ['surveyId' => $surveyId]) }}" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
@@ -162,7 +162,7 @@
                     <label class="whitespace-nowrap">Pregunta 2 -</label>
                     <input type="text" name="grupos[${nuevoNumeroGrupo}][pregunta2]" class="shadow-md border border-gray-200 flex-1 w-full">
                     <label for="g${nuevoNumeroGrupo}c1">Calificación</label>
-                    <input type="number" name="cal[${nuevoNumeroGrupo}][c1]" id="g${nuevoNumeroGrupo}c1" class="shadow-md border border-gray-200 w-16">
+                    <input type="number" name="cal[${nuevoNumeroGrupo}][c2]" id="g${nuevoNumeroGrupo}c1" class="shadow-md border border-gray-200 w-16">
                 </div>
             `;
 

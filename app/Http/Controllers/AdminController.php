@@ -156,20 +156,50 @@ public function UnableEvaluation($surveyId)
     return redirect()->route("adminEvaluation");
    }
 
+
 public function adminEvaluationEdited()
 {
+ 
   $request = (object) session('datos');
-  session()->forget('datos');
-
-  $thisSurvey = Survey::findOrFail($surveyId);
+  //session()->forget('datos');
+  $thisSurvey = Survey::findOrFail($request->surveyId);
   $dateNow = Carbon::now('etc/GMT+6');
-
   if ($dateNow > $thisSurvey->dateStart)
   {
    return redirect()->back()->with('alert','El periodo evaluacion ya inicio y no puede modificar.');
   }
-// Logica para editar
 
+if (isset($request->grupos))
+{
+$numGroup = QuestionGroup::where("survey_id",$request->surveyId)->count();
+$i=$numGroup+1;
+foreach ( $request->grupos as $index => $grupo)
+  {
+ $group=QuestionGroup::create([
+        "survey_id"=>$thisSurvey->id,
+        "groupName"=>"Indicador ". $i
+      ]);
+      
+  QuestionOption::create([
+    "option"=>$grupo["pregunta1"],
+        "calification"=>$request->cal[$index]["c1"],
+        "question_group_id"=>$group->id,
+      ]);
+
+    QuestionOption::create([
+    "option"=>$grupo["pregunta2"],
+        "calification"=>$request->cal[$index]["c2"],
+        "question_group_id"=>$group->id,
+      ]);
+
+      $i+=1;
+  }
+}else
+{
+}
+
+
+return redirect()->route('adminEvaluation');
 }
 
 public function reUseSurvey()
@@ -178,7 +208,7 @@ public function reUseSurvey()
     session()->forget('datos');
   $thisSurvey = Survey::findOrFail($request->survey_id);
 
-  $sameName = $thisSurvey->revision == $request->revision;
+  $sameName = $thisSurvey->revision == $request->evaluationName;
   $sameDateStart=$thisSurvey->dateStart == $request->dateStart;
   $sameDateEnd=$thisSurvey->dateEnd == $request->dateEnd;
   
@@ -189,7 +219,7 @@ public function reUseSurvey()
   }
   
   $survey = new Survey;
-  $survey->revision= $request->revision;
+  $survey->revision= $request->evaluationName;
   $survey->dateStart = $request->dateStart;
   $survey->dateEnd = $request->dateEnd;
   $survey->author = "admin1";
@@ -233,7 +263,7 @@ switch ($action){
   case "reuse":
         return redirect()->route("reUseSurvey")->with(['datos' => $request->all()]);
   case "update":
-
+        return redirect()->route("adminEvaluationEdited")->with(['datos' => $request->all()]);
                 break;
   default:
         return response()->json("algo salio mal");
@@ -252,8 +282,9 @@ switch ($action){
     $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-    dd($years);
-    return view('admin.adminResults');
+
+    //$puntaje = r
+    return view('admin.adminResults',compact("years"));
   }
 
   public function adminDelete($id){

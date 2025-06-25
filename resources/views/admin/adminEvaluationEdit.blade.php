@@ -43,9 +43,9 @@
                             <label for="term" class="md:pr-5">Período -</label>
                             <select name="term" id="term" value="{{ $term }}" class="shadow-md border border-gray-200 w-full md:w-auto text-center">
                                 <option value="0" hidden></option>
-                                <option value="p1" @selected($term=="p1")>Período 1</option>
-                                <option value="p2" @selected($term=="p2")>Período 2</option>
-                                <option value="p3" @selected($term=="p3")>Período 3</option>
+                                <option value="1" @selected($term=="1")>Período 1</option>
+                                <option value="2" @selected($term=="2")>Período 2</option>
+                                <option value="3" @selected($term=="3")>Período 3</option>
                             </select>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                     @php
                         $groupOptions = $collectionOptions->where('question_group_id', $group->id)->values();
                     @endphp
-
+                    
                     <div class="flex flex-col gap-4 py-4">
                         <p class="font-bold text-lg">{{ $group->groupName }}</p>
                         <div class="flex flex-col md:flex-row items-center gap-2 w-full">

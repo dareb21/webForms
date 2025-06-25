@@ -283,10 +283,9 @@ switch ($action){
   }
 
   public function adminResults(){
-   
 $thisYear=now()->year;
     
-$courses = Course::paginate(2);
+$courses = Course::paginate(3);
 
 foreach ($courses as $course)
 {
@@ -302,27 +301,30 @@ foreach ($courses as $course)
     ->select(
         'c.name as course',
         'prof.name as professorName',
-        //'s.id as surveyId',
-        //'c.id as courseId',
+         'c.id as courseId',
         DB::raw('SUM(qo.calification) as totSurvey'),
-        DB::raw("COUNT(DISTINCT u.id) AS totStudents")
+        DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
+        DB::raw("COUNT(DISTINCT sb.survey_id) AS surveyCount"),
     )
-    ->groupBy('prof.name', 'c.name')
+    ->groupBy('prof.name', 'c.name','c.id')
     ->first();
-   $score = ceil(($data->totSurvey / $data->totStudents));
-   $resultados[]=[
-  "score"=>$score,
-  "profesor"=>$data->professorName,
-  "course"=>$data->course,
-  ];
+
+    if ($data && $data->surveyCount > 0 && $data->totStudents > 0) {
+        $score = ceil(($data->totSurvey / $data->totStudents) / $data->surveyCount);
+        $resultados[] = [
+            "score" => $score,
+            "profesor" => $data->professorName,
+            "course" => $data->course,
+            "courseId" =>$data->courseId
+        ];
+    } 
+    
 }
- dd($resultados); 
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
 
-
-    return view('admin.adminResults',compact("years"));
+    return view('admin.adminResults',compact("years","resultados"));
   }
 
   public function adminDelete($id){

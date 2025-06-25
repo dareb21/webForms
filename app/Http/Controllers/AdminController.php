@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Survey;
 use App\Models\QuestionGroup;
 use App\Models\QuestionOption;
+use App\Models\SurveySubmit;
+use App\Models\Course;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 class AdminController extends Controller
 {
 
@@ -124,6 +127,7 @@ public function UnableEvaluation($surveyId)
 
    public function createNewEvaluation(Request $request)
    {
+    //Validar que la suma de todo no pase de 20
     $survey = new Survey;
     $survey->revision= $request->evaluationName;
     $survey->dateStart = $request->dateStart;
@@ -156,20 +160,50 @@ public function UnableEvaluation($surveyId)
     return redirect()->route("adminEvaluation");
    }
 
+
 public function adminEvaluationEdited()
 {
+ 
   $request = (object) session('datos');
-  session()->forget('datos');
-
-  $thisSurvey = Survey::findOrFail($surveyId);
+  //session()->forget('datos');
+  $thisSurvey = Survey::findOrFail($request->surveyId);
   $dateNow = Carbon::now('etc/GMT+6');
-
   if ($dateNow > $thisSurvey->dateStart)
   {
    return redirect()->back()->with('alert','El periodo evaluacion ya inicio y no puede modificar.');
   }
-// Logica para editar
 
+if (isset($request->grupos))
+{
+$numGroup = QuestionGroup::where("survey_id",$request->surveyId)->count();
+$i=$numGroup+1;
+foreach ( $request->grupos as $index => $grupo)
+  {
+ $group=QuestionGroup::create([
+        "survey_id"=>$thisSurvey->id,
+        "groupName"=>"Indicador ". $i
+      ]);
+      
+  QuestionOption::create([
+    "option"=>$grupo["pregunta1"],
+        "calification"=>$request->cal[$index]["c1"],
+        "question_group_id"=>$group->id,
+      ]);
+
+    QuestionOption::create([
+    "option"=>$grupo["pregunta2"],
+        "calification"=>$request->cal[$index]["c2"],
+        "question_group_id"=>$group->id,
+      ]);
+
+      $i+=1;
+  }
+}else
+{
+}
+
+
+return redirect()->route('adminEvaluation');
 }
 
 public function reUseSurvey()
@@ -178,7 +212,7 @@ public function reUseSurvey()
     session()->forget('datos');
   $thisSurvey = Survey::findOrFail($request->survey_id);
 
-  $sameName = $thisSurvey->revision == $request->revision;
+  $sameName = $thisSurvey->revision == $request->evaluationName;
   $sameDateStart=$thisSurvey->dateStart == $request->dateStart;
   $sameDateEnd=$thisSurvey->dateEnd == $request->dateEnd;
   
@@ -189,7 +223,7 @@ public function reUseSurvey()
   }
   
   $survey = new Survey;
-  $survey->revision= $request->revision;
+  $survey->revision= $request->evaluationName;
   $survey->dateStart = $request->dateStart;
   $survey->dateEnd = $request->dateEnd;
   $survey->author = "admin1";
@@ -233,7 +267,7 @@ switch ($action){
   case "reuse":
         return redirect()->route("reUseSurvey")->with(['datos' => $request->all()]);
   case "update":
-
+        return redirect()->route("adminEvaluationEdited")->with(['datos' => $request->all()]);
                 break;
   default:
         return response()->json("algo salio mal");
@@ -249,10 +283,48 @@ switch ($action){
   }
 
   public function adminResults(){
-    $years = Survey::selectRAW("Year(dateStart)")
+$thisYear=now()->year;
+    
+$courses = Course::paginate(3);
+
+foreach ($courses as $course)
+{
+  $data = DB::table('survey_submits as sb')
+    ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+    ->join('courses as c', 'sb.course_id', '=', 'c.id')
+    ->join('users as u', 'sb.user_id', '=', 'u.id') 
+    ->join('users as prof', 'c.user_id', '=', 'prof.id') 
+    ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+    ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+    ->where('c.id', $course->id) 
+    ->whereYear('s.created_at',$thisYear)
+    ->select(
+        'c.name as course',
+        'prof.name as professorName',
+         'c.id as courseId',
+        DB::raw('SUM(qo.calification) as totSurvey'),
+        DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
+        DB::raw("COUNT(DISTINCT sb.survey_id) AS surveyCount"),
+    )
+    ->groupBy('prof.name', 'c.name','c.id')
+    ->first();
+
+    if ($data && $data->surveyCount > 0 && $data->totStudents > 0) {
+        $score = ceil(($data->totSurvey / $data->totStudents) / $data->surveyCount);
+        $resultados[] = [
+            "score" => $score,
+            "profesor" => $data->professorName,
+            "course" => $data->course,
+            "courseId" =>$data->courseId
+        ];
+    } 
+    
+}
+ $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-    return view('admin.adminResults', compact('years'));
+
+    return view('admin.adminResults',compact("years","resultados"));
   }
 
   public function adminDelete($id){
@@ -260,4 +332,6 @@ switch ($action){
       $survey->delete(); // Esto solo marca deleted_at, no borra realmente  
       return redirect()->route('adminEvaluation');
   }
+
+
 }

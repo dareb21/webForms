@@ -155,9 +155,38 @@ Enrollment::create([
             'survey_id' => 1,
         ]);
 
+QuestionGroup::create([
+            'groupName'=>'Indicador 4',
+            'survey_id' => 1,
+        ]);
+        QuestionGroup::create([
+            'groupName'=>'Indicador 5',
+            'survey_id' => 1,
+        ]);
+        QuestionGroup::create([
+            'groupName'=>'Indicador 6',
+            'survey_id' => 1,
+        ]);
+        QuestionGroup::create([
+            'groupName'=>'Indicador 7',
+            'survey_id' => 1,
+        ]);
+        QuestionGroup::create([
+            'groupName'=>'Indicador 8',
+            'survey_id' => 1,
+        ]);
+        QuestionGroup::create([
+            'groupName'=>'Indicador 9',
+            'survey_id' => 1,
+        ]);
+        QuestionGroup::create([
+            'groupName'=>'Indicador 10',
+            'survey_id' => 1,
+        ]);
+
         QuestionOption::create([
             'question_group_id'=>1,
-            'calification'=>10,
+            'calification'=>2,
             'option'=>"Se donde consultar mi material didactico",
         ]);
         
@@ -169,7 +198,7 @@ Enrollment::create([
         
         QuestionOption::create([
             'question_group_id'=>2,
-            'calification'=>10,
+            'calification'=>2,
             'option'=>"Mi profesor me corrige de manera profesional",
         ]);
 
@@ -183,7 +212,7 @@ Enrollment::create([
         
         QuestionOption::create([
             'question_group_id'=>3,
-            'calification'=>10,
+            'calification'=>2,
             'option'=>"Mis tareas son revisadas en tiempo y forma con su respectiva retroalimentacion.",
         ]);
 
@@ -194,28 +223,95 @@ Enrollment::create([
             'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
         ]);
 
-        SurveySubmit::create([
-            'user_id'=>1,
-            'survey_id'=>1,
-            'course_id'=>1,
-            'observations'=>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet risus ut felis mollis porta id quis est. Cras vitae enim lectus. Ut non rhoncus est, non maximus urna. Vestibulum ut imperdiet diam. Nullam ligula lacus, maximus nec imperdiet maximus, convallis sit amet nibh. Phasellus aliquam scelerisque urna, id accumsan quam pharetra in. Praesent suscipit condimentum nisi. Ut lacinia facilisis lacus in pellentesque. Curabitur non lacus at orci feugiat pulvinar ac sit amet eros. Aenean interdum maximus nisi, a aliquet eros elementum vitae. Suspendisse venenatis neque at libero pellentesque, in cursus eros dapibus.",
-            'DateSubmmited'=>"2026-05-23",
-        ]);
-
-        ResponseSubmit::create([
-            'survey_submit_id'=>1,
-            'question_option_id'=>1,
-        ]);
-
-        ResponseSubmit::create([
-            'survey_submit_id'=>1,
-            'question_option_id'=>4,
+        QuestionOption::create([
+            'question_group_id'=>4,
+            'calification'=>2,
+            'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
         ]);
 
         
-        ResponseSubmit::create([
-            'survey_submit_id'=>1,
-            'question_option_id'=>5,
+        QuestionOption::create([
+            'question_group_id'=>4,
+            'calification'=>0,
+            'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
         ]);
+
+        
+        QuestionOption::create([
+            'question_group_id'=>5,
+            'calification'=>2,
+            'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
+        ]);
+
+        QuestionOption::create([
+            'question_group_id'=>5,
+            'calification'=>0,
+            'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
+        ]);
+
+        
+        QuestionOption::create([
+            'question_group_id'=>6,
+            'calification'=>2,
+            'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
+        ]);
+
+        
+        QuestionOption::create([
+            'question_group_id'=>6,
+            'calification'=>0,
+            'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
+        ]);
+
+        
+        QuestionOption::create([
+            'question_group_id'=>7,
+            'calification'=>2,
+            'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
+        ]);
+        
+        QuestionOption::create([
+            'question_group_id'=>7,
+            'calification'=>0,
+            'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
+        ]);
+        
+        QuestionOption::create([
+            'question_group_id'=>8,
+            'calification'=>2,
+            'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
+        ]);
+        
+        QuestionOption::create([
+            'question_group_id'=>8,
+            'calification'=>0,
+            'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
+        ]);
+
+        QuestionOption::create([
+            'question_group_id'=>9,
+            'calification'=>2,
+            'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
+        ]);
+
+        QuestionOption::create([
+            'question_group_id'=>9,
+            'calification'=>0,
+            'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
+        ]);
+
+        
+        QuestionOption::create([
+            'question_group_id'=>10,
+            'calification'=>2,
+            'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
+        ]);
+
+        QuestionOption::create([
+            'question_group_id'=>10,
+            'calification'=>0,
+            'option'=>"Mis tareas son revisadas en periodos irregualres y cuentan con poca retroalimentacion.",
+        ]);
+
     }
 }

@@ -43,7 +43,6 @@
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Clase</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Sección</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Calificación</th>
-                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Fecha</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Estudiantes</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Exportar</th>
                         </tr>

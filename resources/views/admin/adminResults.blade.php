@@ -49,16 +49,16 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($resultados as $resultado)
                         <tr>
+                            <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['profesor'] }}</td>
+                            <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['course'] }}</td>
                             <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">2/20</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">2025/22/06</td>
+                            <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['score'] }}</td>
                             <td class="border border-gray-400 px-4 py-2 text-center">
-                                <a href="{{ route('adminStudentView') }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
-                                    VER
-                                </a>
+                            <a href="{{ route('adminStudentView') }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
+                                VER
+                            </a>
                             </td>
                             <td class="border border-gray-400 px-4 py-2 text-center">
                                 <a href="#" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
@@ -66,6 +66,7 @@
                                 </a>
                             </td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

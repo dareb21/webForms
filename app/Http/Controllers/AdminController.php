@@ -310,7 +310,7 @@ foreach ($courses as $course)
     ->first();
 
     if ($data && $data->surveyCount > 0 && $data->totStudents > 0) {
-        $score = ceil(($data->totSurvey / $data->totStudents) / $data->surveyCount);
+        $score = ceil(($data->totSurvey / $data->totStudents));
         $resultados[] = [
             "score" => $score,
             "profesor" => $data->professorName,
@@ -318,12 +318,11 @@ foreach ($courses as $course)
             "courseId" =>$data->courseId
         ];
     } 
-    
+
 }
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-
     return view('admin.adminResults',compact("years","resultados"));
   }
 

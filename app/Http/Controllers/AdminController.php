@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Survey;
 use App\Models\QuestionGroup;
 use App\Models\QuestionOption;
+use App\Models\SurveySubmit;
+use App\Models\Course;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 class AdminController extends Controller
 {
 
@@ -124,6 +127,7 @@ public function UnableEvaluation($surveyId)
 
    public function createNewEvaluation(Request $request)
    {
+    //Validar que la suma de todo no pase de 20
     $survey = new Survey;
     $survey->revision= $request->evaluationName;
     $survey->dateStart = $request->dateStart;
@@ -279,11 +283,45 @@ switch ($action){
   }
 
   public function adminResults(){
-    $years = Survey::selectRAW("Year(dateStart)")
+   
+$thisYear=now()->year;
+    
+$courses = Course::paginate(2);
+
+foreach ($courses as $course)
+{
+  $data = DB::table('survey_submits as sb')
+    ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+    ->join('courses as c', 'sb.course_id', '=', 'c.id')
+    ->join('users as u', 'sb.user_id', '=', 'u.id') 
+    ->join('users as prof', 'c.user_id', '=', 'prof.id') 
+    ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+    ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+    ->where('c.id', $course->id) 
+    ->whereYear('s.created_at',$thisYear)
+    ->select(
+        'c.name as course',
+        'prof.name as professorName',
+        //'s.id as surveyId',
+        //'c.id as courseId',
+        DB::raw('SUM(qo.calification) as totSurvey'),
+        DB::raw("COUNT(DISTINCT u.id) AS totStudents")
+    )
+    ->groupBy('prof.name', 'c.name')
+    ->first();
+   $score = ceil(($data->totSurvey / $data->totStudents));
+   $resultados[]=[
+  "score"=>$score,
+  "profesor"=>$data->professorName,
+  "course"=>$data->course,
+  ];
+}
+ dd($resultados); 
+ $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
 
-    //$puntaje = r
+
     return view('admin.adminResults',compact("years"));
   }
 
@@ -292,4 +330,6 @@ switch ($action){
       $survey->delete(); // Esto solo marca deleted_at, no borra realmente  
       return redirect()->route('adminEvaluation');
   }
+
+
 }

@@ -278,14 +278,50 @@ switch ($action){
 
 
    public function adminStudentView(){
-    
-    return view('admin.adminStudentView');
+   
+     $courseId=1;
+    $thisYear=now()->year;
+    $courses = Course::paginate(1);
+  foreach ($courses as $index=>$course)
+  {
+  $data = DB::table('survey_submits as sb')
+    ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+    ->join('courses as c', 'sb.course_id', '=', 'c.id')
+    ->join('users as u', 'sb.user_id', '=', 'u.id') 
+    ->join('users as prof', 'c.user_id', '=', 'prof.id') 
+    ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+    ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+    ->where('c.id', $courseId) 
+    ->whereYear('s.created_at',$thisYear)
+    ->select(
+        'c.name as course',
+        'prof.name as professorName',
+        'u.name as student',
+        DB::raw('SUM(qo.calification) as scoreStudent'),
+    )
+    ->groupBy('prof.name', 'c.name','s.id','u.name')
+    ->get();
+    foreach ($data as $item) {
+        $resultados[] = [
+            "score" => $item->scoreStudent,
+            "profesor" => $item->professorName,
+            "course" => $item->course,
+            "nameStudent" => $item->student,
+           
+        ];
+    } 
+ }
+ $years = Survey::selectRAW("Year(dateStart)")
+    ->distinct()
+    ->get();
+     
+    return view('admin.adminStudentView',compact("years","resultados"));
   }
 
   public function adminResults(){
 $thisYear=now()->year;
     
-$courses = Course::paginate(3);
+$courses = Course::paginate(1);
 
 foreach ($courses as $course)
 {
@@ -304,13 +340,12 @@ foreach ($courses as $course)
          'c.id as courseId',
         DB::raw('SUM(qo.calification) as totSurvey'),
         DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
-        DB::raw("COUNT(DISTINCT sb.survey_id) AS surveyCount"),
     )
     ->groupBy('prof.name', 'c.name','c.id')
     ->first();
 
-    if ($data && $data->surveyCount > 0 && $data->totStudents > 0) {
-        $score = ceil(($data->totSurvey / $data->totStudents) / $data->surveyCount);
+    if ($data  && $data->totStudents > 0) {
+        $score = ceil(($data->totSurvey / $data->totStudents));
         $resultados[] = [
             "score" => $score,
             "profesor" => $data->professorName,
@@ -318,6 +353,10 @@ foreach ($courses as $course)
             "courseId" =>$data->courseId
         ];
     } 
+    else
+    {
+      return response()->json("No hay data disponible");
+    }
     
 }
  $years = Survey::selectRAW("Year(dateStart)")
@@ -332,6 +371,8 @@ foreach ($courses as $course)
       $survey->delete(); // Esto solo marca deleted_at, no borra realmente  
       return redirect()->route('adminEvaluation');
   }
+
+  
 
 
 }

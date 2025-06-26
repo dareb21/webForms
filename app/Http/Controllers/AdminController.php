@@ -46,7 +46,7 @@ public function UnableEvaluation($surveyId)
       $resultados = collect();
       $thisYear= now()->year;
       $surveysOfThisYear=Survey::whereYear("created_at",$thisYear)->select("id")->get();
-        
+      
      foreach($surveysOfThisYear as $survey)
       {
        $data = DB::table("surveys as s")
@@ -75,7 +75,7 @@ public function UnableEvaluation($surveyId)
     ]);
     $i+=1;
     }    
-    $anual = ceil (($resultados->pluck("termScore"))->sum() / 3);
+    $anual = ceil (($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
 
  dd($resultados,$anual);
         return view("admin.adminDashboard",compact("resultados","anual" ));

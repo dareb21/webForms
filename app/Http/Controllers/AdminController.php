@@ -82,7 +82,7 @@ public function UnableEvaluation($surveyId)
    {
    if (!$request->filled('adminSearch') || !$request->filled('adminSearchSelect')) 
    {
-       return response()->json("favor llenar todos los campos");
+       return redirect()->back()->with('alert','Llene los campos necesarios para la búsqueda.');
     }
 
     switch ($request->adminSearchSelect)
@@ -344,7 +344,7 @@ foreach ($courses as $course)
     ->groupBy('prof.name', 'c.name','c.id')
     ->first();
 
-    if ($data  && $data->totStudents > 0) {
+    if ($data && $data->surveyCount > 0 && $data->totStudents > 0) {
         $score = ceil(($data->totSurvey / $data->totStudents));
         $resultados[] = [
             "score" => $score,
@@ -353,16 +353,11 @@ foreach ($courses as $course)
             "courseId" =>$data->courseId
         ];
     } 
-    else
-    {
-      return response()->json("No hay data disponible");
-    }
-    
 }
+dd($resultados);
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-
     return view('admin.adminResults',compact("years","resultados"));
   }
 

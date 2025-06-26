@@ -28,10 +28,10 @@
             $dateStart = $survey->dateStart;
             $dateEnd = $survey->dateEnd;
             $surveyId = $survey->id;
+            $term = $survey->term;
         @endphp
         <form action="{{ route('adminUpdateOrReuse',['surveyId'=>$surveyId]) }}" method="POST">    
                 @csrf
-               
                 <div class="flex flex-col md:flex-row justify-center gap-6 py-4 flex-wrap">
                     <!-- Columna izquierda -->
                     <div class="flex flex-col gap-4 w-full md:w-auto">
@@ -41,10 +41,11 @@
                         </div>
                         <div class="flex flex-col md:flex-row items-center gap-2">
                             <label for="term" class="md:pr-5">Período -</label>
-                            <select name="term" id="term" class="shadow-md border border-gray-200 w-full md:w-auto text-center">
-                                <option value="p1">Período 1</option>
-                                <option value="p2">Período 2</option>
-                                <option value="p3">Período 3</option>
+                            <select name="term" id="term" value="{{ $term }}" class="shadow-md border border-gray-200 w-full md:w-auto text-center">
+                                <option value="0" hidden></option>
+                                <option value="1" @selected($term=="1")>Período 1</option>
+                                <option value="2" @selected($term=="2")>Período 2</option>
+                                <option value="3" @selected($term=="3")>Período 3</option>
                             </select>
                         </div>
                     </div>
@@ -68,20 +69,20 @@
                     @php
                         $groupOptions = $collectionOptions->where('question_group_id', $group->id)->values();
                     @endphp
-
+                    
                     <div class="flex flex-col gap-4 py-4">
                         <p class="font-bold text-lg">{{ $group->groupName }}</p>
                         <div class="flex flex-col md:flex-row items-center gap-2 w-full">
                             <label class="whitespace-nowrap">Pregunta 1 -</label>
                             <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[0]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[0]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">
                             <label for="g{{ $group->id }}c1">Calificación</label>
-                            <input type="number" name="cal[{{ $group->id }}][c1]" id="g{{ $group->id }}c1" class="shadow-md border border-gray-200 w-10">
+                            <input type="number" name="cal[{{ $group->id }}][c1]" id="g{{ $group->id }}c1" value="{{ $groupOptions[0]->calification ?? '' }}" class="shadow-md border border-gray-200 w-10">
                         </div>
                         <div class="flex flex-col md:flex-row items-center gap-2 w-full">
                             <label class="whitespace-nowrap">Pregunta 2 -</label>
                             <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[1]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[1]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">
                             <label for="g{{ $group->id }}c2">Calificación</label>
-                            <input type="number" name="cal[{{ $group->id }}][c2]" id="g{{ $group->id }}c2" class="shadow-md border border-gray-200 w-10">
+                            <input type="number" name="cal[{{ $group->id }}][c2]" id="g{{ $group->id }}c2" value="{{ $groupOptions[1]->calification ?? '' }}" class="shadow-md border border-gray-200 w-10">
                         </div>
                     </div>
                 @endforeach
@@ -102,9 +103,11 @@
             <div class="text-center w-full lg:w-auto flex flex-col items-center md:flex-row md:justify-center gap-1 py-4 bg-white rounded-b-xl">
             <button type="submit" name="btn"  value="update"class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
                     GUARDAR
-                </button>
-              
-            <button type="submit" name="btn"  value="reuse" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">REUTILIZAR</button>
+                </a>
+               <input type="hidden" name="survey_id" value="{{$surveyId}}">
+            <button type="submit" name="btn"  value="reuse" class="w-30 bg-blue-600 hover:cursor-pointer hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
+                REUTILIZAR
+            </button>
         </form>
                 <a href="{{ route('enableEvaluation', ['surveyId' => $surveyId]) }}" class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
                     ACTIVAR
@@ -161,8 +164,8 @@
                 <div class="flex flex-col md:flex-row items-center gap-2 w-full">
                     <label class="whitespace-nowrap">Pregunta 2 -</label>
                     <input type="text" name="grupos[${nuevoNumeroGrupo}][pregunta2]" class="shadow-md border border-gray-200 flex-1 w-full">
-                    <label for="g${nuevoNumeroGrupo}c1">Calificación</label>
-                    <input type="number" name="cal[${nuevoNumeroGrupo}][c2]" id="g${nuevoNumeroGrupo}c1" class="shadow-md border border-gray-200 w-16">
+                    <label for="g${nuevoNumeroGrupo}c2">Calificación</label>
+                    <input type="number" name="cal[${nuevoNumeroGrupo}][c2]" id="g${nuevoNumeroGrupo}c2" class="shadow-md border border-gray-200 w-16">
                 </div>
             `;
 

@@ -101,7 +101,7 @@
             <div class="w-full flex flex-col lg:flex-row justify-center gap-4 mt-8">
             <!-- Primer grupo de botones -->
             <div class="text-center w-full lg:w-auto flex flex-col items-center md:flex-row md:justify-center gap-1 py-4 bg-white rounded-b-xl">
-            <button type="submit" name="btn"  value="update"class="w-30 bg-blue-600 hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
+            <button type="submit" name="btn"  value="update"class="w-30 bg-blue-600 hover:cursor-pointer hover:bg-orange-500 text-white font-bold py-1 px-4 rounded">
                     GUARDAR
                 </a>
                <input type="hidden" name="survey_id" value="{{$surveyId}}">

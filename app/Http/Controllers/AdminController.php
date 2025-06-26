@@ -77,7 +77,6 @@ public function UnableEvaluation($surveyId)
     }    
     $anual = ceil (($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
 
- dd($resultados,$anual);
         return view("admin.adminDashboard",compact("resultados","anual" ));
     }
 

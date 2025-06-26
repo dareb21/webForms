@@ -42,8 +42,43 @@ public function UnableEvaluation($surveyId)
 
   public function adminDashboard()
     {
-        $user = (object) session('google_user');
-        return view("admin.adminDashboard",compact("user"));
+      $i=1;
+      $resultados = collect();
+      $thisYear= now()->year;
+      $surveysOfThisYear=Survey::whereYear("created_at",$thisYear)->select("id")->get();
+        
+     foreach($surveysOfThisYear as $survey)
+      {
+       $data = DB::table("surveys as s")
+    ->join("survey_submits as sb", "s.id", "=", "sb.survey_id")
+    ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
+    ->join("question_options as qo", "rs.question_option_id", "=", "qo.id")
+    ->where('s.id', $survey->id)
+    ->select(
+        DB::raw('SUM(qo.calification) as SumaNotaPeriodo'),
+        DB::raw('count(distinct(sb.id)) as Divisor'),
+    )
+    ->get();
+    
+    $numerador=$data->pluck("SumaNotaPeriodo");
+    $divisor=$data->pluck("Divisor");
+   if($divisor[0] == 0)
+   {
+    $notaperiodo=0;
+   }else
+   {
+    $notaperiodo=ceil($numerador[0]/$divisor[0]);
+   }
+   $resultados->push([
+        "termScore" => $notaperiodo,
+        "term" => $i,
+    ]);
+    $i+=1;
+    }    
+    $anual = ceil (($resultados->pluck("termScore"))->sum() / 3);
+
+ dd($resultados,$anual);
+        return view("admin.adminDashboard",compact("resultados","anual" ));
     }
 
 

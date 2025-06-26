@@ -57,18 +57,14 @@ public function UnableEvaluation($surveyId)
 
     public function adminEvaluationEdit($id)
     {
-        // Obtener la encuesta
         $survey = Survey::findOrFail($id);
         
-        // Obtener los grupos de preguntas asociados a la encuesta
         $questionGroups = QuestionGroup::where("survey_id", $survey->id)->get();
 
-        // Obtener todas las opciones asociadas a los grupos, en una sola consulta
         $collectionOptions = QuestionOption::select("id", "option", "question_group_id","calification")
             ->whereIn("question_group_id", $questionGroups->pluck("id"))
             ->get();
 
-        // Retornar vista con los datos necesarios
         return view("admin.adminEvaluationEdit", compact("survey", "collectionOptions", "questionGroups"));
     }
 
@@ -282,7 +278,7 @@ switch ($action){
      $courseId=1;
     $thisYear=now()->year;
     $courses = Course::paginate(1);
-  foreach ($courses as $index=>$course)
+  foreach ($courses as $course)
   {
   $data = DB::table('survey_submits as sb')
     ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
@@ -321,7 +317,7 @@ switch ($action){
   public function adminResults(){
 $thisYear=now()->year;
     
-$courses = Course::paginate(1);
+$courses = Course::paginate(3);
 
 foreach ($courses as $course)
 {
@@ -344,7 +340,7 @@ foreach ($courses as $course)
     ->groupBy('prof.name', 'c.name','c.id')
     ->first();
 
-    if ($data && $data->surveyCount > 0 && $data->totStudents > 0) {
+    if ($data && $data->totStudents > 0) {
         $score = ceil(($data->totSurvey / $data->totStudents));
         $resultados[] = [
             "score" => $score,
@@ -354,7 +350,6 @@ foreach ($courses as $course)
         ];
     } 
 }
-dd($resultados);
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();

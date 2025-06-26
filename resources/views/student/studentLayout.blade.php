@@ -46,70 +46,29 @@
 
     <!-- Sidebar + Contenido -->
     <div class="pt-14 flex">
-        <!-- Sidebar -->
         <aside id="sidebar" class="fixed top-14 left-0 h-[calc(100vh-4rem)] w-80 py-10 bg-white shadow p-4 z-30 transform -translate-x-full transition-transform duration-300 ease-in-out md:translate-x-0">
-            <ul class="font-bold space-y-4">
-                @foreach ($courses as $course)
-    <li>
-        <form action="{{ route('studentEvaluation') }}" method="GET">
-            <input type="hidden" name="noClaseId" value="{{ $loop->index }}">
-            <input type="hidden" name="courseId" value="{{ $coursesId[$loop->index] }}">
-            <button type="submit" class="group flex items-center w-full p-2 md:p-4 px-6 gap-3 cursor-pointer rounded-lg hover:bg-blue-500 hover:text-white border-t border-b md:border-0 border-orange-500 text-blue-500 md:text-black transition">
-                <!-- SVG Ícono de clase/universidad -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 flex-shrink-0 text-blue-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <ul class="font-bold space-y-4">
+            @foreach ($courses as $course)
+            <li>
+                <form action="{{ route('studentEvaluation') }}" method="GET">
+                <input type="hidden" name="noClaseId" value="{{ $loop->index }}">
+                <input type="hidden" name="courseId" value="{{ $coursesId[$loop->index] }}">
+                <button type="submit" class="group flex items-center w-full p-2 md:p-4 px-6 gap-3 cursor-pointer rounded-lg hover:bg-blue-500 hover:text-white border-t border-b md:border-0 border-orange-500 text-blue-500 md:text-black transition">
+                    <!-- SVG Ícono de clase/universidad -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 flex-shrink-0 text-blue-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422A12.083 12.083 0 0112 20.944 12.083 12.083 0 015.84 10.578L12 14z" />
-                </svg>
-                {{ $course }}
-            </button>
-        </form>
-    </li>
-@endforeach
-
-            </ul>
+                    </svg>
+                    {{ $course }}
+                </button>
+                </form>
+            </li>
+            @endforeach
+        </ul>
         </aside>
 
         <!-- Contenido dinámico -->
         @yield('content')
     </div>
-
-    <!-- Script optimizado -->
-    <script defer>
-        document.addEventListener("DOMContentLoaded", function () {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('sidebarToggle');
-            const profileBtn = document.getElementById("profileBtn");
-            const dropdownMenu = document.getElementById("dropdownMenu");
-
-            // Toggle sidebar
-            toggleBtn?.addEventListener('click', () => {
-                sidebar?.classList.toggle('-translate-x-full');
-            });
-
-            // Cerrar sidebar en móvil si se hace clic fuera
-            document.addEventListener('click', (e) => {
-                if (window.innerWidth < 768) {
-                    if (!sidebar?.contains(e.target) && !toggleBtn?.contains(e.target)) {
-                        if (!sidebar?.classList.contains('-translate-x-full')) {
-                            sidebar?.classList.add('-translate-x-full');
-                        }
-                    }
-                }
-            });
-
-            // Dropdown del perfil
-            profileBtn?.addEventListener("click", (event) => {
-                event.stopPropagation();
-                dropdownMenu?.classList.toggle("hidden");
-            });
-
-            // Cerrar dropdown si se hace clic fuera
-            document.addEventListener("click", function (event) {
-                if (!profileBtn?.contains(event.target) && !dropdownMenu?.contains(event.target)) {
-                    dropdownMenu?.classList.add("hidden");
-                }
-            });
-        });
-    </script>
 </body>
 </html>

@@ -18,16 +18,16 @@
                     <input type="text" name="catedraticoBusqueda" id="catedraticoBusqueda" class="shadow-sm ml-2 border-1 border-gray-200">
                     <label for="annualYear">Año</label>
                     <select name="annualYear" id="annualYear" class="shadow-md border border-gray-200">
-                        <option value="annualY1">2025</option>
-                        <option value="annualY2">2024</option>
-                        <option value="annualY2">2023</option>
+                        @foreach ($years as $year)
+                            <option value="{{ $year->{'Year(dateStart)'} }}">{{ $year->{'Year(dateStart)'} }}</option>
+                        @endforeach
                     </select>
                     <label for="annualPeriod">Período</label>
                     <select name="annualPeriod" id="annualPeriod" class="shadow-md border border-gray-200">
-                        <option value="annualT">Anual</option>
-                        <option value="annualP2">Período 1</option>
-                        <option value="annualP3">Período 2</option>
-                        <option value="annualP4">Período 3</option>
+                        <option value="4">Anual</option>
+                        <option value="1">Período 1</option>
+                        <option value="2">Período 2</option>
+                        <option value="3">Período 3</option>
                     </select>
                     <button class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
                         Buscar
@@ -47,12 +47,13 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($resultados as $resultado)
                         <tr>
+                            <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['nameStudent'] }}</td>
+                            <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['profesor'] }}</td>
+                            <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['course'] }}</td>
                             <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
+                            <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['score'] }}</td>
                             <!-- Agrega este bloque dentro de tu <td> en la tabla -->
                             <td class="border border-gray-400 px-4 py-2 text-center">
                                 <div x-data="{ open: false }" class="relative">
@@ -96,6 +97,7 @@
                                 </div>
                             </td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

@@ -64,7 +64,7 @@ class StudentController extends Controller
         "DateSubmmited"=>now(),
         "survey_id"=>$survey->id,
         "course_id"=>$courseId,
-        "user_id"=>1,
+        "user_id"=>2,
         "observations"=>$request->observaciones,
 
       ]);

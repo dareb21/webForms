@@ -307,13 +307,10 @@ switch ($action){
 }
 
 
-   public function adminStudentView(){
+   public function adminStudentView($courseId){
    
-     $courseId=1;
+     
     $thisYear=now()->year;
-    $courses = Course::paginate(1);
-  foreach ($courses as $course)
-  {
   $data = DB::table('survey_submits as sb')
     ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
     ->join('courses as c', 'sb.course_id', '=', 'c.id')
@@ -325,28 +322,65 @@ switch ($action){
     ->whereYear('s.created_at',$thisYear)
     ->select(
         'c.name as course',
+        'sb.id as submitId',
         'prof.name as professorName',
         'u.name as student',
         DB::raw('SUM(qo.calification) as scoreStudent'),
     )
-    ->groupBy('prof.name', 'c.name','s.id','u.name')
+    ->groupBy('prof.name', 'c.name','submitId')
     ->get();
     foreach ($data as $item) {
-        $resultados[] = [
+        $resultados[] = [            
             "score" => $item->scoreStudent,
             "profesor" => $item->professorName,
             "course" => $item->course,
             "nameStudent" => $item->student,
-           
+            "submitId"=>$item->submitId,
         ];
     } 
- }
+ 
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-     
+
     return view('admin.adminStudentView',compact("years","resultados"));
   }
+
+public function adminViewAnswer($submitId)
+{
+    $submit = SurveySubmit::with(['user', 'course', 'survey'])->findOrFail($submitId);
+$data = DB::table('surveys as s')
+    ->select(
+        'qg.groupName as indicator',
+        'qo.option as answer',
+        'sb.observations as observation'
+    )
+    ->join('question_groups as qg', 's.id', '=', 'qg.survey_id')
+    ->join('question_options as qo', 'qg.id', '=', 'qo.question_group_id')
+    ->join('response_submits as rs', 'qo.id', '=', 'rs.question_option_id')
+    ->join('survey_submits as sb', 'rs.survey_submit_id', '=', 'sb.id')
+    ->join('courses as c', 'sb.course_id', '=', 'c.id')
+    ->join('users as u', 'sb.user_id', '=', 'u.id')
+    ->where('s.id', $submit->survey_id)
+    ->where('u.id', $submit->user_id)
+    ->where('c.id', $submit->course_id)
+    ->distinct()
+    ->orderBy('qg.groupName')
+    ->get();
+    foreach($data as $item)
+    {
+      $answer[]= [
+        "indicator" =>$item->indicator,
+        "answer" =>$item->answer, 
+      ];
+    }
+     $answer[]= [
+       "observation" =>$data[0]->observation, 
+     ];
+
+     
+return $answer; 
+}
 
   public function adminResults(){
 $thisYear=now()->year;
@@ -382,7 +416,8 @@ foreach ($courses as $course)
             "course" => $data->course,
             "courseId" =>$data->courseId
         ];
-    } 
+    }
+
 }
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()

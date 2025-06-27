@@ -15,4 +15,20 @@ class SurveySubmit extends Model
         'course_id',
         'observations',
     ];
+
+
+public function user()
+  {
+    return $this->belongsTo(User::class, 'user_id');
+  }
+
+public function course()
+  {
+    return $this->belongsTo(Course::class, 'course_id');
+  }
+
+public function survey()
+  {
+    return $this->belongsTo(Survey::class, 'survey_id');
+  }
 }

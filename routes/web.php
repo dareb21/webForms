@@ -52,7 +52,8 @@ Route::get("/admiEnableEvaluation/{surveyId}",[AdminController::class, "enableEv
 Route::get("/admiUnableEvaluation/{surveyId}",[AdminController::class, "UnableEvaluation"])->name("unableEvaluation");
 Route::get("/adminReUseSurvey",[AdminController::class, "reUseSurvey"])->name("reUseSurvey");
 Route::get('/adminResults', [AdminController::class, "adminResults"])->name("adminResults");
-Route::get('/adminStudentView', [AdminController::class,"adminStudentView"])->name("adminStudentView");
+Route::get('/adminStudentView/{courseId}', [AdminController::class,"adminStudentView"])->name("adminStudentView");
+Route::get('/adminViewAnswer/{submitId}',[AdminController::class,"adminViewAnswer"])->name("adminViewAnswer");
 Route::get('/adminEvaluation/search', [AdminController::class,"evaluationSearch"])->name("adminEvaluationSearch");
 Route::get('/adminResults/search', [AdminController::class,"resultSearch"])->name("adminResultSearch");
 

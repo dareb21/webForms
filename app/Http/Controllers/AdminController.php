@@ -385,7 +385,7 @@ return $answer;
   public function adminResults(){
 $thisYear=now()->year;
     
-$courses = Course::paginate(3);
+$courses = Course::paginate(10);
 
 foreach ($courses as $course)
 {
@@ -409,7 +409,7 @@ foreach ($courses as $course)
     ->first();
 
     if ($data && $data->totStudents > 0) {
-        $score = ceil(($data->totSurvey / $data->totStudents));
+        $score = round(($data->totSurvey / $data->totStudents));
         $resultados[] = [
             "score" => $score,
             "profesor" => $data->professorName,

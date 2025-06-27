@@ -114,6 +114,7 @@
                     max: 120,
                     beginAtZero: true,
                     ticks: {
+                        stepSize: 10,
                         callback: value => `${value.toLocaleString()}`
                     }
                 }

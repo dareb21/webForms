@@ -147,13 +147,6 @@ public function UnableEvaluation($surveyId)
 
    }
 
-   public function resultSearch(Request $request)
-   {
-      dd($request->all());
-   }
-
-
-
 
    public function createNewEvaluation(Request $request)
    {
@@ -195,7 +188,7 @@ public function adminEvaluationEdited()
 {
  
   $request = (object) session('datos');
-  //session()->forget('datos');
+  session()->forget('datos');
   $thisSurvey = Survey::findOrFail($request->surveyId);
   $dateNow = Carbon::now('etc/GMT+6');
   if ($dateNow > $thisSurvey->dateStart)
@@ -348,7 +341,7 @@ switch ($action){
 
 public function adminViewAnswer($submitId)
 {
-    $submit = SurveySubmit::with(['user', 'course', 'survey'])->findOrFail($submitId);
+    $submit = SurveySubmit::with(['user', 'course', 'survey'])->findOrFail($submitId);    
 $data = DB::table('surveys as s')
     ->select(
         'qg.groupName as indicator',
@@ -378,13 +371,61 @@ $data = DB::table('surveys as s')
        "observation" =>$data[0]->observation, 
      ];
 
-     
 return $answer; 
 }
 
-  public function adminResults(){
-$thisYear=now()->year;
-    
+public function adminResults(){
+
+  $thisYear = session()->pull('year', now()->year);
+$courses = Course::paginate(10);
+    foreach ($courses as $course)
+     {
+        $data = DB::table('survey_submits as sb')
+        ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+        ->join('courses as c', 'sb.course_id', '=', 'c.id')
+        ->join('users as u', 'sb.user_id', '=', 'u.id') 
+        ->join('users as prof', 'c.user_id', '=', 'prof.id') 
+        ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+        ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+        ->where('c.id', $course->id) 
+        ->whereYear('s.created_at',$thisYear)
+        ->select(
+            'c.name as course',
+            'prof.name as professorName',
+            'c.id as courseId',
+            DB::raw('SUM(qo.calification) as totSurvey'),
+            DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
+            )
+        ->groupBy('prof.name', 'c.name','c.id')
+        ->first();
+    if ($data && $data->totStudents > 0) {
+        $score = round(($data->totSurvey / $data->totStudents));
+        $resultados[] = [
+            "score" => $score,
+            "profesor" => $data->professorName,
+            "course" => $data->course,
+            "courseId" =>$data->courseId
+        ];
+    }
+
+}
+ $years = Survey::selectRAW("Year(dateStart)")
+    ->distinct()
+    ->get();
+
+  return view('admin.adminResults',compact("years","resultados"));
+  }
+
+
+
+public function resultSearch(Request $request)
+   {
+     $thisYear=$request->annualYear;
+     $term=$request->annualPeriod;
+     if ($term==4)
+     {
+       return redirect()->route("adminResults")->with(['year' => $thisYear]);;
+     }
 $courses = Course::paginate(10);
 
 foreach ($courses as $course)
@@ -397,6 +438,7 @@ foreach ($courses as $course)
     ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
     ->join('surveys as s', 'sb.survey_id', '=', 's.id')
     ->where('c.id', $course->id) 
+    ->where('s.term',$term)
     ->whereYear('s.created_at',$thisYear)
     ->select(
         'c.name as course',
@@ -422,8 +464,16 @@ foreach ($courses as $course)
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
+    // TE QUEDASTE HACIENDO EL FILTRO PARA RESULTADOS
     return view('admin.adminResults',compact("years","resultados"));
-  }
+
+   }
+
+
+
+
+
+
 
   public function adminDelete($id){
       $survey = Survey::findOrFail($id);

@@ -21,7 +21,7 @@ public function user()
   {
     return $this->belongsTo(User::class, 'user_id');
   }
-
+//Este modelo tiene relacion con el modelo User, y la clave foranea en este modelo "user_id" tiene relacion con el id del model oUser
 public function course()
   {
     return $this->belongsTo(Course::class, 'course_id');

@@ -71,7 +71,7 @@
                     @endphp
                     
                     <div class="flex flex-col gap-4 py-4">
-                        <p class="font-bold text-lg">{{ $group->groupName }}</p>
+                        <p class="font-bold text-lg">Indicador {{ $group->groupName }}</p>
                         <div class="flex flex-col md:flex-row items-center gap-2 w-full">
                             <label class="whitespace-nowrap">Pregunta 1 -</label>
                             <input type="text" name="options[{{ $group->id }}][{{ $groupOptions[0]->id ?? 'new1' }}]" id="" value="{{ $groupOptions[0]->option ?? '' }}" class="shadow-md border border-gray-200 flex-1 w-full">

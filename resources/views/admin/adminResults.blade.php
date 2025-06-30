@@ -70,7 +70,7 @@
                                 <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
                                 <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['score'] }}</td>
                                 <td class="border border-gray-400 px-4 py-2 text-center">
-                                    <a href="{{ route('adminStudentView', ['courseId' => $resultado['courseId']]) }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
+                                    <a href="{{ route('adminStudentView', ['courseId' => $resultado['courseId'], 'annualYear' => request('annualYear'), 'annualPeriod' => request('annualPeriod')]) }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
                                         Ver
                                     </a>
                                 </td>

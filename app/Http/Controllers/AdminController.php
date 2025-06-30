@@ -374,7 +374,7 @@ switch ($action){
           DB::raw('SUM(qo.calification) as scoreStudent'),
       )
       ->groupBy('prof.name', 'c.name','submitId')
-      ->get();
+      ->paginate(10);
       foreach ($data as $item) {
           $resultados[] = [            
               "score" => $item->scoreStudent,
@@ -389,7 +389,7 @@ switch ($action){
       ->distinct()
       ->get();
 
-      return view('admin.adminStudentView',compact("years","resultados"));
+      return view('admin.adminStudentView',compact("years","resultados","data"));
   }
 
 public function adminViewAnswer($submitId)
@@ -460,7 +460,6 @@ public function adminResults(){
             "courseId" =>$data->courseId
         ];
     }
-
 }
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()

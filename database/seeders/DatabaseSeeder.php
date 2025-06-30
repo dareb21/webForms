@@ -85,10 +85,7 @@ class DatabaseSeeder extends Seeder
             'email'=>"k@k.com",
             'role' => 'Dean',
         ]);
-        Course::create([
-            "name"=> "capto rine",
-            'user_id'=>5
-        ]);
+ 
         Teacher::create([
             "teacher_id"=>4,
         ]);
@@ -98,7 +95,7 @@ class DatabaseSeeder extends Seeder
         Teacher::create([
             "teacher_id"=>6,
         ]);
-        Course::factory(5)->create();
+        Course::factory(30)->create();
         Enrollment::create([
             'course_id' => 1,
             'user_id' => 1,
@@ -143,44 +140,44 @@ Enrollment::create([
 
         
         QuestionGroup::create([
-            'groupName'=>'Indicador 1',
+            'groupName'=>1,
             'survey_id' => 1,
         ]);
         QuestionGroup::create([
-            'groupName'=>'Indicador 2',
+            'groupName'=>2,
             'survey_id' => 1,
         ]);
         QuestionGroup::create([
-            'groupName'=>'Indicador 3',
+            'groupName'=>3,
             'survey_id' => 1,
         ]);
 
 QuestionGroup::create([
-            'groupName'=>'Indicador 4',
+            'groupName'=>4,
             'survey_id' => 1,
         ]);
         QuestionGroup::create([
-            'groupName'=>'Indicador 5',
+            'groupName'=>5,
             'survey_id' => 1,
         ]);
         QuestionGroup::create([
-            'groupName'=>'Indicador 6',
+            'groupName'=>6,
             'survey_id' => 1,
         ]);
         QuestionGroup::create([
-            'groupName'=>'Indicador 7',
+            'groupName'=>7,
             'survey_id' => 1,
         ]);
         QuestionGroup::create([
-            'groupName'=>'Indicador 8',
+            'groupName'=>8,
             'survey_id' => 1,
         ]);
         QuestionGroup::create([
-            'groupName'=>'Indicador 9',
+            'groupName'=>9,
             'survey_id' => 1,
         ]);
         QuestionGroup::create([
-            'groupName'=>'Indicador 10',
+            'groupName'=>10,
             'survey_id' => 1,
         ]);
 

@@ -12,8 +12,8 @@
     @endif
     
 <!-- Main Content -->
-<div class="flex-1 h-full md:ml-64 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
-    <div class="bg-white rounded-xl shadow-lg p-6 w-full h-full">
+<div class="flex-1 h-full md:ml-64 p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+    <div class="bg-white rounded-xl shadow-lg p-6 w-full lg:h-full">
         <div class="flex flex-col items-center">
             <div class="bg-white p-4 text-center text-2xl font-bold">
                 <h1>
@@ -21,25 +21,31 @@
                 </h1>
             </div>
 
-            <!-- Búsqueda -->
-            <div class="flex justify-center gap-x-4 flex-wrap py-4">
-                <h1 class="font-bold">Búsqueda</h1>
-                <form action="{{ route('adminEvaluationSearch')}}"  method="GET">
-                <input type="text" name="adminSearch" id="adminSearch" class="shadow-md border border-gray-200">
-                <select name="adminSearchSelect" id="adminSearchSelect" class="shadow-md border border-gray-200">
-                    <option value="0" disabled selected hidden></option>
-                    <option value="revision">Revisión</option>
-                    <option value="autor">Autor</option>
-                    <option value="fechaInicio">Fecha Inicio</option>
-                </select>
-                <button type="submit" class="w-30 bg-orange-500 hover:bg-blue-500 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
-                    Buscar
-                </button>
-                </form>
-            </div>
+            
 
             <!-- Seccion de evaluaciones -->
             <div class="w-full h-full mt-6 overflow-x-auto">
+                <!-- Búsqueda -->
+                <div class="w-full flex flex-col items-start pt-3">
+                    <div class="flex gap-x-4 flex-wrap py-4">  
+                    <label for="adminSearch">Búsqueda </label>
+                    <form action="{{ route('adminEvaluationSearch')}}"  method="GET">
+                    <input type="text" name="adminSearch" id="adminSearch" value="{{ request('adminSearch') }}" class="shadow-md border border-gray-200">
+                    <select name="adminSearchSelect" id="adminSearchSelect" class="shadow-md border border-gray-200">
+                        <option value="revision" {{ request('adminSearchSelect') == 'revision' ? 'selected' : '' }}>Revisión</option>
+                        <option value="autor" {{ request('adminSearchSelect') == 'autor' ? 'selected' : '' }}>Autor</option>
+                        <option value="fechaInicio" {{ request('adminSearchSelect') == 'fechaInicio' ? 'selected' : '' }}>Fecha Inicio</option>
+                    </select>
+                    <button type="submit" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                        Buscar
+                    </button>
+                    <a href="{{ route('adminEvaluation') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                        Refrescar
+                    </a>
+                    </form>
+                </div>
+                </div>
+
                 <table class="table-auto border border-gray-400 w-full min-w-[600px] text-left">
                     <thead>
                         <tr>
@@ -62,7 +68,7 @@
                                     <td class="border border-gray-400 px-4 py-2 text-center">
                                         <form action="{{ route('adminEvaluationEdit', ['id' => $survey->id]) }}">
                                             <button type="submit" class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-3 rounded">
-                                                VER/EDITAR
+                                                Ver/Editar
                                             </button>
                                         </form>
                                     </td>
@@ -73,7 +79,7 @@
             </div>
             <div class="p-6">
                 <a href="{{ route('adminNewEvaluation') }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
-                    CREAR NUEVA
+                    Crear Nueva
                 </a>
             </div>
             

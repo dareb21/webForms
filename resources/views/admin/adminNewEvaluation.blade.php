@@ -6,7 +6,7 @@
 @endphp
 
 <!-- Main Content -->
-<div class="flex-1 ml-0 md:ml-64 p-4 md:p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+<div class="flex-1 ml-0 md:ml-64 p-4 md:p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 w-full max-w-screen-lg mx-auto">
         <div class="bg-white p-4 text-center text-2xl font-bold">
             <h1>CREACIÓN DE EVALUACIONES</h1>

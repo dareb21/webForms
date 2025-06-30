@@ -304,39 +304,39 @@ switch ($action){
    
      
     $thisYear=now()->year;
-  $data = DB::table('survey_submits as sb')
-    ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
-    ->join('courses as c', 'sb.course_id', '=', 'c.id')
-    ->join('users as u', 'sb.user_id', '=', 'u.id') 
-    ->join('users as prof', 'c.user_id', '=', 'prof.id') 
-    ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
-    ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-    ->where('c.id', $courseId) 
-    ->whereYear('s.created_at',$thisYear)
-    ->select(
-        'c.name as course',
-        'sb.id as submitId',
-        'prof.name as professorName',
-        'u.name as student',
-        DB::raw('SUM(qo.calification) as scoreStudent'),
-    )
-    ->groupBy('prof.name', 'c.name','submitId')
-    ->get();
-    foreach ($data as $item) {
-        $resultados[] = [            
-            "score" => $item->scoreStudent,
-            "profesor" => $item->professorName,
-            "course" => $item->course,
-            "nameStudent" => $item->student,
-            "submitId"=>$item->submitId,
-        ];
-    } 
- 
- $years = Survey::selectRAW("Year(dateStart)")
-    ->distinct()
-    ->get();
+    $data = DB::table('survey_submits as sb')
+      ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+      ->join('courses as c', 'sb.course_id', '=', 'c.id')
+      ->join('users as u', 'sb.user_id', '=', 'u.id') 
+      ->join('users as prof', 'c.user_id', '=', 'prof.id') 
+      ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+      ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+      ->where('c.id', $courseId) 
+      ->whereYear('s.created_at',$thisYear)
+      ->select(
+          'c.name as course',
+          'sb.id as submitId',
+          'prof.name as professorName',
+          'u.name as student',
+          DB::raw('SUM(qo.calification) as scoreStudent'),
+      )
+      ->groupBy('prof.name', 'c.name','submitId')
+      ->get();
+      foreach ($data as $item) {
+          $resultados[] = [            
+              "score" => $item->scoreStudent,
+              "profesor" => $item->professorName,
+              "course" => $item->course,
+              "nameStudent" => $item->student,
+              "submitId"=>$item->submitId,
+          ];
+      } 
+  
+  $years = Survey::selectRAW("Year(dateStart)")
+      ->distinct()
+      ->get();
 
-    return view('admin.adminStudentView',compact("years","resultados"));
+      return view('admin.adminStudentView',compact("years","resultados"));
   }
 
 public function adminViewAnswer($submitId)
@@ -377,7 +377,7 @@ return $answer;
 public function adminResults(){
 
   $thisYear = session()->pull('year', now()->year);
-$courses = Course::paginate(10);
+  $courses = Course::paginate(10);
     foreach ($courses as $course)
      {
         $data = DB::table('survey_submits as sb')
@@ -413,7 +413,7 @@ $courses = Course::paginate(10);
     ->distinct()
     ->get();
 
-  return view('admin.adminResults',compact("years","resultados"));
+  return view('admin.adminResults',compact("years","resultados","courses"));
   }
 
 

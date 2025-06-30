@@ -23,7 +23,7 @@
     }
 @endphp
 <!-- Main Content -->
-<div class="flex-1 ml-0 md:h-full md:ml-64 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+<div class="flex-1 ml-0 md:h-full md:ml-64 p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
 
     <div class="flex flex-col md:h-full md:flex-row gap-6">
         <!-- Gráfico dentro del div blanco -->

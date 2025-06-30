@@ -150,7 +150,16 @@ public function UnableEvaluation($surveyId)
 
    public function createNewEvaluation(Request $request)
    {
-    //Validar que la suma de todo no pase de 20
+ $cal = $request->input('cal');
+$sumtot=0;
+   foreach ($cal as $key => &$val) {
+    $suma= $val['c1'] + $val['c2'];
+    $sumtot+=$suma;
+   }
+if ($sumtot>20)
+{
+  return response()->json("La calificacion supera los 20 puntos, modifique los valores porfavor.");
+}
     $survey = new Survey;
     $survey->revision= $request->evaluationName;
     $survey->dateStart = $request->dateStart;
@@ -353,19 +362,20 @@ switch ($action){
 }
 
 
-   public function adminStudentView($courseId){
-   
+   public function adminStudentView($courseId, Request $request){
+  
 
-    $thisYear=now()->year;
-    $data = DB::table('survey_submits as sb')
+      if (is_null($request->annualPeriod))
+      {
+      $data = DB::table('survey_submits as sb')
       ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
       ->join('courses as c', 'sb.course_id', '=', 'c.id')
       ->join('users as u', 'sb.user_id', '=', 'u.id') 
       ->join('users as prof', 'c.user_id', '=', 'prof.id') 
       ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
       ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-      ->where('c.id', $courseId) 
-      ->whereYear('s.created_at',$thisYear)
+      ->where('c.id', $courseId)
+      ->whereYear('s.created_at',now()->year)
       ->select(
           'c.name as course',
           'sb.id as submitId',
@@ -375,6 +385,33 @@ switch ($action){
       )
       ->groupBy('prof.name', 'c.name','submitId')
       ->paginate(10);
+      }
+      else
+      {
+
+$data = DB::table('survey_submits as sb')
+      ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+      ->join('courses as c', 'sb.course_id', '=', 'c.id')
+      ->join('users as u', 'sb.user_id', '=', 'u.id') 
+      ->join('users as prof', 'c.user_id', '=', 'prof.id') 
+      ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+      ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+      ->where('c.id', $courseId)
+      ->where('s.term', $request->annualPeriod) 
+      ->whereYear('s.created_at',$request->annualYear)
+      ->select(
+          'c.name as course',
+          'sb.id as submitId',
+          'prof.name as professorName',
+          'u.name as student',
+          DB::raw('SUM(qo.calification) as scoreStudent'),
+      )
+      ->groupBy('prof.name', 'c.name','submitId')
+      ->paginate(10);
+      }
+
+      if ($data)
+      {
       foreach ($data as $item) {
           $resultados[] = [            
               "score" => $item->scoreStudent,
@@ -383,7 +420,15 @@ switch ($action){
               "nameStudent" => $item->student,
               "submitId"=>$item->submitId,
           ];
-      } 
+          }    
+        }else{
+          $resultados[] = [
+            "score" => 0,
+            "profesor" => "n/a",
+            "course" => $course->name,
+            "courseId" =>0
+        ];
+      }
   
   $years = Survey::selectRAW("Year(dateStart)")
       ->distinct()

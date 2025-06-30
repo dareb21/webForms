@@ -355,7 +355,7 @@ switch ($action){
 
    public function adminStudentView($courseId){
    
-     
+
     $thisYear=now()->year;
     $data = DB::table('survey_submits as sb')
       ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
@@ -460,6 +460,14 @@ public function adminResults(){
             "courseId" =>$data->courseId
         ];
     }
+    else{
+       $resultados[] = [
+            "score" => 0,
+            "profesor" => "n/a",
+            "course" => $course->name,
+            "courseId" =>0
+        ];
+}
 }
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
@@ -500,6 +508,7 @@ foreach ($courses as $course)
         DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
     )
     ->groupBy('prof.name', 'c.name','c.id')
+
     ->first();
 
     if ($data && $data->totStudents > 0) {
@@ -510,14 +519,22 @@ foreach ($courses as $course)
             "course" => $data->course,
             "courseId" =>$data->courseId
         ];
+    }else{
+       $resultados[] = [
+            "score" => 0,
+            "profesor" => "n/a",
+            "course" => $course->name,
+            "courseId" =>0
+        ];
     }
 
 }
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
+
     ->get();
     // TE QUEDASTE HACIENDO EL FILTRO PARA RESULTADOS
-    return view('admin.adminResults',compact("years","resultados"));
+    return view('admin.adminResults',compact("years","resultados","courses"));
 
    }
 
@@ -534,6 +551,9 @@ foreach ($courses as $course)
   }
 
   
-
+public function studentSearch()
+{
+  dd($request);
+}
 
 }

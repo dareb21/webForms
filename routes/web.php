@@ -56,6 +56,7 @@ Route::get('/adminStudentView/{courseId}', [AdminController::class,"adminStudent
 Route::get('/adminViewAnswer/{submitId}',[AdminController::class,"adminViewAnswer"])->name("adminViewAnswer");
 Route::get('/adminEvaluation/search', [AdminController::class,"evaluationSearch"])->name("adminEvaluationSearch");
 Route::get('/adminResults/search', [AdminController::class,"resultSearch"])->name("adminResultSearch");
+Route::get('/adminStudent/search', [AdminController::class,"studentSearch"])->name("adminStudentSearch");
 
 
 #Rutas decanos

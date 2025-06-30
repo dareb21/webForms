@@ -85,10 +85,7 @@ class DatabaseSeeder extends Seeder
             'email'=>"k@k.com",
             'role' => 'Dean',
         ]);
-        Course::create([
-            "name"=> "capto rine",
-            'user_id'=>5
-        ]);
+ 
         Teacher::create([
             "teacher_id"=>4,
         ]);
@@ -98,7 +95,7 @@ class DatabaseSeeder extends Seeder
         Teacher::create([
             "teacher_id"=>6,
         ]);
-        Course::factory(5)->create();
+        Course::factory(30)->create();
         Enrollment::create([
             'course_id' => 1,
             'user_id' => 1,

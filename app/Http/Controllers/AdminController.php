@@ -165,7 +165,7 @@ public function UnableEvaluation($surveyId)
     {
       $group=QuestionGroup::create([
         "survey_id"=>$survey->id,
-        "groupName"=>"Indicador ". $i
+        "groupName"=>$i
       ]);
       QuestionOption::create([
         "option"=>$question["p1"],
@@ -204,7 +204,7 @@ foreach ( $request->grupos as $index => $grupo)
   {
  $group=QuestionGroup::create([
         "survey_id"=>$thisSurvey->id,
-        "groupName"=>"Indicador ". $i
+        "groupName"=> $i
       ]);
       
   QuestionOption::create([
@@ -223,7 +223,54 @@ foreach ( $request->grupos as $index => $grupo)
   }
 }else
 {
+  $groups = QuestionGroup::join("surveys", "question_groups.survey_id", "=", "surveys.id")
+    ->join("question_options", "question_groups.id", "=", "question_options.question_group_id")
+    ->where("surveys.id", $thisSurvey->id)
+    ->select(
+        "question_groups.id as groupId",
+        "question_options.id as optionId"
+    )
+    ->distinct()
+    ->get();
+
+   $groupsId = array_unique($groups->pluck("groupId")->toArray());
+  $questionId= $groups->pluck("optionId");
+
+  Survey::where('id', $thisSurvey->id)
+      ->update(['revision' => $request->evaluationName,
+      'dateEnd' => $request->dateEnd,
+      'term' => $request->term,
+      'dateStart'=> $request->dateStart]);
+
+  $firstArrayKey=array_key_first($request->options);
+
+  $subFirstArrayKey=array_key_first($request->options[$firstArrayKey]);
+$i=0;
+foreach ($groupsId as $groupId) {
+    QuestionOption::where("question_group_id", $groupId)
+        ->where("id", $questionId[$i])
+        ->update([
+            "option" => $request->options[$firstArrayKey][$subFirstArrayKey],
+            "calification" => $request->cal[$firstArrayKey]["c1"]
+        ]);
+
+    $subFirstArrayKey += 1;
+      $i+=1;
+    QuestionOption::where("question_group_id", $groupId)
+        ->where("id", $questionId[$i])
+        ->update([
+            "option" => $request->options[$firstArrayKey][$subFirstArrayKey],
+            "calification" => $request->cal[$firstArrayKey]["c2"]
+        ]);
+
+    $firstArrayKey += 1;
+    $subFirstArrayKey += 1;
+    $i+=1;
 }
+
+
+}
+
 
 
 return redirect()->route('adminEvaluation');
@@ -250,6 +297,7 @@ public function reUseSurvey()
   $survey->dateStart = $request->dateStart;
   $survey->dateEnd = $request->dateEnd;
   $survey->author = "admin1";
+  $survey->term = $request->term;
   $survey->status = 0;
   $survey->save();
 
@@ -259,26 +307,31 @@ public function reUseSurvey()
   ->where("surveys.id",$thisSurvey->id)
   ->get();
   $k=0;
+  $firstArrayKey=array_key_first($request->cal);
+  
   for ($i=1; $i<=(count($groups)/2);$i++)
 {
   $questionGroup = new QuestionGroup;
   $questionOption = new QuestionOption;
 
   $questionGroup->survey_id = $survey->id;
-  $questionGroup->groupName = "Indicador ".$i;
+  $questionGroup->groupName = $i;
   $questionGroup->save();
 
   $questionOption->option = $groups[$k]->Options;
   $questionOption->question_group_id= $questionGroup->id;
+  $questionOption->calification =$request->cal[$firstArrayKey]["c1"];
   $questionOption->save();
   $k+=1;
   $questionOption = new QuestionOption;
    $questionOption->option = $groups[$k]->Options;
   $questionOption->question_group_id= $questionGroup->id;
+  $questionOption->calification =$request->cal[$firstArrayKey]["c2"];
   $questionOption->save();
   $k+=1;
+  $firstKeyValue+=1;
 }
-return redirect()->back();
+return redirect()->route("adminEvaluation");
 }
 
 

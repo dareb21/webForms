@@ -10,6 +10,7 @@ use App\Models\SurveySubmit;
 use App\Models\ResponseSubmit;
 use App\Models\Course;
 use App\Models\Enrollment;
+use App\Models\School;
 use App\Models\Teacher;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -85,21 +86,28 @@ class DatabaseSeeder extends Seeder
             'email'=>"k@k.com",
             'role' => 'Dean',
         ]);
- 
-        Teacher::create([
-            "teacher_id"=>4,
+
+        School::create([
+            "name"=>" Escuela de Ciencias de la Computación",
+            "director_id"=>7,
         ]);
-        Teacher::create([
-            "teacher_id"=>5,
+
+        School::create([
+            "name"=>" Escuela de Derecho",
+            "director_id"=>8,
         ]);
-        Teacher::create([
-            "teacher_id"=>6,
+        School::create([
+            "name"=>"Escuela de Comunicación",
+            "director_id"=>9,
         ]);
+
         Course::factory(30)->create();
         Enrollment::create([
             'course_id' => 1,
             'user_id' => 1,
         ]);
+
+        
           Enrollment::create([
             'course_id' => 6,
             'user_id' => 1,
@@ -117,6 +125,7 @@ Enrollment::create([
             'course_id' => 2,
             'user_id' => 1,
         ]);
+        
         Enrollment::create([
             'course_id' => 5,
             'user_id' => 3,
@@ -129,6 +138,10 @@ Enrollment::create([
             'course_id' => 2,
             'user_id' => 2,
         ]);
+    
+
+
+
         Survey::create([
             'revision' => 'Evaluacion #2 Mayo 2026',
             'dateStart' => '2026-05-12',

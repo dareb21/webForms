@@ -19,6 +19,7 @@ class CourseFactory extends Factory
         return [
             "name" => $this->faker->sentence(1),
             "user_id" => $this->faker->numberBetween(4, 6),
+            "school_id" => $this->faker->numberBetween(1, 3),
         ];
     }
 }

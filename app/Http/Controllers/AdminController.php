@@ -10,6 +10,7 @@ use App\Models\SurveySubmit;
 use App\Models\Course;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 class AdminController extends Controller
 {
 
@@ -150,15 +151,40 @@ public function UnableEvaluation($surveyId)
 
    public function createNewEvaluation(Request $request)
    {
+    
+    $request->validate([
+    "evaluationName" => "required|string",
+    "term" => "required|integer|in:1,2,3",
+    "dateStart" =>"required|date|after:today",
+    "dateEnd" => "required|date|after:dateStart",
+    "cal" => "required|array",
+    "cal.*.c1" => "required|numeric|min:1",
+    "cal.*.c2" => "required|numeric|min:1",
+    'questions' => 'required|array',
+    'questions.*.p1' => 'required|string|min:5',
+    'questions.*.p2' => 'required|string|min:5',
+]);
+
+  $year = Carbon::parse($request->dateStart)->year;
+  $thisYears = Survey::whereYear('dateStart', $year)->count();  
+    if ($thisYears==3)
+    {
+        return response()->json("Accion no permitida, para el año solicitado ya hay 3 encuestas. Si desea continuar, elimine una o modifique la fecha.");
+    }
+$terms =Survey::where('term', $request->term)->whereYear('dateStart', $year)->exists();
+
+if ($terms) {
+return response()->json("Accion no permitida, para el periodo solicitado ya hay una encuesta asignada. Si desea continuar, elimine o modifique la encuesta.");
+}
  $cal = $request->input('cal');
 $sumtot=0;
    foreach ($cal as $key => &$val) {
     $suma= $val['c1'] + $val['c2'];
     $sumtot+=$suma;
    }
-if ($sumtot>20)
+if ($sumtot!=20)
 {
-  return response()->json("La calificacion supera los 20 puntos, modifique los valores porfavor.");
+  return response()->json("La calificacion supera  es menor a 20 puntos, modifique los valores porfavor.");
 }
     $survey = new Survey;
     $survey->revision= $request->evaluationName;
@@ -195,14 +221,25 @@ if ($sumtot>20)
 
 public function adminEvaluationEdited()
 {
- 
   $request = (object) session('datos');
   session()->forget('datos');
+    
+$cal = $request->cal;
+$sumtot=0;
+   foreach ($cal as $key => &$val) {
+    $suma= $val['c1'] + $val['c2'];
+    $sumtot+=$suma;
+   }
+
+if ($sumtot!=20)
+{
+  return response()->json("La calificacion es mayor o menor que 20 puntos, valide los valores porfavor.");
+}
   $thisSurvey = Survey::findOrFail($request->surveyId);
   $dateNow = Carbon::now('etc/GMT+6');
-  if ($dateNow > $thisSurvey->dateStart)
+  if ($dateNow >= $thisSurvey->dateStart)
   {
-   return redirect()->back()->with('alert','El periodo evaluacion ya inicio y no puede modificar.');
+   return redirect()->back()->with('alert','El periodo evaluacion ya inicio y no puede se puede modificar.');
   }
 
 if (isset($request->grupos))
@@ -338,7 +375,7 @@ public function reUseSurvey()
   $questionOption->calification =$request->cal[$firstArrayKey]["c2"];
   $questionOption->save();
   $k+=1;
-  $firstKeyValue+=1;
+  $firstArrayKey+=1;
 }
 return redirect()->route("adminEvaluation");
 }

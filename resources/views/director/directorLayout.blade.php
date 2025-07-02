@@ -88,34 +88,5 @@
 </div>
 
 <script src="//unpkg.com/alpinejs" defer></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const sidebar = document.getElementById("sidebar");
-    const toggle = document.getElementById("sidebarToggle");
-
-    function openSidebar() {
-      sidebar.classList.remove("-translate-x-full");
-      toggle.classList.add("hidden");
-    }
-
-    function closeSidebar() {
-      sidebar.classList.add("-translate-x-full");
-      toggle.classList.remove("hidden");
-    }
-
-    toggle.addEventListener("click", function (e) {
-      e.stopPropagation();
-      openSidebar();
-    });
-
-    document.addEventListener("click", function (e) {
-      if (window.innerWidth < 768) {
-        if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
-          closeSidebar();
-        }
-      }
-    });
-  });
-</script>
 </body>
 </html>

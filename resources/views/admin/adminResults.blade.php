@@ -4,7 +4,7 @@
 
 <!-- Main Content -->
 <div class="flex-1 ml-0 md:ml-64 p-4 h-full bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
-    <div class="bg-white rounded-xl shadow-lg p-6 w-full h-full">
+    <div class="bg-white rounded-xl shadow-lg p-6 w-full min-h-[calc(100vh-3rem)]">
         <div class="flex flex-col items-center">
             <div class="bg-white p-4 text-center text-2xl font-bold">
                 <h1>RESULTADOS DE EVALUACIONES</h1>

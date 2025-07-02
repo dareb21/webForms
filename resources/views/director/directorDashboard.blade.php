@@ -1,9 +1,30 @@
 @extends('director.directorLayout')
 @section('content')
-<!-- Main Content -->
-<div class="flex-1 ml-0 md:ml-64 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+{{-- @php
+    $sumPorcentajes = 0;
+    $count = 0;
+    $p1 = $p2 = $p3 = 0;
 
-    <div class="flex flex-col md:flex-row gap-6">
+    for ($i = 0; $i < 3; $i++) {
+        if (! empty($resultados[$i]['termScore'])) {
+            $valor = $resultados[$i]['termScore'] * 100 / 20;
+            ${'p'.($i+1)} = $valor;
+            $sumPorcentajes += $valor;
+            $count++;
+        } else {
+            ${'p'.($i+1)} = 0;
+        }
+    }
+
+    if ($count > 0) {
+        $pAnual = round($sumPorcentajes / $count);
+    } else {
+        $pAnual = 0;
+    }
+@endphp --}}
+<!-- Main Content -->
+<div class="flex-1 ml-0 md:h-full md:ml-64 p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+    <div class="flex flex-col md:h-full md:flex-row gap-6">
         <!-- Gráfico dentro del div blanco -->
         <div class="bg-white rounded-lg shadow-md p-6 flex-1">
             <div class="flex justify-between items-center mt-4 mb-4">
@@ -13,42 +34,38 @@
             <canvas id="revenueChart" height="120"></canvas>
         </div>
 
-        <!-- Top Stats fuera del div blanco -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4 md:w-64">
+        <!-- Period Stats fuera del div blanco -->
+        <div class="grid grid-cols-1 bg-orange-100 text-center sm:grid-cols-2 md:grid-cols-1 gap-4 md:w-64">
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
                     Promedio Anual
-                    <a href="#" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
+                    <a href="{{ route('directorResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
-                <h2 class="text-2xl font-bold text-gray-600">300</h2>
-                <canvas id="chart1" height="40"></canvas>
+                {{-- <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $pAnual }} %</h2> --}}
             </div>
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
                     Período 1
-                    <a href="#" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
+                    <a href="{{ route('directorResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
-                <h2 class="text-2xl font-bold text-gray-600">300</h2>
-                <canvas id="chart2" height="40"></canvas>
+                {{-- <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p1 }} %</h2> --}}
+                
             </div>
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
                     Período 2
-                    <a href="#" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
+                    <a href="{{ route('directorResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
-                <h2 class="text-2xl font-bold text-gray-600">300</h2>
-                <canvas id="chart3" height="40"></canvas>
+                {{-- <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p2 }} %</h2> --}}
             </div>
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
                     Período 3
-                    <a href="#" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
+                    <a href="{{ route('directorResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
-                <h2 class="text-2xl font-bold text-gray-600">300</h2>
-                <canvas id="chart4" height="40"></canvas>
+                {{-- <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p3 }} %</h2> --}}
             </div>
         </div>
-
     </div>
 </div>
 
@@ -60,24 +77,6 @@
         scales: { x: { display: false }, y: { display: false } }
     };
 
-    const smallData = {
-        labels: ["", "", "", "", ""],
-        datasets: [{
-            borderColor: "#FF7518",
-            borderWidth: 2,
-            fill: false,
-            data: [1, 3, 1.5, 3.2, 2.8]
-        }]
-    };
-
-    ["chart1", "chart2", "chart3", "chart4"].forEach(id => {
-        new Chart(document.getElementById(id), {
-            type: 'line',
-            data: smallData,
-            options: chartOptions
-        });
-    });
-
     new Chart(document.getElementById('revenueChart'), {
         type: 'line',
         data: {
@@ -85,14 +84,14 @@
             datasets: [
                 {
                     label: 'Promedio Anual',
-                    data: [50,50,50],
+                    data: [60,60,60],
                     borderColor: '#FF5C00',
                     backgroundColor: 'transparent',
                     tension: 0.4
                 },
                 {
                     label: 'Períodos',
-                    data: [45, 55, 50],
+                    data: [50,50,60],
                     borderColor: '#000080',
                     backgroundColor: 'transparent',
                     tension: 0.4
@@ -109,9 +108,10 @@
             scales: {
                 y: {
                     min: 0,
-                    max: 100,
+                    max: 120,
                     beginAtZero: true,
                     ticks: {
+                        stepSize: 10,
                         callback: value => `${value.toLocaleString()}`
                     }
                 }

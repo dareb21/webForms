@@ -1,6 +1,6 @@
 @extends('director.directorLayout')
 @section('content')
-<div class="flex-1 ml-0 md:ml-64 h-full p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+<div class="flex-1 ml-0 md:h-full md:ml-64 p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="bg-white rounded-xl shadow-lg p-6 w-full min-h-full">
         <div class="bg-white p-4 text-center text-2xl font-bold">
             <h1>

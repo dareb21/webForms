@@ -88,6 +88,7 @@ if (($data->pluck("totStudents"))->sum() !=0)
    "Professor" =>  $professorName,
    "avgScoreProfessor" => $avgScore,
    "coursesPerProfessor" => $coursesPerProfessor,
+   "profeId" => $professor->id,
    ];   
    $coursesPerProfessor=[];
 

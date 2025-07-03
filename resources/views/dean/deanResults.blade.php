@@ -28,9 +28,12 @@
                         <option value="anualP3">Período 2</option>
                         <option value="anualP4">Período 3</option>
                     </select>
-                    <button class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
+                    <button class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
                         Buscar
                     </button>
+                    <a href="{{ route('deanResults') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                        Refrescar
+                    </a>
                 </div>
             <!-- Seccion de evaluaciones -->
             <div class="w-full h-full overflow-x-auto">
@@ -41,7 +44,7 @@
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Escuela</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Clase</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Sección</th>
-                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Calificación <button type="button" id="sort-button" class="border-1 border-white text-white hover:cursor-pointer">&#8711;</button></th>
+                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Calificación</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Estudiantes</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Exportar</th>
                         </tr>

@@ -26,9 +26,12 @@
                         <option value="anualP3">Período 2</option>
                         <option value="anualP4">Período 3</option>
                     </select>
-                    <button class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
+                    <button class="inlie-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
                         Buscar
                     </button>
+                    <a href="{{ route('directorResults') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                        Refrescar
+                    </a>
                 </div>
 
         <div class="overflow-x-auto w-full mt-4">

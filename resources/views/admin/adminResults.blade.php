@@ -37,13 +37,11 @@
                                 <option value="3" {{ request('annualPeriod') == 3 ? 'selected' : '' }}>Período 3</option>
                             </select>
 
-                            <button type="submit"
-                                    class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold py-1 px-4 rounded">
+                            <button type="submit" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold py-1 px-4 rounded">
                                 Buscar
                             </button>
 
-                            <a href="{{ route('adminResults') }}"
-                            class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                            <a href="{{ route('adminResults') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                                 Refrescar
                             </a>
                         </form>

@@ -11,10 +11,8 @@ class School extends Model
         'director_id',
     ];
 
-
-    
-public function user()
+  public function courses()
   {
-    return $this->belongsTo(User::class, 'director_id');
+    return $this->hasMany(Course::class);
   }
 }

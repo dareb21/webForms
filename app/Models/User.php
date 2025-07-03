@@ -45,4 +45,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function school()
+    {
+        return $this->hasOne(School::class,"director_id");
+    }
 }

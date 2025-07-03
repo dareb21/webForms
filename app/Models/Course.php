@@ -11,4 +11,9 @@ class Course extends Model
   protected $fillable=[
         "name",
   ];
+
+  public function professor()
+  {
+    return $this->belongsTo(User::class,'user_id');
+  }
 }

@@ -5,11 +5,11 @@
     <div class="bg-white rounded-xl shadow-lg p-6 w-full h-full">
         <div class="flex flex-col items-center">
             <div class="bg-white p-4 text-center text-2xl font-bold">
-                <h1>
-                    EVALUACIONES DE CLASE TAL
+                <h1 class="uppercase">
+                    EVALUACIONES DE {{ request('courses') }}
                 </h1>
-                <h1 class="text-xl mt-4">
-                    CATEDRÁTICO TAL
+                <h1 class="text-xl mt-4 uppercase">
+                    CATEDRÁTICO {{ request('Professor') }}
                 </h1>
             </div>
             <!-- Seccion de evaluaciones -->

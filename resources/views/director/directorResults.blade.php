@@ -68,7 +68,7 @@
                                             </span>
                                             <span>
                                                 <strong>Evaluaciones estudiantes &rarr;</strong>
-                                               <a href="{{ route('directorStudentView', ['profeId' => $results['profeId']]) }}" class="ml-2 p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition">
+                                               <a href="{{ route('directorStudentView', ['profeId' => $results['profeId'], 'Professor' => $results['Professor'], 'courses' => $course['courses']]) }}" class="ml-2 p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition">
                                                     <strong>Ver más</strong>
                                                 </a>
                                             </span>

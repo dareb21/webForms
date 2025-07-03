@@ -43,11 +43,11 @@
                         <th class="px-4 py-2 text-center">Acción</th>
                     </tr>
                 </thead>
-                @for ($i = 1; $i <= 5; $i++)
+                @foreach ($dataResults as $results)
                     <tbody x-data="{ open: false }" class="border-b">
                         <tr>
-                            <td class="px-4 py-2 text-center">Catedrático {{ $i }}</td>
-                            <td class="px-4 py-2 text-center">{{ rand(10, 20) }}</td>
+                            <td class="px-4 py-2 text-center">Catedrático {{ $results['Professor'] }}</td>
+                            <td class="px-4 py-2 text-center">{{ $results['avgScoreProfessor'] }}</td>
                             <td class="px-4 py-2 text-center">
                                 <button @click="open = !open" class="text-blue-600 hover:underline focus:outline-none">
                                     <span x-show="!open" class="hover:cursor-pointer">Ver detalles</span>
@@ -58,23 +58,28 @@
                         <tr x-show="open" x-cloak>
                             <td colspan="3" class="px-4 py-2 bg-gray-50 text-sm">
                                 <div class="space-y-3">
-                                    @for ($j = 1; $j <= 3; $j++)
-                                        <div class="flex flex-col md:flex-row md:items-center justify-between">
-                                            <span class="md:ml-4"><strong>Clase {{ $j }}:</strong> Desarrollo de apps web {{ $j }}</span>
-                                            <span><strong>Calificación:</strong> {{ rand(10, 20) }}</span>
+                                    @foreach ($results['coursesPerProfessor'] as $course)
+                                        <div class="grid grid-cols-3 gap-4 items-center">
                                             <span>
-                                                <strong>Evaluaciones estudiantes &rarr; </strong>
-                                                <a href="{{ route('directorStudentView') }}" class="p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition mt-2 md:mt-0">
+                                                <strong>Clase:</strong> {{ $course['courses'] }}
+                                            </span>
+                                            <span>
+                                                <strong>Calificación:</strong> {{ $course['scorePerCourse'] }}
+                                            </span>
+                                            <span>
+                                                <strong>Evaluaciones estudiantes &rarr;</strong>
+                                                <a href="{{ route('directorStudentView') }}" class="ml-2 p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition">
                                                     <strong>Ver más</strong>
                                                 </a>
                                             </span>
                                         </div>
-                                    @endfor
+
+                                    @endforeach
                                 </div>
                             </td>
                         </tr>
                     </tbody>
-                @endfor
+                @endforeach
             </table>
         </div>
     </div>

@@ -136,6 +136,7 @@ School::create(['name' => 'Escuela de Matemáticas', 'director_id' => 70]);
                 'user_id' => $studentId,
             ]);
             }
+        }
      
 
         
@@ -206,5 +207,4 @@ for ($i=1; $i<=20;$i++)
         }
 
     }
-}
 }

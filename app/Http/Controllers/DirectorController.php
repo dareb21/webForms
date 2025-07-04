@@ -28,11 +28,9 @@ class DirectorController extends Controller
   $school_id=$user->school->id;
   $professors = $user->school->courses->pluck('professor')->unique();
   $coursesPerProfessor=[];
-
 foreach ($professors as $professor) // recorda quitar este foreach para optimizar las busquedas
      {
-     //$Y=$user->school->courses[$k]->name;
-
+    
       $professorName = $professor->name;
 
        $data = DB::table('survey_submits as sb')
@@ -78,7 +76,7 @@ if (($data->pluck("totStudents"))->sum() >0)   //Si hay estudiantes que evaluaro
     {
       $avgScore=0;
         $coursesPerProfessor[] = [
-        "courses" =>"nombre DENTRO DEL TECER ARRAY",
+        "courses" =>"sin info",
         "scorePerCourse" =>0,
       ];
     }

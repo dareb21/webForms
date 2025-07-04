@@ -510,9 +510,8 @@ return $answer;
 }
 
 public function adminResults(){
-
-  $thisYear = session()->pull('year', now()->year);
-  $courses = Course::paginate(10);
+$courses = Course::has('submits')->paginate(10);
+$thisYear = session()->pull('year', now()->year);
     foreach ($courses as $course)
      {
         $data = DB::table('survey_submits as sb')
@@ -525,38 +524,27 @@ public function adminResults(){
         ->where('c.id', $course->id) 
         ->whereYear('s.created_at',$thisYear)
         ->select(
-            'c.name as course',
             'prof.name as professorName',
-            'c.id as courseId',
             DB::raw('SUM(qo.calification) as totSurvey'),
             DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
             )
-        ->groupBy('prof.name', 'c.name','c.id')
+        ->groupBy('prof.name')
         ->first();
-    if ($data && $data->totStudents > 0) {
-        $score = round(($data->totSurvey / $data->totStudents));
-        $resultados[] = [
+      $score = round(($data->totSurvey / $data->totStudents));
+      $resultados[] = [
             "score" => $score,
             "profesor" => $data->professorName,
-            "course" => $data->course,
-            "courseId" =>$data->courseId
-        ];
-    }
-    else{
-       $resultados[] = [
-            "score" => 0,
-            "profesor" => "n/a",
             "course" => $course->name,
-            "courseId" =>0
+            "courseId" =>$course->id
         ];
-}
+    
+   
 }
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-
   return view('admin.adminResults',compact("years","resultados","courses"));
-  }
+}
 
 
 

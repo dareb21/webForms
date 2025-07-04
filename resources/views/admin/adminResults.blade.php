@@ -61,7 +61,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($noInfo === 1)
+                        @if (request('noInfo') === True)
                             @for ($i=1; $i<=6; $i++)
                                 <td class="border border-gray-400 px-4 py-2 text-center">Aún no hay info.</td>
                             @endfor

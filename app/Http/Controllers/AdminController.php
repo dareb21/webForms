@@ -548,7 +548,6 @@ $thisYear = session()->pull('year', now()->year);
         ];
 
 }
-
   return view('admin.adminResults',compact("years","resultados","courses"));
 }
 
@@ -569,6 +568,7 @@ public function resultSearch(Request $request)
 $courses = Course::has('submits')->withCount('submits')->paginate(10);
 
 $hasData = False;
+
 foreach ($courses as $course)
 {
   $data = DB::table('survey_submits as sb')
@@ -605,7 +605,6 @@ $resultados[] = [
 if (!$hasData)  
  {
     $noInfo=True;
-    dd("no info");
   return view('admin.adminResults',compact("years","noInfo"));
 }
     return view('admin.adminResults',compact("years","resultados","courses"));  

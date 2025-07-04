@@ -30,7 +30,7 @@ class StudentController extends Controller
 
     $noClaseId = $request->query('noClaseId');
     $coursesId = $request->query('courseId');
-    if(!SurveySubmit::where("user_id",67)->where("course_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
+    if(!SurveySubmit::where("user_id",2)->where("course_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
     {
     $survey = new Survey;
     $questionGroups = QuestionGroup::where("survey_id", $thisSurvey->id)->get();

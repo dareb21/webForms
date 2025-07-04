@@ -76,8 +76,7 @@ public function UnableEvaluation($surveyId)
     ]);
     $i+=1;
     }    
-    $anual = ceil (($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
-
+    $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));//que divida si y solo si ya se contesto la cantidad de surveys creadas
         return view("admin.adminDashboard",compact("resultados","anual" ));
     }
 
@@ -169,12 +168,12 @@ public function UnableEvaluation($surveyId)
   $thisYears = Survey::whereYear('dateStart', $year)->count();  
     if ($thisYears==3)
     {
-        return response()->json("Accion no permitida, para el año solicitado ya hay 3 encuestas. Si desea continuar, elimine una o modifique la fecha.");
+        return redirect()->back()->with('alert','No se pueden mas de 3 encuestas al año.');
     }
 $terms =Survey::where('term', $request->term)->whereYear('dateStart', $year)->exists();
 
 if ($terms) {
-return response()->json("Accion no permitida, para el periodo solicitado ya hay una encuesta asignada. Si desea continuar, elimine o modifique la encuesta.");
+    return redirect()->back()->with('alert','Ya hay una evaluacion creada en este período, favor elegir otro.');
 }
  $cal = $request->input('cal');
 $sumtot=0;
@@ -184,7 +183,7 @@ $sumtot=0;
    }
 if ($sumtot!=20)
 {
-  return response()->json("La calificacion supera  es menor a 20 puntos, modifique los valores porfavor.");
+  return redirect()->back()->with('alert','La calificacion no cuadra con los 20 puntos, favor revise.')->withInput();
 }
     $survey = new Survey;
     $survey->revision= $request->evaluationName;

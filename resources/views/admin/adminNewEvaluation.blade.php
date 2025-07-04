@@ -4,6 +4,16 @@
     $minimo = 10;
     $i = 1;
 @endphp
+<!-- Sweet Alert -->
+    @if (session('alert'))
+        <script>
+            Swal.fire({
+                title: "Advertencia",
+                text: {!! json_encode(session('alert')) !!},
+                icon: "warning"
+            });
+        </script>
+    @endif
 
 <!-- Main Content -->
 <div class="flex-1 ml-0 md:ml-64 p-4 md:p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
@@ -20,7 +30,7 @@
                 <div class="flex flex-col gap-4 w-full md:w-auto">
                     <div class="flex flex-col md:flex-row items-center gap-2">
                         <label for="evaluationName">Evaluación -</label>
-                        <input type="text" name="evaluationName" class="shadow-md border border-gray-200 w-full md:w-auto">
+                        <input type="text" name="evaluationName" value="{{ old('evaluationName') }}" class="shadow-md border border-gray-200 w-full md:w-auto">
                     </div>
                     <div class="flex flex-col md:flex-row items-center gap-2">
                         <label for="term" class="md:pr-5">Período -</label>
@@ -36,31 +46,43 @@
                 <div class="flex flex-col gap-4 w-full md:w-auto">
                     <div class="flex flex-col md:flex-row items-center gap-2">
                         <label for="dateStart">Fecha Inicio -</label>
-                        <input type="date" name="dateStart" class="shadow-md border border-gray-200 w-full md:w-auto">
+                        <input type="date" name="dateStart" value="{{ old('dateStart') }}" class="shadow-md border border-gray-200 w-full md:w-auto">
                     </div>
                     <div class="flex flex-col md:flex-row items-center gap-2">
                         <label for="dateEnd">Fecha Cierre -</label>
-                        <input type="date" name="dateEnd" class="shadow-md border border-gray-200 w-full md:w-auto">
+                        <input type="date" name="dateEnd" value="{{ old('dateEnd') }}" class="shadow-md border border-gray-200 w-full md:w-auto">
                     </div>
                 </div>
             </div>
 
             <!-- Indicadores -->
             <div id="grupos-container">
-                @for ($i; $i <= $minimo; $i++)
+                @for ($i = 1; $i <= $minimo; $i++)
                     <div class="flex flex-col gap-4 py-4">
                         <p class="font-bold text-lg">Indicador {{ $i }}</p>
+
                         <div class="flex flex-col md:flex-row items-center gap-2 w-full">
-                            <label for="g{{ $i }}p1" class="whitespace-nowrap">Pregunta 1 -</label>
-                            <input type="text" name="questions[{{ $i }}][p1]" id="g{{ $i }}p1" class="shadow-md border border-gray-200 w-full md:flex-1">
+                            <label for="g{{ $i }}p1">Pregunta 1 -</label>
+                            <input type="text" name="questions[{{ $i }}][p1]" id="g{{ $i }}p1"
+                                value="{{ old("questions.$i.p1") }}"
+                                class="shadow-md border border-gray-200 w-full md:flex-1">
+
                             <label for="g{{ $i }}c1">Calificación</label>
-                            <input type="number" name="cal[{{ $i }}][c1]" id="g{{ $i }}c1" class="shadow-md border border-gray-200 w-16">
+                            <input type="number" name="cal[{{ $i }}][c1]" id="g{{ $i }}c1"
+                                value="{{ old("cal.$i.c1") }}"
+                                class="shadow-md border border-gray-200 w-16">
                         </div>
+
                         <div class="flex flex-col md:flex-row items-center gap-2 w-full">
-                            <label for="g{{ $i }}p2" class="whitespace-nowrap">Pregunta 2 -</label>
-                            <input type="text" name="questions[{{ $i }}][p2]" id="g{{ $i }}p2" class="shadow-md border border-gray-200 w-full md:flex-1">
+                            <label for="g{{ $i }}p2">Pregunta 2 -</label>
+                            <input type="text" name="questions[{{ $i }}][p2]" id="g{{ $i }}p2"
+                                value="{{ old("questions.$i.p2") }}"
+                                class="shadow-md border border-gray-200 w-full md:flex-1">
+
                             <label for="g{{ $i }}c2">Calificación</label>
-                            <input type="number" name="cal[{{ $i }}][c2]" id="g{{ $i }}c2" class="shadow-md border border-gray-200 w-16">
+                            <input type="number" name="cal[{{ $i }}][c2]" id="g{{ $i }}c2"
+                                value="{{ old("cal.$i.c2") }}"
+                                class="shadow-md border border-gray-200 w-16">
                         </div>
                     </div>
                 @endfor
@@ -82,36 +104,48 @@
     </div>
 </div>
 
+
+<script>
+    const oldQuestions = @json(old('questions') ?? []);
+    const oldCal = @json(old('cal') ?? []);
+</script>
+
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const container = document.getElementById("grupos-container");
     const agregarBtn = document.getElementById("agregar-grupo");
     const borrarBtn = document.getElementById("borrar-grupo");
+    
+    // Obtener datos anteriores desde Blade
+    const oldQuestions = @json(old('questions') ?? []);
+    const oldCal = @json(old('cal') ?? []);
+
+    // Establecer grupoActual correctamente
     let grupoActual = 10;
 
+    // Detectar el índice más alto usado en oldQuestions
+    const indicesOld = Object.keys(oldQuestions)
+        .map(i => parseInt(i))
+        .filter(i => !isNaN(i) && i > 10);
+
+    if (indicesOld.length > 0) {
+        const maxIndex = Math.max(...indicesOld);
+        grupoActual = maxIndex;
+
+        // Reconstruir todos los indicadores adicionales
+        indicesOld.sort((a, b) => a - b).forEach(i => {
+            addGrupo(i, oldQuestions[i], oldCal?.[i] ?? {});
+        });
+    }
+
+    // Evento para agregar un nuevo grupo
     agregarBtn.addEventListener("click", function () {
         grupoActual++;
-
-        const grupoDiv = document.createElement("div");
-        grupoDiv.className = "flex flex-col gap-4 py-4 grupo-dinamico";
-        grupoDiv.innerHTML = `
-            <p class="font-bold text-lg">Indicador ${grupoActual}</p>
-            <div class="flex flex-col md:flex-row items-center gap-2 w-full">
-                <label for="g${grupoActual}p1" class="whitespace-nowrap">Pregunta 1 -</label>
-                <input type="text" name="questions[${grupoActual}][p1]" id="g${grupoActual}p1" class="shadow-md border border-gray-200 w-full md:flex-1">
-                <label for="g${grupoActual}c1">Calificación</label>
-                <input type="number" name="cal[${grupoActual}][c1]" id="g${grupoActual}c1" class="shadow-md border border-gray-200 w-16">
-            </div>
-            <div class="flex flex-col md:flex-row items-center gap-2 w-full">
-                <label for="g${grupoActual}p2" class="whitespace-nowrap">Pregunta 2 -</label>
-                <input type="text" name="questions[${grupoActual}][p2]" id="g${grupoActual}p2" class="shadow-md border border-gray-200 w-full md:flex-1">
-                <label for="g${grupoActual}c2">Calificación</label>
-                <input type="number" name="cal[${grupoActual}][c2]" id="g${grupoActual}c2" class="shadow-md border border-gray-200 w-16">
-            </div>
-        `;
-        container.appendChild(grupoDiv);
+        addGrupo(grupoActual);
     });
 
+    // Evento para borrar el último grupo dinámico
     borrarBtn.addEventListener("click", function () {
         const gruposDinamicos = container.querySelectorAll(".grupo-dinamico");
         if (gruposDinamicos.length > 0) {
@@ -119,6 +153,37 @@ document.addEventListener("DOMContentLoaded", function () {
             grupoActual--;
         }
     });
+
+    // Función para crear y agregar un grupo
+    function addGrupo(index, preguntas = {}, cal = {}) {
+        const grupoDiv = document.createElement("div");
+        grupoDiv.className = "flex flex-col gap-4 py-4 grupo-dinamico";
+        grupoDiv.innerHTML = `
+            <p class="font-bold text-lg">Indicador ${index}</p>
+            <div class="flex flex-col md:flex-row items-center gap-2 w-full">
+                <label for="g${index}p1" class="whitespace-nowrap">Pregunta 1 -</label>
+                <input type="text" name="questions[${index}][p1]" id="g${index}p1" 
+                       value="${preguntas.p1 ?? ''}" 
+                       class="shadow-md border border-gray-200 w-full md:flex-1">
+                <label for="g${index}c1">Calificación</label>
+                <input type="number" name="cal[${index}][c1]" id="g${index}c1" 
+                       value="${cal.c1 ?? ''}" 
+                       class="shadow-md border border-gray-200 w-16">
+            </div>
+            <div class="flex flex-col md:flex-row items-center gap-2 w-full">
+                <label for="g${index}p2" class="whitespace-nowrap">Pregunta 2 -</label>
+                <input type="text" name="questions[${index}][p2]" id="g${index}p2" 
+                       value="${preguntas.p2 ?? ''}" 
+                       class="shadow-md border border-gray-200 w-full md:flex-1">
+                <label for="g${index}c2">Calificación</label>
+                <input type="number" name="cal[${index}][c2]" id="g${index}c2" 
+                       value="${cal.c2 ?? ''}" 
+                       class="shadow-md border border-gray-200 w-16">
+            </div>
+        `;
+        container.appendChild(grupoDiv);
+    }
 });
 </script>
+
 @endsection

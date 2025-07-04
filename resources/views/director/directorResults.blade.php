@@ -1,6 +1,6 @@
 @extends('director.directorLayout')
 @section('content')
-<div class="flex-1 ml-0 md:ml-64 h-full p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+<div class="flex-1 ml-0 md:h-full md:ml-64 p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="bg-white rounded-xl shadow-lg p-6 w-full min-h-full">
         <div class="bg-white p-4 text-center text-2xl font-bold">
             <h1>
@@ -26,9 +26,12 @@
                         <option value="anualP3">Período 2</option>
                         <option value="anualP4">Período 3</option>
                     </select>
-                    <button class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
+                    <button class="inlie-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
                         Buscar
                     </button>
+                    <a href="{{ route('directorResults') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                        Refrescar
+                    </a>
                 </div>
 
         <div class="overflow-x-auto w-full mt-4">
@@ -40,11 +43,11 @@
                         <th class="px-4 py-2 text-center">Acción</th>
                     </tr>
                 </thead>
-                @for ($i = 1; $i <= 5; $i++)
+                @foreach ($dataResults as $results)
                     <tbody x-data="{ open: false }" class="border-b">
                         <tr>
-                            <td class="px-4 py-2 text-center">Catedrático {{ $i }}</td>
-                            <td class="px-4 py-2 text-center">{{ rand(10, 20) }}</td>
+                            <td class="px-4 py-2 text-center">Catedrático {{ $results['Professor'] }}</td>
+                            <td class="px-4 py-2 text-center">{{ $results['avgScoreProfessor'] }}</td>
                             <td class="px-4 py-2 text-center">
                                 <button @click="open = !open" class="text-blue-600 hover:underline focus:outline-none">
                                     <span x-show="!open" class="hover:cursor-pointer">Ver detalles</span>
@@ -55,23 +58,28 @@
                         <tr x-show="open" x-cloak>
                             <td colspan="3" class="px-4 py-2 bg-gray-50 text-sm">
                                 <div class="space-y-3">
-                                    @for ($j = 1; $j <= 3; $j++)
-                                        <div class="flex flex-col md:flex-row md:items-center justify-between">
-                                            <span class="md:ml-4"><strong>Clase {{ $j }}:</strong> Desarrollo de apps web {{ $j }}</span>
-                                            <span><strong>Calificación:</strong> {{ rand(10, 20) }}</span>
+                                    @foreach ($results['coursesPerProfessor'] as $course)
+                                        <div class="grid grid-cols-3 gap-4 items-center">
                                             <span>
-                                                <strong>Evaluaciones estudiantes &rarr; </strong>
-                                                <a href="{{ route('directorStudentView') }}" class="p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition mt-2 md:mt-0">
+                                                <strong>Clase:</strong> {{ $course['courses'] }}
+                                            </span>
+                                            <span>
+                                                <strong>Calificación:</strong> {{ $course['scorePerCourse'] }}
+                                            </span>
+                                            <span>
+                                                <strong>Evaluaciones estudiantes &rarr;</strong>
+                                               <a href="{{ route('directorStudentView', ['profeId' => $results['profeId'], 'Professor' => $results['Professor'], 'courses' => $course['courses']]) }}" class="ml-2 p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition">
                                                     <strong>Ver más</strong>
                                                 </a>
                                             </span>
                                         </div>
-                                    @endfor
+
+                                    @endforeach
                                 </div>
                             </td>
                         </tr>
                     </tbody>
-                @endfor
+                @endforeach
             </table>
         </div>
     </div>

@@ -35,7 +35,7 @@
             <canvas id="revenueChart" height="120"></canvas>
         </div>
 
-        <!-- Top Stats fuera del div blanco -->
+        <!-- Period Stats fuera del div blanco -->
         <div class="grid grid-cols-1 bg-orange-100 text-center sm:grid-cols-2 md:grid-cols-1 gap-4 md:w-64">
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">

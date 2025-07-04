@@ -4,7 +4,7 @@
 
 <!-- Main Content -->
 <div class="flex-1 ml-0 md:ml-64 p-4 h-full bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
-    <div class="bg-white rounded-xl shadow-lg p-6 w-full h-full">
+    <div class="bg-white rounded-xl shadow-lg p-6 w-full min-h-[calc(100vh-3rem)]">
         <div class="flex flex-col items-center">
             <div class="bg-white p-4 text-center text-2xl font-bold">
                 <h1>RESULTADOS DE EVALUACIONES</h1>
@@ -37,13 +37,11 @@
                                 <option value="3" {{ request('annualPeriod') == 3 ? 'selected' : '' }}>Período 3</option>
                             </select>
 
-                            <button type="submit"
-                                    class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold py-1 px-4 rounded">
+                            <button type="submit" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold py-1 px-4 rounded">
                                 Buscar
                             </button>
 
-                            <a href="{{ route('adminResults') }}"
-                            class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                            <a href="{{ route('adminResults') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                                 Refrescar
                             </a>
                         </form>

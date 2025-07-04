@@ -22,12 +22,12 @@ class DirectorController extends Controller
 
 
 
-    public function directorResults(){ 
-  $thisYear = session()->pull('year', now()->year);
+    public function directorResults(){
+    $thisYear = session()->pull('year', now()->year);
   $user = User::with('school.courses.professor')->find(61);    
   $school_id=$user->school->id;
   $professors = $user->school->courses->pluck('professor')->unique();
- $coursesPerProfessor=[];
+  $coursesPerProfessor=[];
 
 foreach ($professors as $professor) // recorda quitar este foreach para optimizar las busquedas
      {
@@ -64,7 +64,7 @@ if (($data->pluck("totStudents"))->sum() >0)   //Si hay estudiantes que evaluaro
       $courses = $data->pluck("courses")->unique()->values()->toArray();
       $totSurveyPerCourse =$data->pluck("totSurvey");
       $totStudentPerCourse =$data->pluck("totStudents");
-      foreach ($courses as $course)
+     foreach ($courses as $course)
      {  
        $scorePerCourse = round($totSurveyPerCourse[$i] / $totStudentPerCourse[$i]);  
        $coursesPerProfessor[]=[
@@ -78,7 +78,7 @@ if (($data->pluck("totStudents"))->sum() >0)   //Si hay estudiantes que evaluaro
     {
       $avgScore=0;
         $coursesPerProfessor[] = [
-        "courses" =>"sin INFO",
+        "courses" =>"nombre DENTRO DEL TECER ARRAY",
         "scorePerCourse" =>0,
       ];
     }
@@ -88,8 +88,9 @@ if (($data->pluck("totStudents"))->sum() >0)   //Si hay estudiantes que evaluaro
    "Professor" =>  $professorName,
    "avgScoreProfessor" => $avgScore,
    "coursesPerProfessor" => $coursesPerProfessor,
+   "profeId" => $professor->id,
    ];   
-$coursesPerProfessor = [];
+   $coursesPerProfessor=[];
 
 }
  dd($dataResults);
@@ -107,45 +108,45 @@ $coursesPerProfessor = [];
 
 
     public function directorStudentView(){
-$courseId=1;
- $data = DB::table('survey_submits as sb')
-      ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
-      ->join('courses as c', 'sb.course_id', '=', 'c.id')
-      ->join('users as u', 'sb.user_id', '=', 'u.id') 
-      ->join('users as prof', 'c.user_id', '=', 'prof.id') 
-      ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
-      ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-      ->where('c.id', $courseId)
-      ->whereYear('s.created_at',now()->year)
-      ->select(
-          'c.name as course',
-          'sb.id as submitId',
-          'prof.name as professorName',
-          'u.name as student',
-          DB::raw('SUM(qo.calification) as scoreStudent'),
-      )
-      ->groupBy('prof.name', 'c.name','submitId')
-      ->paginate(10);
-      if ($data)
-      {
-      foreach ($data as $item) {
-          $resultados[] = [            
-              "score" => $item->scoreStudent,
-              "profesor" => $item->professorName,
-              "course" => $item->course,
-              "nameStudent" => $item->student,
-              "submitId"=>$item->submitId,
-          ];
-          }    
-        }else{
-          $resultados[] = [
-            "score" => 0,
-            "profesor" => "n/a",
-            "course" => $course->name,
-            "courseId" =>0
-        ];
-      }
-      dd("Estas aca", $resultados);
+// $courseId=1;
+//  $data = DB::table('survey_submits as sb')
+//       ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+//       ->join('courses as c', 'sb.course_id', '=', 'c.id')
+//       ->join('users as u', 'sb.user_id', '=', 'u.id') 
+//       ->join('users as prof', 'c.user_id', '=', 'prof.id') 
+//       ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+//       ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+//       ->where('c.id', $courseId)
+//       ->whereYear('s.created_at',now()->year)
+//       ->select(
+//           'c.name as course',
+//           'sb.id as submitId',
+//           'prof.name as professorName',
+//           'u.name as student',
+//           DB::raw('SUM(qo.calification) as scoreStudent'),
+//       )
+//       ->groupBy('prof.name', 'c.name','submitId')
+//       ->paginate(10);
+//       if ($data)
+//       {
+//       foreach ($data as $item) {
+//           $resultados[] = [            
+//               "score" => $item->scoreStudent,
+//               "profesor" => $item->professorName,
+//               "course" => $item->course,
+//               "nameStudent" => $item->student,
+//               "submitId"=>$item->submitId,
+//           ];
+//           }    
+//         }else{
+//           $resultados[] = [
+//             "score" => 0,
+//             "profesor" => "n/a",
+//             "course" => $course->name,
+//             "courseId" =>0
+//         ];
+//       }
+//       dd("Estas aca", $resultados);
       return view('director.directorStudentView');
     }
 

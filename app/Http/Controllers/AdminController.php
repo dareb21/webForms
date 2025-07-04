@@ -334,8 +334,8 @@ public function reUseSurvey()
   
   if ($sameDateEnd ||$sameDateStart || $sameName)
   {
-    return response()->json("no joda");
-    //return redirect()->back()->with('alert','El encabezado no es permitido.');
+
+    return redirect()->back()->with('alert','El encabezado no es permitido.');
   }
   
   $survey = new Survey;
@@ -608,9 +608,7 @@ $resultados[] = [
 }
 if (!$hasData)  
  {
-    $noInfo=True;
-    dd("no info");
-  return view('admin.adminResults',compact("years","noInfo"));
+  return redirect()->back()->with('alert','No hay info en ese período.');
 }
     return view('admin.adminResults',compact("years","resultados","courses"));  
 }

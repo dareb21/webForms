@@ -1,6 +1,16 @@
 @extends('admin.adminLayout')
 
 @section('content')
+<!-- Sweet Alert -->
+    @if (session('alert'))
+        <script>
+            Swal.fire({
+                title: "Advertencia",
+                text: {!! json_encode(session('alert')) !!},
+                icon: "warning"
+            });
+        </script>
+    @endif
 
 <!-- Main Content -->
 <div class="flex-1 ml-0 md:ml-64 p-4 h-full bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">

@@ -146,8 +146,8 @@ Enrollment::create([
 ]);
  Survey::create([
             'revision' => 'Evaluacion #2 Mayo 2026',
-            'dateStart' => '2026-05-12',
-            'dateEnd' => '2026-06-12',
+            'dateStart' => '2025-10-12',
+            'dateEnd' => '2025-11-12',
             'Author' => 'admin1',
             'term' => '1',
             'status' =>1,

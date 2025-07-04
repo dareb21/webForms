@@ -158,8 +158,8 @@ public function UnableEvaluation($surveyId)
     "dateStart" =>"required|date|after:today",
     "dateEnd" => "required|date|after:dateStart",
     "cal" => "required|array",
-    "cal.*.c1" => "required|numeric|min:1",
-    "cal.*.c2" => "required|numeric|min:1",
+    "cal.*.c1" => "required|numeric|min:0",
+    "cal.*.c2" => "required|numeric|min:0",
     'questions' => 'required|array',
     'questions.*.p1' => 'required|string|min:5',
     'questions.*.p2' => 'required|string|min:5',
@@ -510,6 +510,10 @@ return $answer;
 }
 
 public function adminResults(){
+$years = Survey::selectRAW("Year(dateStart)")
+    ->distinct()
+    ->get();
+    
 $courses = Course::has('submits')->paginate(10);
 $thisYear = session()->pull('year', now()->year);
     foreach ($courses as $course)
@@ -530,6 +534,11 @@ $thisYear = session()->pull('year', now()->year);
             )
         ->groupBy('prof.name')
         ->first();
+      if (!$data)
+      {
+        $noInfo=True;
+        return view('admin.adminResults',compact("years","noInfo"));
+      }  
       $score = round(($data->totSurvey / $data->totStudents));
       $resultados[] = [
             "score" => $score,
@@ -537,12 +546,9 @@ $thisYear = session()->pull('year', now()->year);
             "course" => $course->name,
             "courseId" =>$course->id
         ];
-    
-   
+
 }
- $years = Survey::selectRAW("Year(dateStart)")
-    ->distinct()
-    ->get();
+
   return view('admin.adminResults',compact("years","resultados","courses"));
 }
 
@@ -550,14 +556,19 @@ $thisYear = session()->pull('year', now()->year);
 
 public function resultSearch(Request $request)
    {
+     $years = Survey::selectRAW("Year(dateStart)")
+    ->distinct()
+    ->get();
+  
      $thisYear=$request->annualYear;
      $term=$request->annualPeriod;
      if ($term==4)
      {
        return redirect()->route("adminResults")->with(['year' => $thisYear]);;
      }
-$courses = Course::paginate(10);
+$courses = Course::has('submits')->withCount('submits')->paginate(10);
 
+$hasData = False;
 foreach ($courses as $course)
 {
   $data = DB::table('survey_submits as sb')
@@ -571,43 +582,34 @@ foreach ($courses as $course)
     ->where('s.term',$term)
     ->whereYear('s.created_at',$thisYear)
     ->select(
-        'c.name as course',
         'prof.name as professorName',
-         'c.id as courseId',
         DB::raw('SUM(qo.calification) as totSurvey'),
         DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
     )
-    ->groupBy('prof.name', 'c.name','c.id')
-
+    ->groupBy('prof.name')
     ->first();
 
-    if ($data && $data->totStudents > 0) {
-        $score = round(($data->totSurvey / $data->totStudents));
-        $resultados[] = [
-            "score" => $score,
+if (!$data)
+    {
+        continue;
+    }  
+$hasData=True;
+$score = round(($data->totSurvey / $data->totStudents));
+$resultados[] = [
+           "score" => $score,
             "profesor" => $data->professorName,
-            "course" => $data->course,
-            "courseId" =>$data->courseId
-        ];
-    }else{
-       $resultados[] = [
-            "score" => 0,
-            "profesor" => "n/a",
             "course" => $course->name,
-            "courseId" =>0
-        ];
-    }
-
+            "courseId" =>$course->id
+ ];
 }
- $years = Survey::selectRAW("Year(dateStart)")
-    ->distinct()
-
-    ->get();
-    // TE QUEDASTE HACIENDO EL FILTRO PARA RESULTADOS
-    return view('admin.adminResults',compact("years","resultados","courses"));
-
-   }
-
+if (!$hasData)  
+ {
+    $noInfo=True;
+    dd("no info");
+  return view('admin.adminResults',compact("years","noInfo"));
+}
+    return view('admin.adminResults',compact("years","resultados","courses"));  
+}
 
 
 

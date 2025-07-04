@@ -513,8 +513,11 @@ public function adminResults(){
 $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-    
 $courses = Course::has('submits')->paginate(10);
+if ($courses->isEmpty())
+{
+  dd("No hay ninguna encuesta");
+}
 $thisYear = session()->pull('year', now()->year);
     foreach ($courses as $course)
      {
@@ -535,10 +538,10 @@ $thisYear = session()->pull('year', now()->year);
         ->groupBy('prof.name')
         ->first();
       if (!$data)
-      {
-        $noInfo=True;
+    {
+      $noInfo=True;
         return view('admin.adminResults',compact("years","noInfo"));
-      }  
+    }  
       $score = round(($data->totSurvey / $data->totStudents));
       $resultados[] = [
             "score" => $score,

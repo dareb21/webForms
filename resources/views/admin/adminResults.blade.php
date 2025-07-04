@@ -61,24 +61,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($resultados as $resultado)
-                            <tr>
-                                <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['profesor'] }}</td>
-                                <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['course'] }}</td>
-                                <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                                <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['score'] }}</td>
-                                <td class="border border-gray-400 px-4 py-2 text-center">
-                                    <a href="{{ route('adminStudentView', ['courseId' => $resultado['courseId'], 'annualYear' => request('annualYear'), 'annualPeriod' => request('annualPeriod')]) }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
-                                        Ver
-                                    </a>
-                                </td>
-                                <td class="border border-gray-400 px-4 py-2 text-center">
-                                    <a href="#" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
-                                        Exportar
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
+                        @if ($noInfo === 1)
+                            @for ($i=1; $i<=6; $i++)
+                                <td class="border border-gray-400 px-4 py-2 text-center">Aún no hay info.</td>
+                            @endfor
+                        @else
+                            @foreach ($resultados as $resultado)
+                                <tr>
+                                    <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['profesor'] }}</td>
+                                    <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['course'] }}</td>
+                                    <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
+                                    <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['score'] }}</td>
+                                    <td class="border border-gray-400 px-4 py-2 text-center">
+                                        <a href="{{ route('adminStudentView', ['courseId' => $resultado['courseId'], 'annualYear' => request('annualYear'), 'annualPeriod' => request('annualPeriod')]) }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
+                                            Ver
+                                        </a>
+                                    </td>
+                                    <td class="border border-gray-400 px-4 py-2 text-center">
+                                        <a href="#" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
+                                            Exportar
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>

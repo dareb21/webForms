@@ -137,7 +137,7 @@ School::create(['name' => 'Escuela de Matemáticas', 'director_id' => 70]);
             ]);
             }
      
-
+    }
         
 Enrollment::create([
     "course_id" =>88,
@@ -206,5 +206,4 @@ for ($i=1; $i<=20;$i++)
         }
 
     }
-}
 }

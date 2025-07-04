@@ -22,16 +22,19 @@ class DirectorController extends Controller
 
 
 
-    public function directorResults(){
-    $thisYear = session()->pull('year', now()->year);
-    $user = User::with('school.courses.professor')->find(61);    
+    public function directorResults(){ 
+  $thisYear = session()->pull('year', now()->year);
+  $user = User::with('school.courses.professor')->find(61);    
   $school_id=$user->school->id;
   $professors = $user->school->courses->pluck('professor')->unique();
+ $coursesPerProfessor=[];
 
-    foreach ($professors as $professor) // recorda quitar este foreach para optimizar las busquedas
+foreach ($professors as $professor) // recorda quitar este foreach para optimizar las busquedas
      {
-   
-        $professorName = $professor->name;
+     //$Y=$user->school->courses[$k]->name;
+
+      $professorName = $professor->name;
+
        $data = DB::table('survey_submits as sb')
         ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
         ->join('courses as c', 'sb.course_id', '=', 'c.id')
@@ -51,7 +54,7 @@ class DirectorController extends Controller
         ->groupBy('prof.name','c.id')
         ->get();
 
-if (($data->pluck("totStudents"))->sum() !=0)
+if (($data->pluck("totStudents"))->sum() >0)   //Si hay estudiantes que evaluaron
 {
 
       $i=0;
@@ -61,8 +64,7 @@ if (($data->pluck("totStudents"))->sum() !=0)
       $courses = $data->pluck("courses")->unique()->values()->toArray();
       $totSurveyPerCourse =$data->pluck("totSurvey");
       $totStudentPerCourse =$data->pluck("totStudents");
-      $coursesPerProfessor=[];
-     foreach ($courses as $course)
+      foreach ($courses as $course)
      {  
        $scorePerCourse = round($totSurveyPerCourse[$i] / $totStudentPerCourse[$i]);  
        $coursesPerProfessor[]=[
@@ -75,7 +77,10 @@ if (($data->pluck("totStudents"))->sum() !=0)
  }else
     {
       $avgScore=0;
-      $coursesPerProfessor = "sin info";
+        $coursesPerProfessor[] = [
+        "courses" =>"sin INFO",
+        "scorePerCourse" =>0,
+      ];
     }
 
  $dataResults[]=
@@ -84,8 +89,10 @@ if (($data->pluck("totStudents"))->sum() !=0)
    "avgScoreProfessor" => $avgScore,
    "coursesPerProfessor" => $coursesPerProfessor,
    ];   
-  
+$coursesPerProfessor = [];
+
 }
+ dd($dataResults);
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();

@@ -91,7 +91,7 @@ if (($data->pluck("totStudents"))->sum() >0)   //Si hay estudiantes que evaluaro
    $coursesPerProfessor=[];
 
 }
- dd($dataResults);
+
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
@@ -148,7 +148,7 @@ if (($data->pluck("totStudents"))->sum() >0)   //Si hay estudiantes que evaluaro
       return view('director.directorStudentView');
     }
 
-    public function directorSchools(){
-      return view('director.directorSchools');
-    }
+    // public function directorSchools(){
+    //   return view('director.directorSchools');
+    // }
 }

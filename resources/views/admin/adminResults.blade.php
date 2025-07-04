@@ -21,12 +21,16 @@
                                 class="shadow-sm ml-2 border border-gray-200">
                             <label for="annualYear">Año</label>
                             <select name="annualYear" id="annualYear" class="shadow-md border border-gray-200">
-                                @foreach ($years as $year)
-                                    <option value="{{ $year->{'Year(dateStart)'} }}"
-                                        {{ request('annualYear') == $year->{'Year(dateStart)'} ? 'selected' : '' }}>
-                                        {{ $year->{'Year(dateStart)'} }}
-                                    </option>
-                                @endforeach
+                                @if (isset($noInfo) && $noInfo)
+                                    <option value="noInfo">No hay info.</option>
+                                @else
+                                    @foreach ($years as $year)
+                                        <option value="{{ $year->{'Year(dateStart)'} }}"
+                                            {{ request('annualYear') == $year->{'Year(dateStart)'} ? 'selected' : '' }}>
+                                            {{ $year->{'Year(dateStart)'} }}
+                                        </option>
+                                    @endforeach
+                                @endif
                             </select>
 
                             <label for="annualPeriod">Período</label>
@@ -61,9 +65,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($noInfo === 1)
+                        @if (isset($noInfo) && $noInfo)
                             @for ($i=1; $i<=6; $i++)
-                                <td class="border border-gray-400 px-4 py-2 text-center">Aún no hay info.</td>
+                                <td class="border border-gray-400 px-4 py-2 text-center"></td>
                             @endfor
                         @else
                             @foreach ($resultados as $resultado)
@@ -84,14 +88,13 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            <!-- Paginación -->
+                            <div class="w-full flex justify-center py-4">
+                                {{ $courses->links() }} 
+                            </div>
                         @endif
                     </tbody>
                 </table>
-            </div>
-
-            <!-- Paginación -->
-            <div class="w-full flex justify-center py-4">
-                {{ $courses->links() }} 
             </div>
         </div>
     </div>

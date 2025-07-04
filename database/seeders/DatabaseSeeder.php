@@ -115,15 +115,68 @@ School::create(['name' => 'Escuela de Biología', 'director_id' => 69]);
 School::create(['name' => 'Escuela de Matemáticas', 'director_id' => 70]);
 
 //seeder cursos
-    $professorIds = User::where('role', 'professor')->pluck('id')->toArray();
-    $schoolIds = School::pluck('id')->toArray();
-    for ($i = 1; $i <= 100; $i++) {
-    Course::create([
-            'name' =>  fake()->words(2, true),
+$schoolNames = [
+    'Ciencias de la Computación',
+    'Derecho',
+    'Comunicación',
+    'Ciencias Económicas',
+    'Ingeniería Civil',
+    'Psicología',
+    'Arquitectura',
+    'Educación',
+    'Biología',
+    'Matemáticas',
+];
+
+// Asumiendo que ya existen las escuelas y están en el mismo orden que el arreglo
+$schools = School::orderBy('id')->take(10)->get();
+$professorIds = User::where('role', 'professor')->pluck('id')->toArray();
+
+$classesBySchool = [
+    // Computación
+    ['Estructuras de Datos', 'Bases de Datos', 'Algoritmos', 'Programación I', 'Programación II', 'Redes', 'Sistemas Operativos', 'Inteligencia Artificial', 'Ingeniería de Software', 'Desarrollo Web'],
+
+    // Derecho
+    ['Derecho Constitucional', 'Derecho Penal', 'Derecho Civil', 'Teoría del Estado', 'Derecho Mercantil', 'Derecho Internacional', 'Derechos Humanos', 'Criminología', 'Código Procesal Penal', 'Ética Jurídica'],
+
+    // Comunicación
+    ['Periodismo', 'Redacción Profesional', 'Teoría de la Comunicación', 'Medios Digitales', 'Comunicación Organizacional', 'Publicidad', 'Radio y Televisión', 'Diseño Gráfico', 'Producción Audiovisual', 'Fotografía'],
+
+    // Ciencias Económicas
+    ['Contabilidad I', 'Economía General', 'Microeconomía', 'Macroeconomía', 'Estadística I', 'Matemáticas Financieras', 'Gestión Empresarial', 'Mercadeo', 'Costos', 'Finanzas'],
+
+    // Ingeniería Civil
+    ['Estática', 'Resistencia de Materiales', 'Dibujo Técnico', 'Topografía', 'Estructuras', 'Construcción I', 'Construcción II', 'Hidráulica', 'Hormigón Armado', 'Diseño Estructural'],
+
+    // Psicología
+    ['Psicología General', 'Neuropsicología', 'Psicología del Desarrollo', 'Teorías de la Personalidad', 'Psicología Clínica', 'Psicopatología', 'Evaluación Psicológica', 'Psicología Educativa', 'Psicología Social', 'Terapias Cognitivas'],
+
+    // Arquitectura
+    ['Diseño Arquitectónico', 'Historia de la Arquitectura', 'Construcción y Materiales', 'Dibujo Arquitectónico', 'Urbanismo', 'Diseño Bioclimático', 'Modelado 3D', 'Taller de Maquetas', 'Tecnología de la Construcción', 'Paisajismo'],
+
+    // Educación
+    ['Didáctica General', 'Planeación Educativa', 'Evaluación del Aprendizaje', 'Psicología Educativa', 'Filosofía de la Educación', 'Currículo', 'Gestión Educativa', 'TIC en la Educación', 'Educación Inclusiva', 'Metodología de la Investigación'],
+
+    // Biología
+    ['Biología Celular', 'Genética', 'Microbiología', 'Botánica', 'Zoología', 'Ecología', 'Fisiología Animal', 'Biología Molecular', 'Biotecnología', 'Bioquímica'],
+
+    // Matemáticas
+    ['Álgebra', 'Geometría', 'Cálculo I', 'Cálculo II', 'Estadística', 'Matemática Discreta', 'Ecuaciones Diferenciales', 'Matemática Aplicada', 'Probabilidades', 'Teoría de Números'],
+];
+
+// Crear las clases
+foreach ($schools as $index => $school) {
+    $classList = $classesBySchool[$index];
+    
+    foreach ($classList as $className) {
+        Course::create([
+            'name' => $className,
             'user_id' => fake()->randomElement($professorIds),
-            'school_id' => fake()->randomElement($schoolIds),
-            ]);
-        }
+            'school_id' => $school->id,
+        ]);
+    }
+}
+
 //seeder Matricula
     $studentIds = User::where('role', 'student')->pluck('id')->toArray();
      $courseIds = Course::pluck('id')->toArray();

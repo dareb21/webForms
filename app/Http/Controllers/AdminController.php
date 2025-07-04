@@ -514,9 +514,9 @@ $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
 $courses = Course::has('submits')->paginate(10);
-if ($courses->isEmpty())
-{
-  dd("No hay ninguna encuesta");
+if($courses -> isEmpty()){
+  $noInfo=True;
+  return view('admin.adminResults',compact("noInfo"));
 }
 $thisYear = session()->pull('year', now()->year);
     foreach ($courses as $course)

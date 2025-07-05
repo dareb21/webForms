@@ -30,7 +30,7 @@
         <div class="bg-white rounded-lg shadow-md p-6 flex-1">
             <div class="flex justify-between items-center mt-4 mb-4">
                 <h2 class="text-2xl text-gray-800 font-bold">Bienvenido Administrador</h2>
-            </div>
+            </div>     
             <h3 class="text-gray-700 font-bold md:mt-10 mb-2">Satisfacción por períodos</h3>
             <canvas id="revenueChart" height="120"></canvas>
         </div>

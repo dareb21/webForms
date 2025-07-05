@@ -673,7 +673,16 @@ public function studentSearch()
 }
 public function adminControlCourses()
 {
-  $courses = Course::paginate(10);
+  $courses = [];
+  $data = Course::with(["professor"])->paginate(10);
+  foreach ($data as $item)
+  {
+    $courses[]=[
+      "courseName" => $item->name,
+      "courseProfessor"=>$item->professor->name,
+      "courseId" =>$item->id,
+    ];
+  }
   return view("admin.adminControlCourses",compact("courses"));
 }
 

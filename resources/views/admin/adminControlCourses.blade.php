@@ -24,43 +24,18 @@
             <div class="w-full h-full mt-6 overflow-x-auto">
                 <div class="w-full flex flex-col items-start pt-3">
                     <div class="flex gap-x-4 flex-wrap py-4">  
-                        <form action="{{ route('adminResultSearch') }}" method="GET" class="flex flex-wrap items-center gap-x-4">
+                        <form action="{{ route('searchCourse') }}" method="GET" class="flex flex-wrap items-center gap-x-4">
                             <label for="catedraticoBusqueda">Búsqueda por nombre</label>
-                            <input type="text" name="catedraticoBusqueda" id="catedraticoBusqueda"
-                                value="{{ request('catedraticoBusqueda') }}"
+                            <input type="text" name="courseSearch" id="courseSearch"
+                                value="{{ request('courseSearch') }}"
                                 class="shadow-sm ml-2 border border-gray-200">
-                            {{-- <label for="annualYear">Año</label> --}}
-                            {{-- <select name="annualYear" id="annualYear" class="shadow-md border border-gray-200">
-                                @if (isset($noInfo) && $noInfo)
-                                    <option value="noInfo">No hay info.</option>
-                                @else
-                                    @foreach ($years as $year)
-                                        <option value="{{ $year->{'Year(dateStart)'} }}"
-                                            {{ request('annualYear') == $year->{'Year(dateStart)'} ? 'selected' : '' }}>
-                                            {{ $year->{'Year(dateStart)'} }}
-                                        </option>
-                                    @endforeach
-                                @endif
-                            </select> --}}
-
-                            {{-- <label for="annualPeriod">Período</label>
-                            <select name="annualPeriod" id="annualPeriod" class="shadow-md border border-gray-200">
-                                <option value="4" {{ request('annualPeriod') == 4 ? 'selected' : '' }}>Anual</option>
-                                <option value="1" {{ request('annualPeriod') == 1 ? 'selected' : '' }}>Período 1</option>
-                                <option value="2" {{ request('annualPeriod') == 2 ? 'selected' : '' }}>Período 2</option>
-                                <option value="3" {{ request('annualPeriod') == 3 ? 'selected' : '' }}>Período 3</option>
-                            </select> --}}
-
                             <button type="submit" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold py-1 px-4 rounded">
                                 Buscar
                             </button>
 
-                            <a href="{{ route('adminResults') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                            <a href="{{ route('adminControlCourses') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                                 Refrescar
                             </a>
-                            {{-- <a href="{{ route('admin.exportarPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
-                                Exportar
-                            </a> --}}
                         </form>
                     </div>
                 </div>
@@ -87,7 +62,12 @@
                                     <td class="border border-gray-400 px-4 py-2 text-center">{{ $course['courseProfessor'] }}</td>
                                     <td class="border border-gray-400 px-4 py-2 text-center">{{ $course['courseName'] }}</td>
                                     <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                                    <td class="border border-gray-400 px-4 py-2 text-center">Activo/Inactivo</td>
+                                    @if ($course['courseStatus'] ===1)
+                                        <td class="border border-gray-400 px-4 py-2 text-center">Activo</td>
+                                    @else
+                                        <td class="border border-gray-400 px-4 py-2 text-center">Inactivo</td>
+                                    @endif
+                                    
                                     <td class="md:w-40 border border-gray-400 px-4 py-2 text-center">
                                         <div class="flex flex-col sm:flex-row sm:justify-center sm:items-center gap-1">
                                             <form action="{{ route('blockCourse', ['courseId'=> $course['courseId']]) }}" method="POST">
@@ -107,13 +87,14 @@
 
                                 </tr>
                             @endforeach
-                            {{-- <!-- Paginación -->
-                            <div class="w-full flex justify-center py-4">
-                                {{ $courses->links() }} 
-                            </div>
-                        @endif --}}
+                            
+                        {{-- @endif --}}
                     </tbody>
                 </table>
+                <!-- Paginación -->
+                <div class="w-full flex justify-center py-4">
+                    {{ $data->links() }}
+                </div>
             </div>
         </div>
     </div>

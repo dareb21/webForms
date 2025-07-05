@@ -681,9 +681,10 @@ public function adminControlCourses()
       "courseName" => $item->name,
       "courseProfessor"=>$item->professor->name,
       "courseId" =>$item->id,
+      "courseStatus"=>$item->status,
     ];
   }
-  return view("admin.adminControlCourses",compact("courses"));
+  return view("admin.adminControlCourses",compact("courses","data"));
 }
 
 

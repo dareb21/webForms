@@ -58,6 +58,9 @@
                             <a href="{{ route('adminResults') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                                 Refrescar
                             </a>
+                            <a href="{{ route('admin.exportarPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                                Exportar
+                            </a>
                         </form>
                     </div>
                 </div>
@@ -71,7 +74,6 @@
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Sección</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Calificación</th>
                             <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Estudiantes</th>
-                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Exportar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,11 +91,6 @@
                                     <td class="border border-gray-400 px-4 py-2 text-center">
                                         <a href="{{ route('adminStudentView', ['courseId' => $resultado['courseId'], 'annualYear' => request('annualYear'), 'annualPeriod' => request('annualPeriod')]) }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
                                             Ver
-                                        </a>
-                                    </td>
-                                    <td class="border border-gray-400 px-4 py-2 text-center">
-                                        <a href="#" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
-                                            Exportar
                                         </a>
                                     </td>
                                 </tr>

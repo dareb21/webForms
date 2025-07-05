@@ -12,6 +12,8 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class AdminController extends Controller
 {
 
@@ -266,7 +268,7 @@ $sumtot=0;
 
 if ($sumtot!=20)
 {
-  return response()->json("La calificacion es mayor o menor que 20 puntos, valide los valores porfavor.");
+  return redirect()->back()->with('alert','La calificacion no cuadra con los 20 puntos, favor revise.')->withInput();
 }
   $thisSurvey = Survey::findOrFail($request->surveyId);
   $dateNow = Carbon::now('etc/GMT+6');
@@ -663,4 +665,40 @@ public function studentSearch()
   dd($request);
 }
 
+
+
+public function exportarResultadosPDF()
+{
+  $courses = Course::has('submits')->paginate(10);
+  $thisYear = session()->pull('year', now()->year);
+    foreach ($courses as $course)
+     {
+        $data = DB::table('survey_submits as sb')
+        ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+        ->join('courses as c', 'sb.course_id', '=', 'c.id')
+        ->join('users as u', 'sb.user_id', '=', 'u.id') 
+        ->join('users as prof', 'c.user_id', '=', 'prof.id') 
+        ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+        ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+        ->where('c.id', $course->id) 
+        ->whereYear('s.created_at',$thisYear)
+        ->select(
+            'prof.name as professorName',
+            DB::raw('SUM(qo.calification) as totSurvey'),
+            DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
+            )
+        ->groupBy('prof.name')
+        ->first();
+        $score = round(($data->totSurvey / $data->totStudents));
+        $resultados[] = [
+            "score" => $score,
+            "profesor" => $data->professorName,
+            "course" => $course->name,
+            "courseId" =>$course->id
+        ];
+      }
+  return Pdf::loadView('pdf.adminResultsPDF', compact('resultados'))
+              ->setPaper('a4', 'portrait')
+              ->download('resultados.pdf');
+}
 }

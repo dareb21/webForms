@@ -701,4 +701,8 @@ public function exportarResultadosPDF()
               ->setPaper('a4', 'portrait')
               ->download('resultados.pdf');
 }
+
+  public function adminControlCourses(){
+    return view("admin.adminControlCourses");
+  }
 }

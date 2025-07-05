@@ -57,7 +57,7 @@ Route::get('/adminViewAnswer/{submitId}',[AdminController::class,"adminViewAnswe
 Route::get('/adminEvaluation/search', [AdminController::class,"evaluationSearch"])->name("adminEvaluationSearch");
 Route::get('/adminResults/search', [AdminController::class,"resultSearch"])->name("adminResultSearch");
 Route::get('/adminStudent/search', [AdminController::class,"studentSearch"])->name("adminStudentSearch");
-
+Route::get('/adminControlCourses', [AdminController::class,"adminControlCourses"])->name("adminControlCourses");
 
 #Rutas decanos
 Route::get('/deanDashboard', [DeanController::class, "deanDashboard"])->name("deanDashboard");
@@ -65,7 +65,7 @@ Route::get('/deanResults', [DeanController::class, "deanResults"])->name("deanRe
 Route::get('/deanSchools', [DeanController::class, "deanSchools"])->name("deanSchools");
 Route::get('/deanStudentView', [DeanController::class, "deanStudentView"])->name("deanStudentView");
 
-#Rutas direcotres
+#Rutas directores
 Route::get('/directorDashboard', [DirectorController::class, "directorDashboard"])->name("directorDashboard");
 Route::get('/directorResults', [DirectorController::class, "directorResults"])->name("directorResults");
 Route::get('/directorStudentView', [DirectorController::class, "directorStudentView"])->name("directorStudentView");

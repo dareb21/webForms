@@ -74,6 +74,17 @@
           </a>
         </li>
 
+        
+        <li class="hover:bg-blue-700 hover:text-white">
+          <a href="{{ route('adminControlCourses') }}" class="group flex items-center p-2 space-x-3 rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" class="w-5 h-5 text-gray-700 transition duration-300 group-hover:invert">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M11.25 3v2.25m0 13.5V21m6.364-14.136l-1.591 1.591m-9.546 0L5.636 6.864m12.728 10.272l-1.591-1.591m-9.546 0l-1.591 1.591M21 11.25h-2.25m-13.5 0H3" />
+            </svg>
+            <span>Control Cursos</span>
+          </a>
+        </li>
       </ul>
 
       <ul class="pt-4 pb-2 space-y-1 text-sm">

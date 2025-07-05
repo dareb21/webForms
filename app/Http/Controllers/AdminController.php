@@ -8,6 +8,7 @@ use App\Models\QuestionGroup;
 use App\Models\QuestionOption;
 use App\Models\SurveySubmit;
 use App\Models\Course;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -47,7 +48,8 @@ public function UnableEvaluation($surveyId)
       $resultados = collect();
       $thisYear= now()->year;
       $surveysOfThisYear=Survey::whereYear("created_at",$thisYear)->select("id")->get();
-      
+     // $thisIds =  $surveysOfThisYear->pluck("id");
+    
      foreach($surveysOfThisYear as $survey)
       {
        $data = DB::table("surveys as s")
@@ -76,8 +78,15 @@ public function UnableEvaluation($surveyId)
     ]);
     $i+=1;
     }    
-    $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));//que divida si y solo si ya se contesto la cantidad de surveys creadas
-        return view("admin.adminDashboard",compact("resultados","anual" ));
+    $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
+
+
+  $allProfessor = User::where("role","professor")->count();
+  $amountProfessors =Course::has('submits')->get();
+  $professorsEvaluated=$amountProfessors->pluck("user_id")->unique()->count();
+
+
+        return view("admin.adminDashboard",compact("resultados","anual","allProfessor","professorsEvaluated" ));
     }
 
 
@@ -150,11 +159,11 @@ public function UnableEvaluation($surveyId)
 
    public function createNewEvaluation(Request $request)
    {
-    
-    $request->validate([
+  
+$request->validate([
     "evaluationName" => "required|string",
     "term" => "required|integer|in:1,2,3",
-    "dateStart" =>"required|date|after:today",
+    "dateStart" => "required|date|after:today",
     "dateEnd" => "required|date|after:dateStart",
     "cal" => "required|array",
     "cal.*.c1" => "required|numeric|min:0",
@@ -162,7 +171,32 @@ public function UnableEvaluation($surveyId)
     'questions' => 'required|array',
     'questions.*.p1' => 'required|string|min:5',
     'questions.*.p2' => 'required|string|min:5',
+],[
+    "evaluationName.required" => "El nombre de la revisión está vacío, por favor llénelo.",
+    "term.required" => "El período es obligatorio.",
+    "term.in" => "El período debe ser 1, 2 o 3.",
+    "dateStart.required" => "La fecha de apertura es obligatoria.",
+    "dateStart.after" => "La fecha de apertura debe ser posterior a hoy.",
+    "dateEnd.required" => "La fecha de cierre es obligatoria.",
+    "dateEnd.after" => "La fecha de cierre debe ser después de la fecha de apertura.",
+    
+    "cal.required" => "Debe ingresar al menos una calificación.",
+    "cal.*.c1.required" => "La calificación C1 es obligatoria.",
+    "cal.*.c1.numeric" => "La calificación C1 debe ser un número.",
+    "cal.*.c1.min" => "La calificación C1 no puede ser negativa.",
+    "cal.*.c2.required" => "La calificación C2 es obligatoria.",
+    "cal.*.c2.numeric" => "La calificación C2 debe ser un número.",
+    "cal.*.c2.min" => "La calificación C2 no puede ser negativa.",
+
+    "questions.required" => "Debe ingresar al menos una pregunta.",
+    "questions.*.p1.required" => "La pregunta P1 es obligatoria.",
+    "questions.*.p1.string" => "La pregunta P1 debe ser texto.",
+    "questions.*.p1.min" => "La pregunta P1 debe tener al menos 5 caracteres.",
+    "questions.*.p2.required" => "La pregunta P2 es obligatoria.",
+    "questions.*.p2.string" => "La pregunta P2 debe ser texto.",
+    "questions.*.p2.min" => "La pregunta P2 debe tener al menos 5 caracteres.",
 ]);
+
 
   $year = Carbon::parse($request->dateStart)->year;
   $thisYears = Survey::whereYear('dateStart', $year)->count();  
@@ -512,7 +546,6 @@ public function adminResults(){
 $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-    
 $courses = Course::has('submits')->paginate(10);
 if($courses -> isEmpty()){
   $noInfo=True;
@@ -538,10 +571,10 @@ $thisYear = session()->pull('year', now()->year);
         ->groupBy('prof.name')
         ->first();
       if (!$data)
-      {
-        $noInfo=True;
+    {
+      $noInfo=True;
         return view('admin.adminResults',compact("years","noInfo"));
-      }  
+    }  
       $score = round(($data->totSurvey / $data->totStudents));
       $resultados[] = [
             "score" => $score,
@@ -551,7 +584,6 @@ $thisYear = session()->pull('year', now()->year);
         ];
 
 }
-
   return view('admin.adminResults',compact("years","resultados","courses"));
 }
 
@@ -609,6 +641,8 @@ if (!$hasData)
  {
   return redirect()->back()->with('alert','No hay info en ese período.');
 }
+
+
     return view('admin.adminResults',compact("years","resultados","courses"));  
 }
 

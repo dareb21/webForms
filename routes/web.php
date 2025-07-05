@@ -60,6 +60,7 @@ Route::get('/adminStudent/search', [AdminController::class,"studentSearch"])->na
 Route::get('/adminControlCourses', [AdminController::class,"adminControlCourses"])->name("adminControlCourses");
 Route::post('/adminControlCourses/block/{courseId}', [AdminController::class,"blockCourse"])->name("blockCourse");
 Route::post('/adminControlCourses/unblock/{courseId}', [AdminController::class,"unblockCourse"])->name("unblockCourse");
+Route::get('/adminSearchCourses', [AdminController::class,"searchCourse"])->name("searchCourse");
 
 #Rutas decanos
 Route::get('/deanDashboard', [DeanController::class, "deanDashboard"])->name("deanDashboard");

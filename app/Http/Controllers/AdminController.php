@@ -675,6 +675,11 @@ public function adminControlCourses()
 {
   $courses = [];
   $data = Course::with(["professor"])->paginate(10);
+  if(!$data)
+  {
+    $noInfo = True;
+    return view("admin.adminControlCourses",compact("noInfo"));
+  }
   foreach ($data as $item)
   {
     $courses[]=[
@@ -705,7 +710,25 @@ public function unblockCourses($courseId)
     return redirect()->route("adminControlCourses");
 }
 
-
+public function searchCourse(Request $request)
+{
+$course = Course::where("name", "LIKE", "%". $request->courseSearch ."%")->first();
+$data = Course::with(["professor"])->findOrFail($course->id);
+if(!$data)
+  {
+    $noInfo = True;
+    return view("admin.adminControlCourses",compact("noInfo"));
+  }
+  foreach ($data as $item)
+  {
+    $courses[]=[
+      "courseName" => $item->name,
+      "courseProfessor"=>$item->professor->name,
+      "courseId" =>$item->id,
+    ];
+  }
+  return view("admin.adminControlCourses",compact("courses"));
+}
 
 public function exportarResultadosPDF()
 {

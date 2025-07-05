@@ -696,7 +696,7 @@ public function blockCourse($courseId)
     return redirect()->route("adminControlCourses");
 }
 
-public function unblockCourses($courseId)
+public function unblockCourse($courseId)
 {
     $thisCourse = Course::find($courseId);
     $thisCourse->update([

@@ -32,7 +32,7 @@
                             <label for="annualYear">Año</label>
                             <select name="annualYear" id="annualYear" class="shadow-md border border-gray-200">
                                 @if (isset($noInfo) && $noInfo)
-                                    <option value="noInfo">No hay info.</option>
+                                    <option value="noInfo">None</option>
                                 @else
                                     @foreach ($years as $year)
                                         <option value="{{ $year->{'Year(dateStart)'} }}"
@@ -78,7 +78,7 @@
                     </thead>
                     <tbody>
                         @if (isset($noInfo) && $noInfo)
-                            @for ($i=1; $i<=6; $i++)
+                            @for ($i=1; $i<=5; $i++)
                                 <td class="border border-gray-400 px-4 py-2 text-center"></td>
                             @endfor
                         @else

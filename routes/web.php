@@ -57,7 +57,9 @@ Route::get('/adminViewAnswer/{submitId}',[AdminController::class,"adminViewAnswe
 Route::get('/adminEvaluation/search', [AdminController::class,"evaluationSearch"])->name("adminEvaluationSearch");
 Route::get('/adminResults/search', [AdminController::class,"resultSearch"])->name("adminResultSearch");
 Route::get('/adminStudent/search', [AdminController::class,"studentSearch"])->name("adminStudentSearch");
-
+Route::get('/adminCourses', [AdminController::class,"controlCourses"])->name("controlCourses");
+Route::post('/adminCourses/block/{courseId}', [AdminController::class,"blockCourse"])->name("blockCourse");
+Route::post('/adminCourses/unblock/{courseId}', [AdminController::class,"unblockCourse"])->name("unblockCourse");
 
 #Rutas decanos
 Route::get('/deanDashboard', [DeanController::class, "deanDashboard"])->name("deanDashboard");

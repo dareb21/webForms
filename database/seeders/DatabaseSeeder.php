@@ -172,6 +172,7 @@ foreach ($schools as $index => $school) {
         Course::create([
             'name' => $className,
             'user_id' => fake()->randomElement($professorIds),
+            'status' =>1,
             'school_id' => $school->id,
         ]);
     }

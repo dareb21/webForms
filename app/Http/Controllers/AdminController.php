@@ -23,12 +23,19 @@ class AdminController extends Controller
     if (Survey::where("status",1)->exists())
     {
       return redirect()->back()->with('alert','Ya hay una evaluacion Activa');
-    }else
-    {
-      Survey::where("id",$surveyId)->update([
-        "status" => 1,    
-      ]);
     }
+     $thisSurvey = 
+    $dateNow = Carbon::now('etc/GMT+6');
+    $thisSurvey = Survey::find($surveyId);
+
+    if ($dateNow>=$thisSurvey->dateEnd)
+    {
+            return redirect()->back()->with('alert','La evaluacion llego a su fecha de cierre.');
+    }
+
+    $thisSurvey->update([
+      "status" =>1,
+    ]);
     return redirect()->route("adminEvaluation");
   }
 
@@ -663,6 +670,30 @@ if (!$hasData)
 public function studentSearch()
 {
   dd($request);
+}
+public function controlCourses()
+{
+  $courses = Course::paginate(10);
+  return view("admin.controlCourses",compact("courses"));
+}
+
+
+public function blockCourse($courseId)
+{
+    $thisCourse = Course::find($courseId);
+    $thisCourse->update([
+      "status"=>0,
+    ]);
+    return redirect()->route("controlCourses");
+}
+
+public function unblockCourses($courseId)
+{
+    $thisCourse = Course::find($courseId);
+    $thisCourse->update([
+      "status"=>1,
+    ]);
+    return redirect()->route("controlCourses");
 }
 
 

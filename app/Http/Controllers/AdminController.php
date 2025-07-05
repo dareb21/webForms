@@ -671,10 +671,10 @@ public function studentSearch()
 {
   dd($request);
 }
-public function controlCourses()
+public function adminControlCourses()
 {
   $courses = Course::paginate(10);
-  return view("admin.controlCourses",compact("courses"));
+  return view("admin.adminControlCourses",compact("courses"));
 }
 
 
@@ -684,7 +684,7 @@ public function blockCourse($courseId)
     $thisCourse->update([
       "status"=>0,
     ]);
-    return redirect()->route("controlCourses");
+    return redirect()->route("adminControlCourses");
 }
 
 public function unblockCourses($courseId)
@@ -693,7 +693,7 @@ public function unblockCourses($courseId)
     $thisCourse->update([
       "status"=>1,
     ]);
-    return redirect()->route("controlCourses");
+    return redirect()->route("adminControlCourses");
 }
 
 
@@ -732,8 +732,4 @@ public function exportarResultadosPDF()
               ->setPaper('a4', 'portrait')
               ->download('resultados.pdf');
 }
-
-  public function adminControlCourses(){
-    return view("admin.adminControlCourses");
-  }
 }

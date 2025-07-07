@@ -66,7 +66,7 @@ return view('student.studentEvaluation', compact('noClaseId','coursesId','data')
         "DateSubmmited"=>now(),
         "survey_id"=>$survey->id,
         "course_id"=>$courseId,
-        "user_id"=>1,
+        "user_id"=>9,
         "observations"=>$request->observaciones,
       ]);
       

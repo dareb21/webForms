@@ -71,7 +71,7 @@ Route::get('/deanStudentView', [DeanController::class, "deanStudentView"])->name
 #Rutas directores
 Route::get('/directorDashboard', [DirectorController::class, "directorDashboard"])->name("directorDashboard");
 Route::get('/directorResults', [DirectorController::class, "directorResults"])->name("directorResults");
-Route::get('/directorStudentView', [DirectorController::class, "directorStudentView"])->name("directorStudentView");
+Route::get('/directorStudentView/{courseId}', [DirectorController::class, "directorStudentView"])->name("directorStudentView");
 Route::get('/directorSchools', [DirectorController::class, "directorSchools"])->name("directorSchools");
 
 #Ruta Log Out

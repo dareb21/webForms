@@ -189,7 +189,8 @@ public function directorStudentView($courseId){
 return $answer; 
 }
 
-    // public function directorSchools(){
-    //   return view('director.directorSchools');
-    // }
+    public function filterDirector()
+    {
+      dd("Nuevo commit");
+    }
 }

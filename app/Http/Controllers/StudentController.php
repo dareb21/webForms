@@ -49,6 +49,7 @@ class StudentController extends Controller
     'data' => $data,
 ]);
 */
+$data = collect($data)->groupBy('groupName');
 return view('student.studentEvaluation', compact('noClaseId','coursesId','data'));
         }
         else

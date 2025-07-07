@@ -32,34 +32,42 @@
             <div class="overflow-x-auto">
                 <table class="table-auto border border-gray-400 w-full text-left">
                     <tbody>
-                        @foreach ($questionGroups as $group)
-                            @php
-                                $groupOptions = $collectionOptions->where('question_group_id', $group->id)->values();
-                            @endphp
-
-                            @foreach ($groupOptions as $option)
+                        @foreach ($data as $groupName => $group)
+                            @foreach ($group as $index => $item)
                                 <tr>
-                                    @if ($loop->first)
+                                    @if ($index === 0)
                                         <th
                                             class="border border-gray-400 text-center bg-blue-600 text-white w-24 md:w-36 px-4 py-2 align-middle"
-                                            rowspan="{{ $groupOptions->count() }}"
+                                            rowspan="{{ count($group) }}"
                                             scope="rowgroup"
                                         >
-                                            Indicador {{ $group->groupName }}
+                                            Indicador {{ $groupName }}
                                         </th>
                                     @endif
-                                    <td class="border border-gray-400 px-4 py-2 text-center">
-                                        {{ $option->option ?? 'Pregunta sin texto' }}
-                                    </td>
-                                    <td class="border border-gray-400 w-12 md:w-20 px-4 py-2 text-center">
-                                        <input
-                                            type="checkbox"
-                                            name="option_{{ $option->id }}"
-                                            id="option_{{ $option->id }}"
-                                            class="group-checkbox"
-                                            data-group="{{ $group->id }}"
-                                            aria-labelledby="label_option_{{ $option->id }}"
-                                        >
+                                    <td class="border border-gray-400 px-4 py-2" colspan="4">
+                                        <div class="flex flex-col divide-y divide-gray-300">
+                                            <div class="flex justify-between items-center py-2">
+                                                <span class="font-medium">{{ $item['option1'] ?? 'Pregunta sin texto' }}</span>
+                                                <input
+                                                    type="checkbox"
+                                                    name="option_{{ $item['option1Id'] }}"
+                                                    id="option_{{ $item['option1Id'] }}"
+                                                    class="w-5 h-5 text-blue-600"
+                                                    data-group="{{ $groupName }}"
+                                                >
+                                            </div>
+
+                                            <div class="flex justify-between items-center py-2">
+                                                <span class="font-medium">{{ $item['option2'] ?? 'Pregunta sin texto' }}</span>
+                                                <input
+                                                    type="checkbox"
+                                                    name="option_{{ $item['option2Id'] }}"
+                                                    id="option_{{ $item['option2Id'] }}"
+                                                    class="w-5 h-5 text-blue-600"
+                                                    data-group="{{ $groupName }}"
+                                                >
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -95,12 +103,12 @@
 <!-- Script para manejo de selección única por grupo -->
 <script defer>
     document.addEventListener('DOMContentLoaded', () => {
-        const checkboxes = document.querySelectorAll('.group-checkbox');
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][data-group]');
 
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('change', function () {
                 const group = this.dataset.group;
-                const groupCheckboxes = document.querySelectorAll(`.group-checkbox[data-group='${group}']`);
+                const groupCheckboxes = document.querySelectorAll(`input[type="checkbox"][data-group='${group}']`);
 
                 if (this.checked) {
                     groupCheckboxes.forEach(cb => {

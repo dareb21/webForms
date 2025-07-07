@@ -53,7 +53,7 @@
                 <form action="{{ route('studentEvaluation') }}" method="GET">
                 <input type="hidden" name="noClaseId" value="{{ $loop->index }}">
                 <input type="hidden" name="courseId" value="{{ $coursesId[$loop->index] }}">
-                <button type="submit" class="group flex items-center w-full p-2 md:p-4 px-6 gap-3 cursor-pointer rounded-lg hover:bg-blue-500 hover:text-white border-t border-b md:border-0 border-orange-500 text-blue-500 md:text-black transition">
+                <button type="submit" class="group flex text-left items-center w-full p-2 md:p-4 px-6 gap-3 cursor-pointer rounded-lg hover:bg-blue-500 hover:text-white border-t border-b md:border-0 border-orange-500 text-blue-500 md:text-black transition">
                     <!-- SVG Ícono de clase/universidad -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 flex-shrink-0 text-blue-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date("dateEnd");
             $table->string("term");
             $table->string("Author");
-            $table->boolean("status");
+            $table->boolean("status"); //
             $table->timestamps();
             $table->softDeletes();
         });

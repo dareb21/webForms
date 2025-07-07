@@ -12,4 +12,14 @@ class QuestionGroup extends Model
         'survey_id',
         'groupName',
     ];
+
+  public function Survey()
+   {
+    return $this->belongsTo(Survey::class,"survey_id");
+   }
+
+   public function QuestionOption()
+   {
+    return $this->hasMany(QuestionOption::class,);
+   }
 }

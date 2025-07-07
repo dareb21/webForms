@@ -13,4 +13,10 @@ class QuestionOption extends Model
         'option',
         'calification', 
     ];
+
+
+    public function QuestionGroup()
+    {
+      return $this->belongsTo(QuestionGroup::class,"question_group_id");
+    }
 }

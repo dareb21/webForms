@@ -18,4 +18,9 @@ class Survey extends Model
         'Author',
         'term',
     ];
+
+    public function QuestionGroup()
+    {
+      return $this->hasMany(QuestionGroup::class);
+    }
 }

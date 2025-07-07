@@ -154,7 +154,7 @@ public function directorStudentView($courseId){
     public function directorViewAnswer($submitId)
     {
     $submit = SurveySubmit::with(['user', 'course', 'survey'])->findOrFail($submitId);    
-$data = DB::table('surveys as s')
+    $data = DB::table('surveys as s')
     ->select(
         'qg.groupName as indicator',
         'qo.option as answer',

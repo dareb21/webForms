@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Survey;
 use App\Models\User;
 use App\Models\School;
+use App\Models\SurveySubmit;
 
 
 class DirectorController extends Controller
@@ -96,7 +97,9 @@ if (($data->pluck("totStudents"))->sum() >0)   //Si hay estudiantes que evaluaro
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-
+     /* return response()->json([
+    'resultados' => $dataResults,
+]);*/
   return view("director.directorResults",compact("years","dataResults"));
   
     }
@@ -141,8 +144,50 @@ public function directorStudentView($courseId){
                    
        }
 
+     /* return response()->json([
+    'resultados' => $resultados,
+]);*/
+
       return view('director.directorStudentView',compact("resultados"));
     }
+
+    public function directorViewAnswer($submitId)
+    {
+    $submit = SurveySubmit::with(['user', 'course', 'survey'])->findOrFail($submitId);    
+$data = DB::table('surveys as s')
+    ->select(
+        'qg.groupName as indicator',
+        'qo.option as answer',
+        'sb.observations as observation'
+    )
+    ->join('question_groups as qg', 's.id', '=', 'qg.survey_id')
+    ->join('question_options as qo', 'qg.id', '=', 'qo.question_group_id')
+    ->join('response_submits as rs', 'qo.id', '=', 'rs.question_option_id')
+    ->join('survey_submits as sb', 'rs.survey_submit_id', '=', 'sb.id')
+    ->join('courses as c', 'sb.course_id', '=', 'c.id')
+    ->join('users as u', 'sb.user_id', '=', 'u.id')
+    ->where('s.id', $submit->survey_id)
+    ->where('u.id', $submit->user_id)
+    ->where('c.id', $submit->course_id)
+    ->distinct()
+    ->orderBy('qg.groupName')
+    ->get();
+    foreach($data as $item)
+    {
+      $answer[]= [
+        "indicator" =>$item->indicator,
+        "answer" =>$item->answer, 
+      ];
+    }
+     $answer[]= [
+       "observation" =>$data[0]->observation, 
+     ];
+  /* return response()->json([
+    'respuesta' => $answer,
+]);*/
+
+return $answer; 
+}
 
     // public function directorSchools(){
     //   return view('director.directorSchools');

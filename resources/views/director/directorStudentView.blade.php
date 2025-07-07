@@ -6,10 +6,10 @@
         <div class="flex flex-col items-center">
             <div class="bg-white p-4 text-center text-2xl font-bold">
                 <h1 class="uppercase">
-                    EVALUACIONES DE {{ request('courses') }}
+                    EVALUACIONES DE <span class="italic">{{ request('courses') }}</span>
                 </h1>
                 <h1 class="text-xl mt-4 uppercase">
-                    CATEDRÁTICO {{ request('Professor') }}
+                    CATEDRÁTICO <span class="italic">{{ request('Professor') }}</span>
                 </h1>
             </div>
             <!-- Seccion de evaluaciones -->

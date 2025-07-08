@@ -1,27 +1,12 @@
 @extends('director.directorLayout')
 @section('content')
-{{-- @php
-    $sumPorcentajes = 0;
-    $count = 0;
-    $p1 = $p2 = $p3 = 0;
+@php
+    $pAnual = $anual;
 
-    for ($i = 0; $i < 3; $i++) {
-        if (! empty($resultados[$i]['termScore'])) {
-            $valor = $resultados[$i]['termScore'] * 100 / 20;
-            ${'p'.($i+1)} = $valor;
-            $sumPorcentajes += $valor;
-            $count++;
-        } else {
-            ${'p'.($i+1)} = 0;
-        }
-    }
-
-    if ($count > 0) {
-        $pAnual = round($sumPorcentajes / $count);
-    } else {
-        $pAnual = 0;
-    }
-@endphp --}}
+    $p1 = isset($resultados[0]['termScore']) ? $resultados[0]['termScore'] : 0;
+    $p2 = isset($resultados[1]['termScore']) ? $resultados[1]['termScore'] : 0;
+    $p3 = isset($resultados[2]['termScore']) ? $resultados[2]['termScore'] : 0;
+@endphp
 <!-- Main Content -->
 <div class="flex-1 ml-0 md:h-full md:ml-64 p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="flex flex-col md:h-full md:flex-row gap-6">
@@ -30,7 +15,10 @@
             <div class="flex justify-between items-center mt-4 mb-4">
                 <h2 class="text-2xl text-gray-800 font-bold">Bienvenido a la escuela de Ciencias Informáticas</h2>
             </div>
-            <h3 class="text-gray-700 font-bold md:mt-10 mb-2">Satisfacción por períodos</h3>
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-gray-700 font-bold md:mt-10 mb-2 text-left">Satisfacción por períodos</h3>
+                <span class="text-md font-medium text-right">Catedráticos evaluados: {{ $professorsEvaluated }}  / {{ $allProfessor }}</span>
+            </div>
             <canvas id="revenueChart" height="120"></canvas>
         </div>
 
@@ -41,29 +29,28 @@
                     Promedio Anual
                     <a href="{{ route('directorResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
-                {{-- <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $pAnual }} %</h2> --}}
+                <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $pAnual }}</h2>
             </div>
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
                     Período 1
                     <a href="{{ route('directorResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
-                {{-- <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p1 }} %</h2> --}}
-                
+                <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p1 }}</h2>
             </div>
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
                     Período 2
                     <a href="{{ route('directorResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
-                {{-- <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p2 }} %</h2> --}}
+                <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p2 }}</h2>
             </div>
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
                     Período 3
                     <a href="{{ route('directorResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
-                {{-- <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p3 }} %</h2> --}}
+                <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p3 }}</h2>
             </div>
         </div>
     </div>
@@ -84,14 +71,14 @@
             datasets: [
                 {
                     label: 'Promedio Anual',
-                    data: [60,60,60],
+                    data: [{{ $pAnual }},{{ $pAnual }},{{ $pAnual }}],
                     borderColor: '#FF5C00',
                     backgroundColor: 'transparent',
                     tension: 0.4
                 },
                 {
                     label: 'Períodos',
-                    data: [50,50,60],
+                    data: [{{ $p1 }},{{ $p2 }},{{ $p3 }}],
                     borderColor: '#000080',
                     backgroundColor: 'transparent',
                     tension: 0.4
@@ -108,10 +95,10 @@
             scales: {
                 y: {
                     min: 0,
-                    max: 120,
+                    max: 25,
                     beginAtZero: true,
                     ticks: {
-                        stepSize: 10,
+                        stepSize: 1,
                         callback: value => `${value.toLocaleString()}`
                     }
                 }

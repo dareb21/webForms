@@ -65,7 +65,6 @@ class DirectorController extends Controller
 
   $professorsEvaluated =count(Course::has('submits')->whereIn("id",$coursesId)->pluck("user_id")->unique());
 
-dd($resultados,$anual,$allProfessor,$professorsEvaluated);
       return view('director.directorDashboard',compact("resultados","anual","allProfessor","professorsEvaluated" ));
     }
 
@@ -73,7 +72,9 @@ dd($resultados,$anual,$allProfessor,$professorsEvaluated);
 
     public function directorResults(){
     $thisYear = session()->pull('year', now()->year);
-  $school_id=$user->school->id;
+  $user = User::with('school.courses.professor')->find(64);    
+ 
+    $school_id=$user->school->id;
   $professors = $user->school->courses->pluck('professor')->unique();
   $coursesPerProfessor=[];
 foreach ($professors as $professor) // recorda quitar este foreach para optimizar las busquedas

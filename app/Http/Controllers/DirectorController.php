@@ -17,15 +17,62 @@ class DirectorController extends Controller
 
     public function directorDashboard(){
 
+  $i=1;
+  $user = User::with('school.courses.professor')->find(64);    
+  $schoolId = $user->school->id;
 
-      return view('director.directorDashboard');
+    $resultados = collect();
+    $thisYear= now()->year;
+    $surveysOfThisYear=Survey::whereYear("created_at",$thisYear)->select("id")->get();
+     foreach($surveysOfThisYear as $survey)
+      {
+       $data = DB::table("surveys as s")
+    ->join("survey_submits as sb", "s.id", "=", "sb.survey_id")
+    ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
+    ->join("question_options as qo", "rs.question_option_id", "=", "qo.id")
+    ->join("courses as c","sb.course_id","=","c.id")
+    ->where('s.id', $survey->id)
+    ->where("c.school_id",$schoolId)
+    ->select(
+        DB::raw('SUM(qo.calification) as SumaNotaPeriodo'),
+        DB::raw('count(distinct(sb.id)) as Divisor'),
+    )
+    ->get();
+    
+    $numerador=$data->pluck("SumaNotaPeriodo");
+    $divisor=$data->pluck("Divisor");
+   if($divisor[0] == 0)
+   {
+    $notaperiodo=0;
+   }else
+   {
+    $notaperiodo=ceil($numerador[0]/$divisor[0]);
+   }
+   $resultados->push([
+        "termScore" => $notaperiodo,
+        "term" => $i,
+    ]);
+    $i+=1;
+    }    
+    $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
+
+   
+    $coursesofThisSchool=$user->school->courses;
+
+    $allProfessor = count($coursesofThisSchool->pluck("user_id")->unique());
+
+   $coursesId = $coursesofThisSchool->pluck("id")->toArray();
+
+  $professorsEvaluated =count(Course::has('submits')->whereIn("id",$coursesId)->pluck("user_id")->unique());
+
+dd($resultados,$anual,$allProfessor,$professorsEvaluated);
+      return view('director.directorDashboard',compact("resultados","anual","allProfessor","professorsEvaluated" ));
     }
 
 
 
     public function directorResults(){
     $thisYear = session()->pull('year', now()->year);
-  $user = User::with('school.courses.professor')->find(64);    
   $school_id=$user->school->id;
   $professors = $user->school->courses->pluck('professor')->unique();
   $coursesPerProfessor=[];

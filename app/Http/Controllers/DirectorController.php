@@ -18,8 +18,9 @@ class DirectorController extends Controller
     public function directorDashboard(){
 
   $i=1;
-  $user = User::with('school.courses.professor')->find(64);    
-  $schoolId = $user->school->id;
+  $user = User::with('school.courses.professor')->find(64);  
+  $thisSchool =$user->school;  
+  $schoolId = $thisSchool->id;
 
     $resultados = collect();
     $thisYear= now()->year;
@@ -57,16 +58,16 @@ class DirectorController extends Controller
     $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
 
    
-    $coursesofThisSchool=$user->school->courses;
+    $coursesofThisSchool=$thisSchool->courses;
 
     $allProfessor = count($coursesofThisSchool->pluck("user_id")->unique());
 
    $coursesId = $coursesofThisSchool->pluck("id")->toArray();
 
   $professorsEvaluated =count(Course::has('submits')->whereIn("id",$coursesId)->pluck("user_id")->unique());
+  $schoolName = $thisSchool->name;
 
-dd($resultados,$anual,$allProfessor,$professorsEvaluated);
-      return view('director.directorDashboard',compact("resultados","anual","allProfessor","professorsEvaluated" ));
+      return view('director.directorDashboard',compact("resultados","anual","allProfessor","professorsEvaluated" ,"schoolName"));
     }
 
 

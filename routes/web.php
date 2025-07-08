@@ -83,3 +83,5 @@ Route::get("/logOut",[LogOutController::class,"logOut"])->name("logOut");
 
 #Ruta PDF
 Route::get('/exportar-resultados', [App\Http\Controllers\AdminController::class, 'exportarResultadosPDF'])->name('admin.exportarPDF');
+Route::get('/director/pdf', [DirectorController::class, 'directorPDF'])->name('director.directorPDF');
+

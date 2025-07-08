@@ -13,7 +13,7 @@
         <!-- Gráfico dentro del div blanco -->
         <div class="bg-white rounded-lg shadow-md p-6 flex-1">
             <div class="flex justify-between items-center mt-4 mb-4">
-                <h2 class="text-2xl text-gray-800 font-bold">Bienvenido a la escuela de Ciencias Informáticas</h2>
+                <h2 class="text-2xl text-gray-800 font-bold">Bienvenido a la {{ $schoolName }}</h2>
             </div>
             <div class="flex justify-between items-center mb-2">
                 <h3 class="text-gray-700 font-bold md:mt-10 mb-2 text-left">Satisfacción por períodos</h3>

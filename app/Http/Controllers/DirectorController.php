@@ -17,15 +17,62 @@ class DirectorController extends Controller
 
     public function directorDashboard(){
 
+  $i=1;
+  $user = User::with('school.courses.professor')->find(64);    
+  $schoolId = $user->school->id;
 
-      return view('director.directorDashboard');
+    $resultados = collect();
+    $thisYear= now()->year;
+    $surveysOfThisYear=Survey::whereYear("created_at",$thisYear)->select("id")->get();
+     foreach($surveysOfThisYear as $survey)
+      {
+       $data = DB::table("surveys as s")
+    ->join("survey_submits as sb", "s.id", "=", "sb.survey_id")
+    ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
+    ->join("question_options as qo", "rs.question_option_id", "=", "qo.id")
+    ->join("courses as c","sb.course_id","=","c.id")
+    ->where('s.id', $survey->id)
+    ->where("c.school_id",$schoolId)
+    ->select(
+        DB::raw('SUM(qo.calification) as SumaNotaPeriodo'),
+        DB::raw('count(distinct(sb.id)) as Divisor'),
+    )
+    ->get();
+    
+    $numerador=$data->pluck("SumaNotaPeriodo");
+    $divisor=$data->pluck("Divisor");
+   if($divisor[0] == 0)
+   {
+    $notaperiodo=0;
+   }else
+   {
+    $notaperiodo=ceil($numerador[0]/$divisor[0]);
+   }
+   $resultados->push([
+        "termScore" => $notaperiodo,
+        "term" => $i,
+    ]);
+    $i+=1;
+    }    
+    $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
+
+   
+    $coursesofThisSchool=$user->school->courses;
+
+    $allProfessor = count($coursesofThisSchool->pluck("user_id")->unique());
+
+   $coursesId = $coursesofThisSchool->pluck("id")->toArray();
+
+  $professorsEvaluated =count(Course::has('submits')->whereIn("id",$coursesId)->pluck("user_id")->unique());
+
+dd($resultados,$anual,$allProfessor,$professorsEvaluated);
+      return view('director.directorDashboard',compact("resultados","anual","allProfessor","professorsEvaluated" ));
     }
 
 
 
     public function directorResults(){
     $thisYear = session()->pull('year', now()->year);
-  $user = User::with('school.courses.professor')->find(64);    
   $school_id=$user->school->id;
   $professors = $user->school->courses->pluck('professor')->unique();
   $coursesPerProfessor=[];
@@ -55,7 +102,7 @@ foreach ($professors as $professor) // recorda quitar este foreach para optimiza
         ->get();
 
 if (($data->pluck("totStudents"))->sum() >0)   //Si hay estudiantes que evaluaron
-{
+{ 
 
       $i=0;
       $totAllSurvey = ($data->pluck("totSurvey"))->sum();
@@ -94,6 +141,7 @@ if (($data->pluck("totStudents"))->sum() >0)   //Si hay estudiantes que evaluaro
    $coursesPerProfessor=[];
 
 }
+
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
@@ -189,7 +237,97 @@ public function directorStudentView($courseId){
 return $answer; 
 }
 
-    // public function directorSchools(){
-    //   return view('director.directorSchools');
-    // }
+    public function directorFilter(Request $request)
+    {
+      $hasData=False;
+    $term = $request->anualPeriod;
+    $thisYear = $request->anualYear;
+
+    if ($term==4)
+     {
+       return redirect()->route("directorResults")->with(['year' => $thisYear]);;
+     }
+     $user = User::with('school.courses.professor')->find(64);    
+  $school_id=$user->school->id;
+  $professors = $user->school->courses->pluck('professor')->unique();
+  $coursesPerProfessor=[];
+foreach ($professors as $professor) // recorda quitar este foreach para optimizar las busquedas
+     {
+    
+      $professorName = $professor->name;
+
+       $data = DB::table('survey_submits as sb')
+        ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+        ->join('courses as c', 'sb.course_id', '=', 'c.id')
+        ->join('users as u', 'sb.user_id', '=', 'u.id') 
+        ->join('users as prof', 'c.user_id', '=', 'prof.id') 
+        ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+        ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+        ->where('c.user_id', $professor->id) 
+        ->where("s.term",$term)
+        ->where('c.school_id',$school_id) 
+        ->whereYear('s.created_at',$thisYear)
+        ->select(
+            'prof.name as professorName',
+            'c.name as courses',
+            'c.id as coursesId',
+            DB::raw('SUM(qo.calification) as totSurvey'),
+            DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
+            )
+        ->groupBy('prof.name','c.id')
+        ->get();
+
+if (($data->pluck("totStudents"))->sum() >0)   //Si hay estudiantes que evaluaron
+{
+      $hasData=True;
+      $i=0;
+      $totAllSurvey = ($data->pluck("totSurvey"))->sum();
+      $totAllStudents = ($data->pluck("totStudents"))->sum();
+      $avgScore = round($totAllSurvey/ $totAllStudents);
+      $courses = $data->pluck("courses")->unique()->values()->toArray();
+      $coursesId =$data->pluck("coursesId")->unique()->values()->toArray();
+      $totSurveyPerCourse =$data->pluck("totSurvey");
+      $totStudentPerCourse =$data->pluck("totStudents");
+     foreach ($courses as $course)
+     {  
+       $scorePerCourse = round($totSurveyPerCourse[$i] / $totStudentPerCourse[$i]);  
+       $coursesPerProfessor[]=[
+            "courseId" =>$coursesId[$i],
+            "courses" =>$courses[$i],
+            "scorePerCourse" =>$scorePerCourse,
+          ];
+        $i+=1;
+   }    
+
+ }else
+    {
+      $avgScore=0;
+        $coursesPerProfessor[] = [
+        "courses" =>"sin info",
+        "scorePerCourse" =>0,
+      ];
+    }
+
+ $dataResults[]=
+   [
+   "Professor" =>  $professorName,
+   "avgScoreProfessor" => $avgScore,
+   "coursesPerProfessor" => $coursesPerProfessor,
+   ];   
+   $coursesPerProfessor=[];
+
+}
+if (!$hasData)
+{
+ return redirect()->back()->with('alert','No hay info en ese período.');
+}
+ $years = Survey::selectRAW("Year(dateStart)")
+    ->distinct()
+    ->get();
+     /* return response()->json([
+    'resultados' => $dataResults,
+]);*/
+  return view("director.directorResults",compact("years","dataResults"));
+  
+    }
 }

@@ -29,28 +29,28 @@
                     Promedio Anual
                     <a href="{{ route('directorResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
-                <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $pAnual }}</h2>
+                <h2 class="text-3xl font-bold mt-2 text-gray-600">{{ $pAnual }}</h2>
             </div>
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
                     Período 1
                     <a href="{{ route('directorResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
-                <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p1 }}</h2>
+                <h2 class="text-3xl font-bold mt-2 text-gray-600">{{ $p1 }}</h2>
             </div>
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
                     Período 2
                     <a href="{{ route('directorResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
-                <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p2 }}</h2>
+                <h2 class="text-3xl font-bold mt-2 text-gray-600">{{ $p2 }}</h2>
             </div>
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
                     Período 3
                     <a href="{{ route('directorResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
-                <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p3 }}</h2>
+                <h2 class="text-3xl font-bold mt-2 text-gray-600">{{ $p3 }}</h2>
             </div>
         </div>
     </div>

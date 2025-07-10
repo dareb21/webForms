@@ -7,6 +7,7 @@ use App\Models\School;
 use App\Models\Survey;
 use Illuminate\Support\Facades\DB;
 use App\Models\Course;
+use App\Models\User;
 use App\Models\SurveySubmit;
 
 
@@ -14,6 +15,7 @@ class DeanController extends Controller
 {
 
     public function deanDashboard(){
+      $i=1;
     $resultados = collect();
     $thisYear= now()->year;
     $surveysOfThisYear=Survey::whereYear("dateStart",$thisYear)->select("id")->get();
@@ -29,20 +31,22 @@ class DeanController extends Controller
         DB::raw('count(distinct(sb.id)) as Divisor'),
     )
     ->first();
-    if ($data->isEmpty())
+    if (!$data)
     {
         $notaperiodo=0;
     }else
     {
-        $numerador=$data->pluck("SumaNotaPeriodo");
-        $divisor=$data->pluck("Divisor");
+        $numerador=$data->SumaNotaPeriodo;
+        $divisor=$data->Divisor;
         $notaperiodo=round($numerador/$divisor);
-    }
-   
+        
    $resultados->push([
         "termScore" => $notaperiodo,
         "term" => $i,
     ]);
+    $i+=1;
+    }
+   
     }    
     $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
   $allProfessor = User::where("role","professor")->count();

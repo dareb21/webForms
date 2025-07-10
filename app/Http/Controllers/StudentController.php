@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use App\Models\Enrollment;
 use App\Models\QuestionOption;
 use App\Models\QuestionGroup;
 use App\Models\SurveySubmit;
@@ -24,6 +23,7 @@ class StudentController extends Controller
     public function studentEvaluation(Request $request)
     {
     $thisSurvey=Survey::with(["QuestionGroup.QuestionOption"])->where("status",1)->first();
+    
     if(is_null($thisSurvey))
     {
         return view("student.studentInactiveEvaluation");
@@ -31,10 +31,13 @@ class StudentController extends Controller
 
     $noClaseId = $request->query('noClaseId');
     $coursesId = $request->query('courseId');
-    if(!SurveySubmit::where("user_id",2)->where("course_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
+    if(SurveySubmit::where("user_id",23)->where("course_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
     {
-            $questionGroups=$thisSurvey->QuestionGroup;
-            $data=[];
+              return view("student.thankyouView");
+     }
+        
+  $questionGroups=$thisSurvey->QuestionGroup;
+    $data=[];
         foreach ($questionGroups as $questionGroup)
         {
         $data[]=[
@@ -45,18 +48,9 @@ class StudentController extends Controller
         "option2" => $questionGroup->QuestionOption[1]->option,
         ];
 }   
-/*return response()->json([
-    'data' => $data,
-]);
-*/
+
 $data = collect($data)->groupBy('groupName');
 return view('student.studentEvaluation', compact('noClaseId','coursesId','data'));
-        }
-        else
-            {
-                return view("student.thankyouView");
-        }
-
     }
     public Function studentSubmit(Request $request, $courseId)
     {
@@ -66,7 +60,7 @@ return view('student.studentEvaluation', compact('noClaseId','coursesId','data')
         "DateSubmmited"=>now(),
         "survey_id"=>$survey->id,
         "course_id"=>$courseId,
-        "user_id"=>9,
+        "user_id"=>27,
         "observations"=>$request->observaciones,
       ]);
       
@@ -79,10 +73,10 @@ return view('student.studentEvaluation', compact('noClaseId','coursesId','data')
     {
         continue;
     }
-            $seleccionados[] =[ 
-                "survey_submit_id" =>$surveySubmit->id,
-               "question_option_id"=>$optionPicked,
-            ];
+    $seleccionados[] =[ 
+        "survey_submit_id" =>$surveySubmit->id,
+        "question_option_id"=>$optionPicked,
+    ];
         }
 ResponseSubmit::insert($seleccionados);
 

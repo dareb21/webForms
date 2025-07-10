@@ -74,6 +74,7 @@ class DirectorController extends Controller
 
 
     public function directorResults(){
+    $user = User::with('school.courses.professor')->find(64); 
     $thisYear = session()->pull('year', now()->year);
   $user = User::with('school.courses.professor')->find(64);    
  
@@ -157,6 +158,9 @@ if (($data->pluck("totStudents"))->sum() >0)   //Si hay estudiantes que evaluaro
     }
     
 public function directorStudentView($courseId){
+  $course = Course::with("professor")->find($courseId);
+  $profesor=$course->professor->name;
+  $courseName=$course->name;
  $data = DB::table('survey_submits as sb')
  ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
 ->join('courses as c', 'sb.course_id', '=', 'c.id')
@@ -164,7 +168,7 @@ public function directorStudentView($courseId){
        ->join('users as prof', 'c.user_id', '=', 'prof.id') 
       ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
        ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-       ->where('c.id', $courseId)
+       ->where('c.id', $course->id)
        ->whereYear('s.created_at',now()->year)
      ->select(
          'c.name as course',
@@ -175,29 +179,30 @@ public function directorStudentView($courseId){
        )
        ->groupBy('prof.name', 'c.name','submitId')
        ->paginate(10);
-       if ($data)
+       
+       if (!$data->isEmpty())
        {
       foreach ($data as $item) {
           $resultados[] = [            
               "score" => $item->scoreStudent,
-               "profesor" => $item->professorName,
-               "course" => $item->course,
+               "profesor" => $profesor,
+               "course" => $courseName,
               "nameStudent" => $item->student,
               "submitId"=>$item->submitId,
           ];
-           }    
+        }    
          }else{
            $resultados[] = [
              "score" => 0,
-             "profesor" => "n/a",
-             "course" => $course->name,
-            "courseId" =>0
+               "profesor" => $profesor,
+               "course" => $courseName,
                    ];
                    
        }
-
+      
      /* return response()->json([
     'resultados' => $resultados,
+     acac 
 ]);*/
 
       return view('director.directorStudentView',compact("resultados"));

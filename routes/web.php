@@ -64,9 +64,10 @@ Route::get('/adminSearchCourses', [AdminController::class,"searchCourse"])->name
 
 #Rutas decanos
 Route::get('/deanDashboard', [DeanController::class, "deanDashboard"])->name("deanDashboard");
-Route::get('/deanResults', [DeanController::class, "deanResults"])->name("deanResults");
+Route::get('/deanResults/{schoolId}', [DeanController::class, "deanResults"])->name("deanResults");
 Route::get('/deanSchools', [DeanController::class, "deanSchools"])->name("deanSchools");
-Route::get('/deanStudentView', [DeanController::class, "deanStudentView"])->name("deanStudentView");
+Route::get('/deanStudentView/{courseId}', [DeanController::class, "deanStudentView"])->name("deanStudentView");
+Route::get("/deanViewAnswer/{submitId}", [DeanController::class, "deanViewAnswer"])->name("deanViewAnswer");
 
 #Rutas directores
 Route::get('/directorDashboard', [DirectorController::class, "directorDashboard"])->name("directorDashboard");

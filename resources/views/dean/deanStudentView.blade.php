@@ -74,7 +74,7 @@
                 </table>
             </div>
             <div class="p-6 flex justify-center">
-                <a href="{{ route('deanResults') }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
+                <a href="javascript:void(0);" onclick="history.back();" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
                     REGRESAR
                 </a>
             </div>

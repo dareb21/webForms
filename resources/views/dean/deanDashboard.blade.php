@@ -1,27 +1,6 @@
 @extends('dean.deanLayout')
 @section('content')
-{{-- @php
-    $sumPorcentajes = 0;
-    $count = 0;
-    $p1 = $p2 = $p3 = 0;
 
-    for ($i = 0; $i < 3; $i++) {
-        if (! empty($resultados[$i]['termScore'])) {
-            $valor = $resultados[$i]['termScore'] * 100 / 20;
-            ${'p'.($i+1)} = $valor;
-            $sumPorcentajes += $valor;
-            $count++;
-        } else {
-            ${'p'.($i+1)} = 0;
-        }
-    }
-
-    if ($count > 0) {
-        $pAnual = round($sumPorcentajes / $count);
-    } else {
-        $pAnual = 0;
-    }
-@endphp --}}
 <!-- Main Content -->
 <div class="flex-1 ml-0 md:h-full md:ml-64 p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="flex flex-col md:h-full md:flex-row gap-6">
@@ -39,14 +18,14 @@
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
                     Promedio Anual
-                    <a href="{{ route('deanResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
+                    <a href="{{ route('deanSchools') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
                 {{-- <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $pAnual }} %</h2> --}}
             </div>
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
                     Período 1
-                    <a href="{{ route('deanResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
+                    <a href="{{ route('deanSchools') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
                 {{-- <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p1 }} %</h2> --}}
                 
@@ -54,14 +33,14 @@
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
                     Período 2
-                    <a href="{{ route('deanResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
+                    <a href="{{ route('deanSchools') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
                 {{-- <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p2 }} %</h2> --}}
             </div>
             <div class="bg-white p-2 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
                     Período 3
-                    <a href="{{ route('deanResults') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
+                    <a href="{{ route('deanSchools') }}" class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white">Ver más</a>
                 </p>
                 {{-- <h2 class="text-2xl font-bold mt-2 text-gray-600">{{ $p3 }} %</h2> --}}
             </div>

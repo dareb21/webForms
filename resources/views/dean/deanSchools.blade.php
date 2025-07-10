@@ -14,13 +14,19 @@
                     <label for="schoolSearch">Búsqueda por escuela </label>
                     <select name="schoolSearch" id="schoolSearch" class="shadow-sm ml-2 border-1 border-gray-200">
                         <!-- foreach de escuelas -->
-                        <option value="">Escuela de Ciencias Informáticas</option>
+                        @foreach ($school as $results)
+                            <option value="{{ $results['id'] }}">{{ $results['Name'] }}</option>
+                        @endforeach
+                        
                     </select>
                     <button class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
                         Buscar
                     </button>
                     <a href="{{ route('deanSchools') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                         Refrescar
+                    </a>
+                    <a href="{{ route('director.directorPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                        Exportar
                     </a>
                 </div>
 
@@ -33,17 +39,17 @@
                         <th class="px-4 py-2 text-center">Acción</th>
                     </tr>
                 </thead>
-                @for ($i = 1; $i <= 5; $i++)
                     <tbody class="border-b">
-                        <tr>
-                            <td class="px-4 py-2 text-center">Escuela {{ $i }}</td>
-                            <td class="px-4 py-2 text-center">{{ rand(10, 20) }}</td>
-                            <td class="px-4 py-2 text-center">
-                                <a href="{{ route('deanResults') }}" class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold py-1 px-3 rounded">VER ESCUELA</a>
-                            </td>
-                        </tr>
+                        @foreach ($school as $results)
+                            <tr>
+                                <td class="px-4 py-2 text-center">{{ $results['Name'] }}</td>
+                                <td class="px-4 py-2 text-center">{{ $results['score'] }}</td>
+                                <td class="px-4 py-2 text-center">
+                                    <a href="{{ route('deanResults',['schoolId' => $results['id']]) }}" class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold py-1 px-3 rounded">VER ESCUELA</a>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
-                @endfor
             </table>
         </div>
     </div>

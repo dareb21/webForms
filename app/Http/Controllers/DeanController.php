@@ -68,11 +68,8 @@ $dataResults[] = [
 ];
 
 }
-return response()->json([
-    'dataResults' => $dataResults,
-]);
 
-        return view('dean.deanResults',compact("dataResults"));
+        return view('dean.deanResults',compact("dataResults","schoolId"));
     }
 
     public function deanSchools(){

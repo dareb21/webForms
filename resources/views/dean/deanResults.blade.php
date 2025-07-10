@@ -31,45 +31,62 @@
                     <button class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
                         Buscar
                     </button>
-                    <a href="{{ route('deanResults') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                    <a href="{{ route('deanResults',['schoolId' => $schoolId]) }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                         Refrescar
+                    </a>
+                    <a href="{{ route('director.directorPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                        Exportar
                     </a>
                 </div>
             <!-- Seccion de evaluaciones -->
             <div class="w-full h-full overflow-x-auto">
-                <table id="mi-tabla" class="table-auto border border-gray-400 w-full min-w-[600px] text-left">
-                    <thead>
-                        <tr>
-                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Catedrático</th>
-                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Escuela</th>
-                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Clase</th>
-                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Sección</th>
-                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Calificación</th>
-                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Estudiantes</th>
-                            <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Exportar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <!-- Aqui ira la info de busqueda -->
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">2/20</td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">
-                                <a href="{{ route('deanStudentView') }}"  class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
-                                    VER
-                                </a>
-                            </td>
-                            <td class="border border-gray-400 px-4 py-2 text-center">
-                                <a href="#" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
-                                    EXPORTAR
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="overflow-x-auto w-full mt-4">
+                    <table class="min-w-full border border-gray-300 divide-y divide-gray-200">
+                        <thead class="bg-blue-600 text-white">
+                            <tr>
+                                <th class="px-4 py-2 text-center">Catedrático</th>
+                                <th class="px-4 py-2 text-center">Promedio</th>
+                                <th class="px-4 py-2 text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        @foreach ($dataResults as $results)
+                            <tbody x-data="{ open: false }" class="border-b">
+                                <tr>
+                                    <td class="px-4 py-2 text-center">Catedrático {{ $results['professorName'] }}</td>
+                                    <td class="px-4 py-2 text-center">{{ $results['professorScoreAvg'] }}</td>
+                                    <td class="px-4 py-2 text-center">
+                                        <button @click="open = !open" class="text-blue-600 hover:underline focus:outline-none">
+                                            <span x-show="!open" class="hover:cursor-pointer">Ver detalles</span>
+                                            <span x-show="open" class="hover:cursor-pointer">Ocultar</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr x-show="open" x-cloak>
+                                    <td colspan="3" class="px-4 py-2 bg-gray-50 text-sm">
+                                        <div class="space-y-3">
+                                            @foreach ($results['coursesData'] as $course)
+                                                <div class="grid grid-cols-3 gap-4 items-center">
+                                                    <span>
+                                                        <strong>Clase:</strong> {{ $course['course'] }}
+                                                    </span>
+                                                    <span>
+                                                        <strong>Calificación:</strong> {{ $course['totPerCourse'] }}
+                                                    </span>
+                                                    <span>
+                                                        <strong>Evaluaciones estudiantes &rarr;</strong>
+                                                    <a href="{{ route('deanStudentView', ['courseId' => $course['courseId'] ?? '0', 'Professor' => $results['professorName'], 'courses' => $course['course']]) }}" class="ml-2 p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition">
+                                                            <strong>Ver más</strong>
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        @endforeach
+                    </table>
+                </div>
                 <div class="p-6 flex justify-center">
                     <a href="{{ route('deanSchools') }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
                         REGRESAR
@@ -79,32 +96,4 @@
         </div>
     </div>
 </div>
-
-<script>
-let ascending = true; // Alternancia ascendente/descendente
-
-document.getElementById("sort-button").addEventListener("click", function () {
-    const table = document.getElementById("mi-tabla").querySelector("tbody");
-    const rows = Array.from(table.querySelectorAll("tr"));
-
-    rows.sort((a, b) => {
-        const tdA = a.children[4].innerText.trim(); // Columna 5: Calificación
-        const tdB = b.children[4].innerText.trim();
-
-        const [numA, denA] = tdA.split('/').map(Number);
-        const [numB, denB] = tdB.split('/').map(Number);
-
-        const valA = numA / denA;
-        const valB = numB / denB;
-
-        return ascending ? valA - valB : valB - valA;
-    });
-
-    // Reordenar las filas en el <tbody>
-    rows.forEach(row => table.appendChild(row));
-
-    ascending = !ascending;
-});
-</script>
-
 @endsection

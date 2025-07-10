@@ -132,8 +132,6 @@
         fetch(`/adminViewAnswer/${submitId}`)
           .then(res => res.json())
           .then(data => {
-            // Tu controlador devuelve un array donde los primeros N elementos
-            // tienen {indicator, answer} y el último elemento tiene {observation}
             this.observation = '';
             this.answers = data.filter(item => item.indicator);
             const obsItem = data.find(item => item.observation);

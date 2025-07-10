@@ -46,7 +46,10 @@
                                 Refrescar
                             </a>
                             <a href="{{ route('director.directorPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
-                                Exportar
+                                PDF
+                            </a>
+                            <a href="{{ route('reporte.directorResultsExcel') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                                EXCEL
                             </a>
                         </form>
                     </div>

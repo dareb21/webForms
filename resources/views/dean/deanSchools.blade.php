@@ -1,6 +1,6 @@
 @extends('dean.deanLayout')
 @section('content')
-<div class="flex-1 ml-0 md:ml-64 h-full p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+<div class="flex-1 ml-0 md:h-full md:ml-64 p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="bg-white rounded-xl shadow-lg p-6 w-full min-h-full">
         <div class="bg-white p-4 text-center text-2xl font-bold">
             <h1>
@@ -25,8 +25,11 @@
                     <a href="{{ route('deanSchools') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                         Refrescar
                     </a>
-                    <a href="{{ route('director.directorPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
-                        Exportar
+                    <a href="{{ route('dean.deanSchoolPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                        PDF
+                    </a>
+                    <a href="{{ route('reporte.deanSchoolExcel') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                        EXCEL
                     </a>
                 </div>
 

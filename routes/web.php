@@ -85,4 +85,9 @@ Route::get("/logOut",[LogOutController::class,"logOut"])->name("logOut");
 #Ruta PDF
 Route::get('/exportar-resultados', [App\Http\Controllers\AdminController::class, 'exportarResultadosPDF'])->name('admin.exportarPDF');
 Route::get('/director/pdf', [DirectorController::class, 'directorPDF'])->name('director.directorPDF');
+Route::get('/dean/pdf', [DeanController::class, 'deanSchoolPDF'])->name('dean.deanSchoolPDF');
+
+#Ruta Excel
+Route::get('/exportar-escuelas', [DeanController::class, 'deanSchoolExcel'])->name('reporte.deanSchoolExcel');
+Route::get('/exportar-resultados', [DirectorController::class, 'directorResultsExcel'])->name('reporte.directorResultsExcel');
 

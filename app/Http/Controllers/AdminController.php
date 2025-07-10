@@ -666,11 +666,6 @@ if (!$hasData)
       return redirect()->route('adminEvaluation');
   }
 
-  
-public function studentSearch()
-{
-  dd($request);
-}
 public function adminControlCourses()
 {
   $courses = [];

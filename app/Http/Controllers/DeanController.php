@@ -7,13 +7,48 @@ use App\Models\School;
 use App\Models\Survey;
 use Illuminate\Support\Facades\DB;
 use App\Models\Course;
+use App\Models\SurveySubmit;
 
 
 class DeanController extends Controller
 {
 
     public function deanDashboard(){
-        return view('dean.deanDashboard');
+    $resultados = collect();
+    $thisYear= now()->year;
+    $surveysOfThisYear=Survey::whereYear("dateStart",$thisYear)->select("id")->get();
+ foreach($surveysOfThisYear as $survey)
+      {
+       $data = DB::table("surveys as s")
+    ->join("survey_submits as sb", "s.id", "=", "sb.survey_id")
+    ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
+    ->join("question_options as qo", "rs.question_option_id", "=", "qo.id")
+    ->where('s.id', $survey->id)
+    ->select(
+        DB::raw('SUM(qo.calification) as SumaNotaPeriodo'),
+        DB::raw('count(distinct(sb.id)) as Divisor'),
+    )
+    ->first();
+    if ($data->isEmpty())
+    {
+        $notaperiodo=0;
+    }else
+    {
+        $numerador=$data->pluck("SumaNotaPeriodo");
+        $divisor=$data->pluck("Divisor");
+        $notaperiodo=round($numerador/$divisor);
+    }
+   
+   $resultados->push([
+        "termScore" => $notaperiodo,
+        "term" => $i,
+    ]);
+    }    
+    $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
+  $allProfessor = User::where("role","professor")->count();
+  $amountProfessors =Course::has('submits')->get();
+  $professorsEvaluated=$amountProfessors->pluck("user_id")->unique()->count();
+        return view('dean.deanDashboard',compact("resultados","anual","allProfessor","professorsEvaluated" ));
     }
 
     public function deanResults($schoolId){
@@ -68,12 +103,11 @@ $dataResults[] = [
 ];
 
 }
-
-        return view('dean.deanResults',compact("dataResults","schoolId"));
+$schoolName = $thisSchool->name;
+        return view('dean.deanResults',compact("dataResults","schoolName"));
     }
 
     public function deanSchools(){
-        $i=0;
         $schools = School::select("id")->get();
         $schoolsId = $schools->pluck("id")->toArray();
         $thisYear = now()->year;
@@ -104,9 +138,7 @@ foreach ($data as $item)
     "Name" => $item->schoolName,
     "score" =>   round($item->totEscuela / $item->Alumnos) ,
  ];
-
 }
-
 
 return view('dean.deanSchools',compact("school"));
     }
@@ -156,11 +188,6 @@ public function deanViewAnswer($submitId)
 {
     $submit = SurveySubmit::with(['user', 'course', 'survey'])->findOrFail($submitId);    
     $data = DB::table('surveys as s')
-    ->select(
-        'qg.groupName as indicator',
-        'qo.option as answer',
-        'sb.observations as observation'
-    )
     ->join('question_groups as qg', 's.id', '=', 'qg.survey_id')
     ->join('question_options as qo', 'qg.id', '=', 'qo.question_group_id')
     ->join('response_submits as rs', 'qo.id', '=', 'rs.question_option_id')
@@ -170,6 +197,11 @@ public function deanViewAnswer($submitId)
     ->where('s.id', $submit->survey_id)
     ->where('u.id', $submit->user_id)
     ->where('c.id', $submit->course_id)
+      ->select(
+        'qg.groupName as indicator',
+        'qo.option as answer',
+        'sb.observations as observation'
+    )
     ->distinct()
     ->orderBy('qg.groupName')
     ->get();
@@ -183,7 +215,6 @@ public function deanViewAnswer($submitId)
      $answer[]= [
        "observation" =>$data[0]->observation, 
      ];
-
 return $answer; 
 }
 }

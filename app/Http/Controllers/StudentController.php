@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use App\Models\Enrollment;
 use App\Models\QuestionOption;
 use App\Models\QuestionGroup;
 use App\Models\SurveySubmit;
@@ -61,7 +60,7 @@ return view('student.studentEvaluation', compact('noClaseId','coursesId','data')
         "DateSubmmited"=>now(),
         "survey_id"=>$survey->id,
         "course_id"=>$courseId,
-        "user_id"=>23,
+        "user_id"=>27,
         "observations"=>$request->observaciones,
       ]);
       

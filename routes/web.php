@@ -62,6 +62,9 @@ Route::post('/adminControlCourses/block/{courseId}', [AdminController::class,"bl
 Route::post('/adminControlCourses/unblock/{courseId}', [AdminController::class,"unblockCourse"])->name("unblockCourse");
 Route::get('/adminSearchCourses', [AdminController::class,"searchCourse"])->name("searchCourse");
 
+#Rutas admin DCA
+Route::get('/adminDcaDashboard', [AdminController::class, "adminDcaDashboard"])->name("adminDcaDashboard");
+
 #Rutas decanos
 Route::get('/deanDashboard', [DeanController::class, "deanDashboard"])->name("deanDashboard");
 Route::get('/deanResults/{schoolId}', [DeanController::class, "deanResults"])->name("deanResults");
@@ -81,8 +84,6 @@ Route::get('/directorFilter', [DirectorController::class, "directorFilter"])->na
 Route::get("/logOut",[LogOutController::class,"logOut"])->name("logOut");
 
 
-
-
 #Ruta PDF
 Route::get('/admin/pdf', [AdminController::class, 'exportarResultadosPDF'])->name('admin.adminPDF');
 Route::get('/director/pdf', [DirectorController::class, 'directorPDF'])->name('director.directorPDF');
@@ -93,3 +94,8 @@ Route::get('/dean/excel', [DeanController::class, 'deanSchoolExcel'])->name('rep
 Route::get('/director/excel', [DirectorController::class, 'directorResultsExcel'])->name('reporte.directorResultsExcel');
 Route::get('/admin/excel', [AdminController::class, 'adminResultsExcel'])->name('reporte.adminResultsExcel');
 
+#ruta no autirzado
+Route::get('/unauthorized',[LoginController::class,"unauthorized"])->name('unauthorized');
+
+#Ruta sesion muerta
+Route::get('/endedSession',[LoginController::class,"sessionDead"])->name('sessionDead');

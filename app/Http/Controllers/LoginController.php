@@ -59,5 +59,13 @@ public function handdleCallBack()
     */
 }
 
+public function unauthorized()
+{
+    return view('unauthorizedPage');
+}
 
+public function sessionDead()
+{
+    return view('endedSessionPage');
+}
 }

@@ -795,4 +795,8 @@ public function adminResultsExcel()
       }
   return Excel::download(new adminResultsExcel($resultados), 'reporteAdmin-resultados.xlsx');
 }
+
+public function adminDcaDashboard(){
+  return view("admin.dcaDashboard");
+}
 }

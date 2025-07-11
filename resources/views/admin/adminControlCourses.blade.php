@@ -52,11 +52,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @if (isset($noInfo) && $noInfo)
+                        @if (isset($noInfo) && $noInfo)
                             @for ($i=1; $i<=6; $i++)
                                 <td class="border border-gray-400 px-4 py-2 text-center"></td>
                             @endfor
-                        @else --}}
+                        @else
                             @foreach ($courses as $course)
                                 <tr>
                                     <td class="border border-gray-400 px-4 py-2 text-center">{{ $course['courseProfessor'] }}</td>
@@ -87,8 +87,7 @@
 
                                 </tr>
                             @endforeach
-                            
-                        {{-- @endif --}}
+                        @endif
                     </tbody>
                 </table>
                 <!-- Paginación -->

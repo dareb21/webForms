@@ -20,7 +20,7 @@
                         @endforeach
                     
                     </select>
-                    <button type="submit" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
+                    <button type="submit" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold ml-2 py-1 px-3 rounded">
                         Buscar
                     </button>
                     </form>

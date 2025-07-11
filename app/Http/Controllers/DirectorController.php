@@ -102,7 +102,6 @@ class DirectorController extends Controller
 
   if ($noInfo)
     {
-      dd("no info");
      return redirect()->back()->with('alert','No hay info en ese período.');
     }
 
@@ -263,7 +262,6 @@ return $answer;
 
   if ($noInfo)
     {
-      dd("no info");
      return redirect()->back()->with('alert','No hay info en ese período.');
     }
 

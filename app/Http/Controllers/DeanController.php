@@ -111,7 +111,7 @@ $dataResults[] = [
 
 }
 $schoolName = $thisSchool->name;
-        return view('dean.deanResults',compact("dataResults","schoolName"));
+        return view('dean.deanResults',compact("dataResults","schoolName","schoolId"));
     }
 
     public function deanSchools(){

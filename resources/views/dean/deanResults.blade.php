@@ -1,12 +1,12 @@
 @extends('dean.deanLayout')
 @section('content')
 <!-- Main Content -->
-<div class="flex-1 h-full ml-0 md:ml-64 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+<div class="flex-1 ml-0 md:h-full md:ml-64 p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="bg-white rounded-xl shadow-lg p-6 w-full h-full">
         <div class="flex flex-col items-center">
             <div class="bg-white p-4 text-center text-2xl font-bold">
-                <h1>
-                    RESULTADOS DE EVALUACIONES
+                <h1 class="uppercase">
+                    RESULTADOS DE {{ $schoolName ?? 'Escuela' }}
                 </h1>
             </div>
             <!-- Segmentación por años y períodos -->
@@ -15,6 +15,7 @@
                     <div class="flex gap-x-4 flex-wrap py-4">  
                     <label for="catedraticoBusqueda">Búsqueda por nombre </label>
                     <input type="text" name="catedraticoBusqueda" id="catedraticoBusqueda" class="shadow-sm ml-2 border-1 border-gray-200">
+                    <div>
                     <label for="anualYear">Año</label>
                     <select name="anualYear" id="anualYear" class="shadow-md border border-gray-200">
                         <option value="anualY1">2025</option>
@@ -28,14 +29,18 @@
                         <option value="anualP3">Período 2</option>
                         <option value="anualP4">Período 3</option>
                     </select>
+                </div>
                     <button class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
                         Buscar
                     </button>
                     <a href="{{ route('deanResults',['schoolId' => $schoolId]) }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                         Refrescar
                     </a>
+                    <a href="{{ route('dean.deanSchoolPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                        PDF
+                    </a>
                     <a href="{{ route('director.directorPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
-                        Exportar
+                        EXCEL
                     </a>
                 </div>
             <!-- Seccion de evaluaciones -->

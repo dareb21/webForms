@@ -29,7 +29,7 @@ class StudentController extends Controller
         return view("student.studentInactiveEvaluation");
     }
 
-    $noClaseId = $request->query('noClaseId');
+    $courseArrayPosition = $request->query('courseArrayPosition');
     $coursesId = $request->query('courseId');
     if(SurveySubmit::where("user_id",23)->where("course_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
     {
@@ -50,7 +50,7 @@ class StudentController extends Controller
 }   
 
 $data = collect($data)->groupBy('groupName');
-return view('student.studentEvaluation', compact('noClaseId','coursesId','data'));
+return view('student.studentEvaluation', compact('courseArrayPosition','coursesId','data'));
     }
     public Function studentSubmit(Request $request, $courseId)
     {
@@ -60,7 +60,7 @@ return view('student.studentEvaluation', compact('noClaseId','coursesId','data')
         "DateSubmmited"=>now(),
         "survey_id"=>$survey->id,
         "course_id"=>$courseId,
-        "user_id"=>27,
+        "user_id"=>23,
         "observations"=>$request->observaciones,
       ]);
       

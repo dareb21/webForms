@@ -15,7 +15,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-  <style> [x-cloak] { display: none !important;} </style>
+  <style>[x-cloak] { display: none !important; }</style>
 </head>
 <body class="bg-gray-100">
 

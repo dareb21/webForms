@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Models\School;
 use App\Models\SurveySubmit;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\directorResultsExcel;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class DirectorController extends Controller
@@ -413,4 +415,75 @@ public function directorPDF()
     $pdf = Pdf::loadView('pdf.directorResultsPDF', compact('dataResults'));
     return $pdf->download('resultados-evaluacion.pdf');
 }
+
+public function directorResultsExcel()
+{
+    $thisYear = session()->pull('year', now()->year);
+    $user = User::with('school.courses.professor')->find(64);    
+    $school_id = $user->school->id;
+    $professors = $user->school->courses->pluck('professor')->unique();
+
+    $dataResults = [];
+
+    foreach ($professors as $professor) {
+        $professorName = $professor->name;
+        $data = DB::table('survey_submits as sb')
+            ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+            ->join('courses as c', 'sb.course_id', '=', 'c.id')
+            ->join('users as u', 'sb.user_id', '=', 'u.id')
+            ->join('users as prof', 'c.user_id', '=', 'prof.id')
+            ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+            ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+            ->where('c.user_id', $professor->id)
+            ->where('c.school_id', $school_id)
+            ->whereYear('s.created_at', $thisYear)
+            ->select(
+                'prof.name as professorName',
+                'c.name as courses',
+                'c.id as coursesId',
+                DB::raw('SUM(qo.calification) as totSurvey'),
+                DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
+            )
+            ->groupBy('prof.name', 'c.id')
+            ->get();
+
+        $coursesPerProfessor = [];
+
+        if (($data->pluck("totStudents"))->sum() > 0) {
+            $i = 0;
+            $totSurveyPerCourse = $data->pluck("totSurvey");
+            $totStudentPerCourse = $data->pluck("totStudents");
+            $courses = $data->pluck("courses")->unique()->values()->toArray();
+            $coursesId = $data->pluck("coursesId")->unique()->values()->toArray();
+            $totAllSurvey = $totSurveyPerCourse->sum();
+            $totAllStudents = $totStudentPerCourse->sum();
+            $avgScore = round($totAllSurvey / $totAllStudents);
+
+            foreach ($courses as $course) {
+                $scorePerCourse = round($totSurveyPerCourse[$i] / $totStudentPerCourse[$i]);
+                $coursesPerProfessor[] = [
+                    "courseId" => $coursesId[$i],
+                    "courses" => $courses[$i],
+                    "scorePerCourse" => $scorePerCourse,
+                ];
+                $i++;
+            }
+        } else {
+            $avgScore = 0;
+            $coursesPerProfessor[] = [
+                "courses" => "sin info",
+                "scorePerCourse" => 0,
+            ];
+        }
+
+        $dataResults[] = [
+            "Professor" => $professorName,
+            "avgScoreProfessor" => $avgScore,
+            "coursesPerProfessor" => $coursesPerProfessor,
+        ];
+    }
+
+    return Excel::download(new directorResultsExcel($dataResults), 'reporteDirector-resultados.xlsx');
+}
+
 }

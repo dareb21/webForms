@@ -51,7 +51,7 @@
             @foreach ($courses as $course)
             <li>
                 <form action="{{ route('studentEvaluation') }}" method="GET">
-                <input type="hidden" name="noClaseId" value="{{ $loop->index }}">
+                <input type="hidden" name="courseArrayPosition" value="{{ $loop->index }}">
                 <input type="hidden" name="courseId" value="{{ $coursesId[$loop->index] }}">
                 <button type="submit" class="group flex text-left items-center w-full p-2 md:p-4 px-6 gap-3 cursor-pointer rounded-lg hover:bg-blue-500 hover:text-white border-t border-b md:border-0 border-orange-500 text-blue-500 md:text-black transition">
                     <!-- SVG Ícono de clase/universidad -->

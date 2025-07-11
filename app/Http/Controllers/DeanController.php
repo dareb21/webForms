@@ -7,6 +7,9 @@ use App\Models\School;
 use App\Models\Survey;
 use Illuminate\Support\Facades\DB;
 use App\Models\Course;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\deanSchoolExcel;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\User;
 use App\Models\SurveySubmit;
 
@@ -108,7 +111,7 @@ $dataResults[] = [
 
 }
 $schoolName = $thisSchool->name;
-        return view('dean.deanResults',compact("dataResults","schoolName"));
+        return view('dean.deanResults',compact("dataResults","schoolName","schoolId"));
     }
 
     public function deanSchools(){
@@ -221,4 +224,83 @@ public function deanViewAnswer($submitId)
      ];
 return $answer; 
 }
+
+
+public function deanSchoolPDF(){
+        $i=0;
+        $schools = School::select("id")->get();
+        $schoolsId = $schools->pluck("id")->toArray();
+        $thisYear = now()->year;
+        $surveysOfThisYear=Survey::whereYear("dateStart",$thisYear)->select("id")->get();
+        $school =[];
+    $dataQuery = DB::table("schools as sc")
+    ->join("courses as c","sc.id","=","c.school_id")
+    ->join("survey_submits as sb","c.id","=","sb.course_id")
+    ->join("surveys as s","sb.survey_id","=","s.id")
+    ->join("response_submits as rs","sb.id","=","rs.survey_submit_id")
+    ->join("question_options as qo", "rs.question_option_id","=","qo.id")
+    ->whereIn('sc.id', $schoolsId)
+    ->whereIn("s.id",$surveysOfThisYear)
+    ->select(
+        "sc.id as schoolId",
+        "sc.name as schoolName",
+        DB::raw('SUM(qo.calification) as totEscuela'),
+        DB::raw('count(distinct(sb.id)) as Alumnos'),
+    )
+    ->groupBy('sc.id', 's.id')
+    ->get();
+    $data=$dataQuery->values();
+    //PROBA CON UN MAP HACER ESTO
+foreach ($data as $item)
+{
+ $school[] =[
+    "id" =>$item->schoolId,
+    "Name" => $item->schoolName,
+    "score" =>   round($item->totEscuela / $item->Alumnos) ,
+ ];
+
+}
+  // Generar PDF
+    $pdf = Pdf::loadView('pdf.deanSchoolPDF', compact('school'));
+    return $pdf->download('resultados-escuelas.pdf');
+}
+
+public function deanSchoolExcel()
+{
+    $i=0;
+        $schools = School::select("id")->get();
+        $schoolsId = $schools->pluck("id")->toArray();
+        $thisYear = now()->year;
+        $surveysOfThisYear=Survey::whereYear("dateStart",$thisYear)->select("id")->get();
+        $school =[];
+    $dataQuery = DB::table("schools as sc")
+    ->join("courses as c","sc.id","=","c.school_id")
+    ->join("survey_submits as sb","c.id","=","sb.course_id")
+    ->join("surveys as s","sb.survey_id","=","s.id")
+    ->join("response_submits as rs","sb.id","=","rs.survey_submit_id")
+    ->join("question_options as qo", "rs.question_option_id","=","qo.id")
+    ->whereIn('sc.id', $schoolsId)
+    ->whereIn("s.id",$surveysOfThisYear)
+    ->select(
+        "sc.id as schoolId",
+        "sc.name as schoolName",
+        DB::raw('SUM(qo.calification) as totEscuela'),
+        DB::raw('count(distinct(sb.id)) as Alumnos'),
+    )
+    ->groupBy('sc.id', 's.id')
+    ->get();
+    $data=$dataQuery->values();
+    //PROBA CON UN MAP HACER ESTO
+foreach ($data as $item)
+{
+ $school[] =[
+    "Name" => $item->schoolName,
+    "score" =>   round($item->totEscuela / $item->Alumnos) ,
+ ];
+
+}
+
+    return Excel::download(new deanSchoolExcel($school), 'reporteDean-escuelas.xlsx');
+}
+
 }

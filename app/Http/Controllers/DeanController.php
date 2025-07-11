@@ -300,7 +300,7 @@ foreach ($data as $item)
 
 }
 
-    return Excel::download(new deanSchoolExcel($school), 'reporte-escuelas.xlsx');
+    return Excel::download(new deanSchoolExcel($school), 'reporteDean-escuelas.xlsx');
 }
 
 }

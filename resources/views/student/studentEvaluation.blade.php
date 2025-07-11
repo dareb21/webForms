@@ -17,11 +17,11 @@
             <div class="flex flex-wrap gap-8 mt-4 justify-center w-full max-w-4xl">
                 <div class="flex items-center gap-2">
                     <span class="font-bold">ASIGNATURA:</span>
-                    <span class="uppercase">{{ $courses[$noClaseId] ?? 'N/D' }}</span>
+                    <span class="uppercase">{{ $courses[$courseArrayPosition] ?? 'N/D' }}</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="font-bold">DOCENTE:</span>
-                    <span class="uppercase">{{ $profe[$noClaseId] ?? 'N/D' }}</span>
+                    <span class="uppercase">{{ $profe[$courseArrayPosition] ?? 'N/D' }}</span>
                 </div>
             </div>
         </header>

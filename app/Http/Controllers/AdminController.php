@@ -13,6 +13,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\adminResultsExcel;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
@@ -758,6 +760,39 @@ public function exportarResultadosPDF()
       }
   return Pdf::loadView('pdf.adminResultsPDF', compact('resultados'))
               ->setPaper('a4', 'portrait')
-              ->download('resultados.pdf');
+              ->download('admin-resultados.pdf');
+}
+
+public function adminResultsExcel()
+{
+  $courses = Course::has('submits')->paginate(10);
+  $thisYear = session()->pull('year', now()->year);
+    foreach ($courses as $course)
+     {
+        $data = DB::table('survey_submits as sb')
+        ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+        ->join('courses as c', 'sb.course_id', '=', 'c.id')
+        ->join('users as u', 'sb.user_id', '=', 'u.id') 
+        ->join('users as prof', 'c.user_id', '=', 'prof.id') 
+        ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+        ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+        ->where('c.id', $course->id) 
+        ->whereYear('s.created_at',$thisYear)
+        ->select(
+            'prof.name as professorName',
+            DB::raw('SUM(qo.calification) as totSurvey'),
+            DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
+            )
+        ->groupBy('prof.name')
+        ->first();
+        $score = round(($data->totSurvey / $data->totStudents));
+        $resultados[] = [
+            "score" => $score,
+            "profesor" => $data->professorName,
+            "course" => $course->name,
+            "courseId" =>$course->id
+        ];
+      }
+  return Excel::download(new adminResultsExcel($resultados), 'reporteAdmin-resultados.xlsx');
 }
 }

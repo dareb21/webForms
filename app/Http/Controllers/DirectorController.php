@@ -483,7 +483,7 @@ public function directorResultsExcel()
         ];
     }
 
-    return Excel::download(new directorResultsExcel($dataResults), 'reporte-resultados.xlsx');
+    return Excel::download(new directorResultsExcel($dataResults), 'reporteDirector-resultados.xlsx');
 }
 
 }

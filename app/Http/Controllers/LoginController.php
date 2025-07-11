@@ -27,6 +27,7 @@ public function handdleCallBack()
                 ->join('users', 'courses.user_id', '=', 'users.id')
                 ->select('courses.name as course_name','courses.id as course_id','users.name as Teacher')
                 ->where('enrollments.user_id',3)
+                ->where('courses.status',1)
                 ->get(); 
                 $courseNames = $classes->pluck('course_name');  
                 $coursesId=$classes->pluck('course_id');

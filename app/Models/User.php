@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(School::class,"director_id");
     }
+
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
 }

@@ -690,37 +690,37 @@ public function adminControlCourses()
 
 public function blockCourse($courseId)
 {
-    $thisCourse = Course::find($courseId);
-    $thisCourse->update([
-      "status"=>0,
-    ]);
-    return redirect()->route("adminControlCourses");
+  return response()->json('ok');
+$thisCourse = Course::findOrFail($courseId);
+$thisCourse->update(["status" => 0]);
+return response('ok');
+
 }
 
 public function unblockCourse($courseId)
 {
-    $thisCourse = Course::find($courseId);
-    $thisCourse->update([
-      "status"=>1,
-    ]);
-    return redirect()->route("adminControlCourses");
+   $thisCourse = Course::findOrFail($courseId);
+$thisCourse->update(["status" => 1]);
+return back()->with('success', 'Curso activado correctamente');
+
 }
 
 public function searchCourse(Request $request)
 {
-$course = Course::where("name", "LIKE", "%". $request->courseSearch ."%")->first();
-$data = Course::with(["professor"])->findOrFail($course->id);
-if(!$data)
+$userSearch = User::where("name", "LIKE", "DA%")->where("role","professor")->select("id","name")->first(); /*$request->courseSearch*/
+$data = User::with(["Courses"])->findOrFail($userSearch->id);
+if(!$data->courses)
   {
     $noInfo = True;
     return view("admin.adminControlCourses",compact("noInfo"));
   }
-  foreach ($data as $item)
+  foreach ($data->courses as $item)
   {
     $courses[]=[
       "courseName" => $item->name,
-      "courseProfessor"=>$item->professor->name,
+      "courseProfessor"=>$data->name,
       "courseId" =>$item->id,
+      "courseStatus"=>$item->status,
     ];
   }
   return view("admin.adminControlCourses",compact("courses"));

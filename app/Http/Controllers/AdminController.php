@@ -709,7 +709,7 @@ return back()->with('success', 'Curso activado correctamente');
 
 public function searchCourse(Request $request)
 {
-$userSearch = User::where("name", "LIKE", "DA%")->where("role","professor")->select("id","name")->first(); /*$request->courseSearch*/
+$userSearch = User::where("name", "LIKE", $request->courseSearch. "%")->where("role","professor")->select("id","name")->first(); /*$request->courseSearch*/
 $data = User::with(["Courses"])->findOrFail($userSearch->id);
 if(!$data->courses)
   {

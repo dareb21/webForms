@@ -61,7 +61,7 @@ class DeanController extends Controller
     public function deanResults($schoolId){
         $thisYear=now()->year;
         $thisSchool = School::with("courses.professor")->findOrFail($schoolId);  
-         $professorId = ($thisSchool->courses->pluck("professor.id"))->toArray();
+         //$professorId = ($thisSchool->courses->pluck("professor.id"))->toArray();
        $data = DB::table('survey_submits as sb')
         ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
         ->join('courses as c', 'sb.course_id', '=', 'c.id')
@@ -69,7 +69,6 @@ class DeanController extends Controller
         ->join('users as prof', 'c.user_id', '=', 'prof.id') 
         ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
         ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-        ->whereIn('c.user_id', $professorId) 
         ->where('c.school_id',$thisSchool->id) 
         ->whereYear('s.created_at',$thisYear)
         ->select(

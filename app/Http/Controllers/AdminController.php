@@ -8,6 +8,7 @@ use App\Models\QuestionGroup;
 use App\Models\QuestionOption;
 use App\Models\SurveySubmit;
 use App\Models\Course;
+use App\Models\School;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -795,4 +796,17 @@ public function adminResultsExcel()
       }
   return Excel::download(new adminResultsExcel($resultados), 'reporteAdmin-resultados.xlsx');
 }
+
+public function allClases()
+{
+  $letras = range('a', 'z');        // Genera de 'a' a 'z'
+$numeros = range(0, 9);           // Genera del 0 al 9
+$alfanumerico = array_merge($letras, $numeros);
+$codigo = implode('', array_map(fn($i) => $alfanumerico[array_rand($alfanumerico)], range(1, 5)));
+dd($codigo);
+ $schools = School::with("courses")->count();
+ dd($schools);
+}
+
+
 }

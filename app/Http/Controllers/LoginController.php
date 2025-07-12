@@ -25,10 +25,12 @@ public function handdleCallBack()
         case True:
                 $classes = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id')
                 ->join('users', 'courses.user_id', '=', 'users.id')
-                ->select('courses.name as course_name','courses.id as course_id','users.name as Teacher')
-                ->where('enrollments.user_id',3)
+                ->join('sections','courses.id','=','sections.course_id')
+                ->select('courses.name as course_name','sections.id as section_id','users.name as Teacher')
+                ->where('enrollments.user_id',148)
                 ->where('courses.status',1)
                 ->get(); 
+                dd($classes);
                 $courseNames = $classes->pluck('course_name');  
                 $coursesId=$classes->pluck('course_id');
                 $teacher=$classes->pluck('Teacher');

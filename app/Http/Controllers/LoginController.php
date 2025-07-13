@@ -23,16 +23,17 @@ public function handdleCallBack()
 
         switch ($pase) {
         case True:
-                $classes = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id')
-                ->join('users', 'courses.user_id', '=', 'users.id')
-                ->join('sections','courses.id','=','sections.course_id')
-                ->select('courses.name as course_name','sections.id as section_id','users.name as Teacher')
-                ->where('enrollments.user_id',148)
+                $classes = Enrollment::join('sections', 'enrollments.section_id', '=', 'sections.id')
+                ->join('courses','sections.course_id','=','courses.id')
+                ->join('users as Prof', 'sections.user_id', '=', 'Prof.id')
+                ->join('users as Student','enrollments.user_id','=','Student.id')
+                ->select('courses.name as course_name','sections.id as section_id','sections.code as sections_code','Prof.name as Teacher')
+                ->where('enrollments.user_id',111)
                 ->where('courses.status',1)
                 ->get(); 
-                dd($classes);
+            
                 $courseNames = $classes->pluck('course_name');  
-                $coursesId=$classes->pluck('course_id');
+                $coursesId=$classes->pluck('section_id');
                 $teacher=$classes->pluck('Teacher');
                 session([
                 'userInfo' => [

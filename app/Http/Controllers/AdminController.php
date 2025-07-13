@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\adminResultsExcel;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Cache;
 
 class AdminController extends Controller
 {
@@ -27,7 +28,6 @@ class AdminController extends Controller
     {
       return redirect()->back()->with('alert','Ya hay una evaluacion Activa');
     }
-     $thisSurvey = 
     $dateNow = Carbon::now('etc/GMT+6');
     $thisSurvey = Survey::find($surveyId);
 
@@ -39,6 +39,7 @@ class AdminController extends Controller
     $thisSurvey->update([
       "status" =>1,
     ]);
+    Survey::CacheActiveSurvey();
     return redirect()->route("adminEvaluation");
   }
 
@@ -46,9 +47,14 @@ class AdminController extends Controller
 
 public function UnableEvaluation($surveyId)
 {
-    Survey::where("id", $surveyId)->update([
-    "status" => 0,
-    ]);
+  $thisSurvey= Survey::select("status","id")->where("id", $surveyId)->first();
+if ($thisSurvey->status === 1)
+  {
+   $thisSurvey->status = 0;
+    $thisSurvey->save();
+  Survey::ForgetCache();
+  } 
+    
     return redirect()->route("adminEvaluation");
 }
 

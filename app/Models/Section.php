@@ -12,4 +12,19 @@ class Section extends Model
         'course_id',
         'user_id'
     ];
-}
+
+  public function professor()
+  {
+    return $this->belongsTo(User::class,'user_id');
+  }
+  
+  public function course()
+  {
+    return $this->belongsTo(Course::class, "course_id");
+  }
+
+  public function submits()
+  {
+    return $this->hasMany(SurveySubmit::class);
+  }
+  }

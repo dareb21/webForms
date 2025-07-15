@@ -51,8 +51,8 @@ class User extends Authenticatable
         return $this->hasOne(School::class,"director_id");
     }
 
-    public function courses()
+    public function section()
     {
-        return $this->hasMany(Course::class);
+        return $this->hasMany(Section::class);
     }
 }

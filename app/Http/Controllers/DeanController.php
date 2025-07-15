@@ -7,6 +7,7 @@ use App\Models\School;
 use App\Models\Survey;
 use Illuminate\Support\Facades\DB;
 use App\Models\Course;
+use App\Models\Section;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\deanSchoolExcel;
 use Maatwebsite\Excel\Facades\Excel;
@@ -53,20 +54,23 @@ class DeanController extends Controller
     }    
     $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
   $allProfessor = User::where("role","professor")->count();
-  $amountProfessors =Course::has('submits')->get();
+  $amountProfessors =Section::has('submits')->get();
   $professorsEvaluated=$amountProfessors->pluck("user_id")->unique()->count();
-        return view('dean.deanDashboard',compact("resultados","anual","allProfessor","professorsEvaluated" ));
+return view('dean.deanDashboard',compact("resultados","anual","allProfessor","professorsEvaluated" ));
     }
 
-    public function deanResults($schoolId){
+
+
+public function deanResults($schoolId){
         $thisYear=now()->year;
-        $thisSchool = School::with("courses.professor")->findOrFail($schoolId);  
+        $thisSchool = School::with("courses.sections.professor")->findOrFail($schoolId);  
          //$professorId = ($thisSchool->courses->pluck("professor.id"))->toArray();
        $data = DB::table('survey_submits as sb')
         ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
-        ->join('courses as c', 'sb.course_id', '=', 'c.id')
+        ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
+        ->join('courses as c','sec.course_id','=','c.id')
         ->join('users as u', 'sb.user_id', '=', 'u.id') 
-        ->join('users as prof', 'c.user_id', '=', 'prof.id') 
+        ->join('users as prof', 'sec.user_id', '=', 'prof.id') 
         ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
         ->join('surveys as s', 'sb.survey_id', '=', 's.id')
         ->where('c.school_id',$thisSchool->id) 
@@ -75,13 +79,13 @@ class DeanController extends Controller
             'prof.name as professorName',
             'prof.id as professorId',
             'c.name as courses',
-            'c.id as coursesId',
+            'sec.id as sectionId',
+            'sec.code as sectionCode',
             DB::raw('SUM(qo.calification) as totSurvey'),
             DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
             )
-        ->groupBy('prof.name','c.id')
+        ->groupBy('prof.name','sec.id')
         ->get();
-       
 $dataResults =[]; 
 $dataId = $data->pluck("professorId")->unique();
 foreach ($dataId as $index=>$id)
@@ -96,7 +100,8 @@ $coursesData = $thisItem->map(function ($i) {
     $totStudentPerCourse = $i->totStudents;
     $totPerCourse = round($totSurveyPerCourse /$totStudentPerCourse);
     return [
-      "courseId"=>$i->coursesId,
+      "sectionId"=>$i->sectionId,
+      "sectionCode"=>$i->sectionCode,
        "course"=>$i->courses,
        "totPerCourse"=> $totPerCourse
     ];
@@ -110,10 +115,14 @@ $dataResults[] = [
 
 }
 $schoolName = $thisSchool->name;
+
         return view('dean.deanResults',compact("dataResults","schoolName","schoolId"));
     }
 
-    public function deanSchools(){
+
+
+public function deanSchools(){
+    //Esta 2 primeras busquedas se pueden optimizar con un inner join
         $schools = School::select("id")->get();
         $schoolsId = $schools->pluck("id")->toArray();
         $thisYear = now()->year;
@@ -121,7 +130,8 @@ $schoolName = $thisSchool->name;
         $school =[];
     $dataQuery = DB::table("schools as sc")
     ->join("courses as c","sc.id","=","c.school_id")
-    ->join("survey_submits as sb","c.id","=","sb.course_id")
+    ->join("sections as sec","c.id","=","sec.course_id")
+    ->join("survey_submits as sb","sec.id","=","sb.section_id")
     ->join("surveys as s","sb.survey_id","=","s.id")
     ->join("response_submits as rs","sb.id","=","rs.survey_submit_id")
     ->join("question_options as qo", "rs.question_option_id","=","qo.id")
@@ -149,21 +159,24 @@ foreach ($data as $item)
 return view('dean.deanSchools',compact("school"));
     }
 
-    public function deanStudentView($courseId){
-        $course = Course::with("professor")->find($courseId);
-  $profesor=$course->professor->name;
-  $courseName=$course->name;
+public function deanStudentView($sectionId){
+$section = Section::with("professor","course")->find($sectionId);
+  $profesor=$section->professor->name;
+  $courseName=$section->course->name;
+
  $data = DB::table('survey_submits as sb')
  ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
-->join('courses as c', 'sb.course_id', '=', 'c.id')
+->join('sections as sec', 'sb.section_id', '=', 'sec.id')
+->join("courses as c","sec.course_id","=","c.id")
  ->join('users as u', 'sb.user_id', '=', 'u.id') 
-       ->join('users as prof', 'c.user_id', '=', 'prof.id') 
+       ->join('users as prof', 'sec.user_id', '=', 'prof.id') 
       ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
        ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-       ->where('c.id', $course->id)
+       ->where('sec.id', $sectionId)
        ->whereYear('s.created_at',now()->year)
      ->select(
          'c.name as course',
+         'sec.code as section',
           'sb.id as submitId',
           'prof.name as professorName',
            'u.name as student',
@@ -171,7 +184,6 @@ return view('dean.deanSchools',compact("school"));
        )
        ->groupBy('prof.name', 'c.name','submitId')
        ->paginate(10);
-
 if ($data->isEmpty())
 {
     $noInfo = True;
@@ -186,23 +198,25 @@ if ($data->isEmpty())
             "nameStudent" => $item->student,
             "submitId"=>$item->submitId,
           ];
-        }    
+        }  
+       
+
         return view('dean.deanStudentView',compact("resultados"));
     }
 
 public function deanViewAnswer($submitId)
 {
-    $submit = SurveySubmit::with(['user', 'course', 'survey'])->findOrFail($submitId);    
+    $submit = SurveySubmit::findOrFail($submitId);  
     $data = DB::table('surveys as s')
     ->join('question_groups as qg', 's.id', '=', 'qg.survey_id')
     ->join('question_options as qo', 'qg.id', '=', 'qo.question_group_id')
     ->join('response_submits as rs', 'qo.id', '=', 'rs.question_option_id')
     ->join('survey_submits as sb', 'rs.survey_submit_id', '=', 'sb.id')
-    ->join('courses as c', 'sb.course_id', '=', 'c.id')
+    ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
     ->join('users as u', 'sb.user_id', '=', 'u.id')
     ->where('s.id', $submit->survey_id)
     ->where('u.id', $submit->user_id)
-    ->where('c.id', $submit->course_id)
+    ->where('sec.id', $submit->section_id)
       ->select(
         'qg.groupName as indicator',
         'qo.option as answer',

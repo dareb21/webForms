@@ -74,17 +74,14 @@
         }
      }">
 
-
-
     <div class="flex flex-col md:h-full md:flex-row gap-6">
         <!-- Gráfico principal -->
         <div class="bg-white rounded-lg shadow-md p-6 flex-1">
             <div class="flex justify-between items-center mt-4 mb-4">
                 <h2 class="text-2xl text-gray-800 font-bold">Bienvenido Administrador</h2>
             </div>
-            <div class="flex justify-between items-center mb-2">
-                <h3 class="text-gray-700 font-bold md:mt-10 mb-2 text-left">Satisfacción por períodos</h3>
-                <span class="text-md font-medium text-right">Catedráticos evaluados: </span>
+            <div class="flex justify-center items-center mb-2">
+                <h3 class="text-gray-700 font-bold md:mt-10 mb-2">Satisfacción por períodos</h3>
             </div>
             <div class="flex justify-center items-center">
                 <div class="md:w-85 md:h-85 relative">

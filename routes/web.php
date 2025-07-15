@@ -93,3 +93,5 @@ Route::get('/dean/excel', [DeanController::class, 'deanSchoolExcel'])->name('rep
 Route::get('/director/excel', [DirectorController::class, 'directorResultsExcel'])->name('reporte.directorResultsExcel');
 Route::get('/admin/excel', [AdminController::class, 'adminResultsExcel'])->name('reporte.adminResultsExcel');
 
+#Ruta Temporal
+Route::get('/adminAllClases', [AdminController::class,"allClases"])->name("allClases");

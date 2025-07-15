@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class Survey extends Model
 {
@@ -17,10 +18,23 @@ class Survey extends Model
         'dateEnd',
         'Author',
         'term',
+        'status',
     ];
 
     public function QuestionGroup()
     {
       return $this->hasMany(QuestionGroup::class);
     }
+
+
+    public static function CacheActiveSurvey() 
+    {
+      $cacheActiveSurvey=self::with(["QuestionGroup.QuestionOption"])->where("status",1)->first();
+      Cache::forever("cacheActiveSurvey",$cacheActiveSurvey);
+    }
+    public static function ForgetCache()
+    {
+      Cache::Forget("cacheActiveSurvey");
+    }
+
 }

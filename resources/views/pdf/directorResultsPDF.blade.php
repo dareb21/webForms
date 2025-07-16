@@ -29,24 +29,16 @@
         <thead>
             <tr>
                 <th>Catedrático</th>
-                <th>Clase</th>
-                <th>Sección</th>
                 <th>Promedio</th>
             </tr>
         </thead>
         <tbody>
             @forelse ($dataResults as $profesor)
-                @foreach ($profesor['coursesPerProfessor'] as $curso)
-                    <tr>
-                        <td>{{ $profesor['Professor'] }}</td>
-                        <td>{{ $curso['courses'] }}</td>
-                        <td>Hola</td>
-                        <td>{{ $curso['scorePerCourse'] }}</td>
-                    </tr>
-                @endforeach
+                <td>{{ $profesor['professorName'] }}</td>
+                <td>{{ $profesor['professorScoreAvg'] }}</td>
             @empty
                 <tr>
-                    <td colspan="4">No hay resultados disponibles.</td>
+                    <td colspan="3">No hay resultados disponibles.</td>
                 </tr>
             @endforelse
         </tbody>

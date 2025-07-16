@@ -1,5 +1,15 @@
 @extends('director.directorLayout')
 @section('content')
+<!-- Sweet Alert -->
+    @if (session('alert'))
+        <script>
+            Swal.fire({
+                title: "Advertencia",
+                text: {!! json_encode(session('alert')) !!},
+                icon: "warning"
+            });
+        </script>
+    @endif
 <div class="flex-1 ml-0 md:h-full md:ml-64 p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
     <div class="bg-white rounded-xl shadow-lg p-6 w-full min-h-[calc(100vh-3rem)]">
         <div class="flex flex-col items-center">
@@ -71,8 +81,8 @@
                 @foreach ($dataResults as $results)
                     <tbody x-data="{ open: false }" class="border-b">
                         <tr>
-                            <td class="px-4 py-2 text-center">{{ $results['Professor'] }}</td>
-                            <td class="px-4 py-2 text-center">{{ $results['avgScoreProfessor'] }}</td>
+                            <td class="px-4 py-2 text-center">{{ $results['professorName'] }}</td>
+                            <td class="px-4 py-2 text-center">{{ $results['professorScoreAvg'] }}</td>
                             <td class="px-4 py-2 text-center">
                                 <button @click="open = !open" class="text-blue-600 hover:underline focus:outline-none">
                                     <span x-show="!open" class="hover:cursor-pointer">Ver detalles</span>
@@ -83,17 +93,17 @@
                         <tr x-show="open" x-cloak>
                             <td colspan="3" class="px-4 py-2 bg-gray-50 text-sm">
                                 <div class="space-y-3">
-                                    @foreach ($results['coursesPerProfessor'] as $course)
+                                    @foreach ($results['coursesData'] as $course)
                                         <div class="grid grid-cols-3 gap-4 items-center">
                                             <span>
-                                                <strong>Clase:</strong> {{ $course['courses'] }}
+                                                <strong>Clase:</strong> {{ $course['course'] }}
                                             </span>
                                             <span>
-                                                <strong>Calificación:</strong> {{ $course['scorePerCourse'] }}
+                                                <strong>Calificación:</strong> {{ $course['totPerCourse'] }}
                                             </span>
                                             <span>
                                                 <strong>Evaluaciones estudiantes &rarr;</strong>
-                                               <a href="{{ route('directorStudentView', ['courseId' => $course['courseId'] ?? '0', 'Professor' => $results['Professor'], 'courses' => $course['courses']]) }}" class="ml-2 p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition">
+                                               <a href="{{ route('directorStudentView', ['courseId' => $course['courseId'] ?? '0', 'Professor' => $results['professorName'], 'courses' => $course['course']]) }}" class="ml-2 p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition">
                                                     <strong>Ver más</strong>
                                                 </a>
                                             </span>

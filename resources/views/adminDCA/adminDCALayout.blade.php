@@ -14,7 +14,6 @@
   <link rel="preload" as="image" href="{{ asset('img/pfp.jpg') }}">
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>[x-cloak] { display: none !important; }</style>
 </head>
@@ -37,30 +36,50 @@
     <div class="flex items-center p-2 space-x-4">
       <img src="{{ asset('img/pfp.jpg') }}" alt="" class="w-12 h-12 rounded-full bg-gray-300" />
       <div>
-        <h2 class="text-lg font-semibold">Director USAP</h2>
-        <span class="text-sm font-light">director@usap.edu</span>
+        <h2 class="text-lg font-semibold">Admin DCA USAP</h2>
+        <span class="text-sm font-light">admindca@usap.edu</span>
       </div>
     </div>
 
     <div class="divide-y divide-gray-300">
       <ul class="pt-2 pb-4 space-y-1 text-sm">
+        
         <li class="hover:bg-blue-700 hover:text-white">
-          <a href="{{ route('directorDashboard') }}" class="group flex items-center p-2 space-x-3 rounded-md">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-              class="w-5 h-5 fill-current text-gray-600 transition duration-300 group-hover:invert">
-              <path d="M68.983,382.642l171.35,98.928a32.082,32.082,0,0,0,32,0l171.352-98.929a32.093,32.093,0,0,0,16-27.713V157.071a32.092,32.092,0,0,0-16-27.713L272.334,30.429a32.086,32.086,0,0,0-32,0L68.983,129.358a32.09,32.09,0,0,0-16,27.713V354.929A32.09,32.09,0,0,0,68.983,382.642ZM272.333,67.38l155.351,89.691V334.449L272.333,246.642ZM256.282,274.327l157.155,88.828-157.1,90.7L99.179,363.125ZM84.983,157.071,240.333,67.38v179.2L84.983,334.39Z"/>
+          <a href="{{ route('adminDcaDashboard') }}" class="group flex items-center p-2 space-x-3 rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+              class="w-5 h-5 fill-current text-gray-700 transition duration-300 group-hover:invert">
+              <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8v-10h-8v10zm0-18v6h8V3h-8z"/>
             </svg>
             <span>Dashboard</span>
           </a>
         </li>
+
+        <li class="group flex items-center p-2 space-x-3 rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+              class="w-5 h-5 fill-current text-gray-400 transition duration-300">
+              <path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2H3V4zm0 4h18v12a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm5 2v2h2v-2H8zm0 4v2h2v-2H8zm4-4v2h6v-2h-6zm0 4v2h6v-2h-6z"/>
+            </svg>
+            <span class="text-gray-400">Evaluaciones</span>
+        </li>
+
         <li class="hover:bg-blue-700 hover:text-white">
-          <a href="{{ route('directorResults') }}" class="group flex items-center p-2 space-x-3 rounded-md">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-              class="w-5 h-5 fill-current text-gray-600 transition duration-300 group-hover:invert">
-              <path d="M479.6,399.716l-81.084-81.084-62.368-25.767A175.014,175.014,0,0,0,368,192c0-97.047-78.953-176-176-176S16,94.953,16,192,94.953,368,192,368a175.034,175.034,0,0,0,101.619-32.377l25.7,62.2L400.4,478.911a56,56,0,1,0,79.2-79.195ZM48,192c0-79.4,64.6-144,144-144s144,64.6,144,144S271.4,336,192,336,48,271.4,48,192ZM456.971,456.284a24.028,24.028,0,0,1-33.942,0l-76.572-76.572-23.894-57.835L380.4,345.771l76.573,76.572A24.028,24.028,0,0,1,456.971,456.284Z"/>
+          <a href="{{ route('adminDcaResults') }}" class="group flex items-center p-2 space-x-3 rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+              class="w-5 h-5 fill-current text-gray-700 transition duration-300 group-hover:invert">
+              <path d="M5 9h2v10H5V9zm6 4h2v6h-2v-6zm6-8h2v14h-2V5z"/>
             </svg>
             <span>Resultados</span>
           </a>
+        </li>
+
+        
+        <li class="group flex items-center p-2 space-x-3 rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" class="w-5 h-5 text-gray-400 transition duration-300">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M11.25 3v2.25m0 13.5V21m6.364-14.136l-1.591 1.591m-9.546 0L5.636 6.864m12.728 10.272l-1.591-1.591m-9.546 0l-1.591 1.591M21 11.25h-2.25m-13.5 0H3" />
+            </svg>
+            <span class="text-gray-400">Control Cursos</span>
         </li>
       </ul>
 
@@ -89,6 +108,8 @@
   </main>
 </div>
 
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="//unpkg.com/alpinejs" defer></script>
 </body>
 </html>

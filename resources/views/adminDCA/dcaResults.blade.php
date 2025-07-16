@@ -1,4 +1,4 @@
-@extends('admin.adminLayout')
+@extends('adminDCA.adminDCALayout')
 
 @section('content')
 <!-- Sweet Alert -->
@@ -32,7 +32,7 @@
                             <div>
                                 <label for="annualYear">Año</label>
                                 <select name="annualYear" id="annualYear" class="shadow-md border border-gray-200">
-                                    @if (isset($noInfo) && $noInfo)
+                                    {{-- @if (isset($noInfo) && $noInfo)
                                         <option value="noInfo">None</option>
                                     @else
                                         @foreach ($years as $year)
@@ -41,7 +41,7 @@
                                                 {{ $year->{'Year(dateStart)'} }}
                                             </option>
                                         @endforeach
-                                    @endif
+                                    @endif --}}
                                 </select>
 
                                 <label for="annualPeriod">Período</label>
@@ -53,17 +53,17 @@
                                 </select>
                             </div>
 
-                            <button type="submit" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold py-1 px-3 rounded">
+                            <button type="submit" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold py-1 px-4 rounded">
                                 Buscar
                             </button>
 
-                            <a href="{{ route('adminResults') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-3 rounded">
+                            <a href="{{ route('adminResults') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                                 Refrescar
                             </a>
-                            <a href="{{ route('admin.adminPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-3 rounded">
+                            <a href="{{ route('admin.adminPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                                 PDF
                             </a>
-                            <a href="{{ route('reporte.adminResultsExcel') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-3 rounded">
+                            <a href="{{ route('reporte.adminResultsExcel') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                                 EXCEL
                             </a>
                         </form>
@@ -81,18 +81,17 @@
                             <th class="px-4 py-2 text-center">Acción</th>
                         </tr>
                     </thead>
-                    
-                        @if (isset($noInfo) && $noInfo)
+                        {{-- @if (isset($noInfo) && $noInfo)
                             <tbody x-data="{ open: false }" class="border-b">
-                            @for ($i=1; $i<=4; $i++)
+                            @for ($i=1; $i<=5; $i++)
                                 <td class="px-4 py-2 text-center"></td>
                             @endfor
                         @else
-                            @foreach ($dataResults as $resultado)
+                            @foreach ($resultados as $resultado)
                             <tbody x-data="{ open: false }" class="border-b">
                                 <tr>
-                                    <td class="px-4 py-2 text-center">{{ $resultado['professorName'] }}</td>
-                                    <td class="px-4 py-2 text-center">{{ $resultado['professorScoreAvg'] }}</td>
+                                    <td class="px-4 py-2 text-center">{{ $resultado['profesor'] }}</td>
+                                    <td class="px-4 py-2 text-center">{{ $resultado['score'] }}</td>
                                     <td class="px-4 py-2 text-center">
                                         <button @click="open = !open" class="text-blue-600 hover:underline focus:outline-none">
                                             <span x-show="!open" class="hover:cursor-pointer">Ver detalles</span>
@@ -101,50 +100,31 @@
                                     </td>
                                 </tr>
                                 <tr x-show="open" x-cloak>
-                                <td colspan="4" class="py-2 bg-gray-50 text-sm">
-                                <div class="flex flex-col items-center gap-y-3">
-                                    @foreach ($resultado['coursesData'] as $courses)
-                                        <div class="w-full max-w-4xl grid grid-cols-4 gap-x-6 items-center border border-gray-200 rounded px-4 py-2 bg-white shadow-sm">
-                                            
-                                            <!-- Columna 1: Clase -->
-                                            <div class="text-left truncate">
-                                                <strong>Clase:</strong> {{ $courses['course'] }}
+                                <td colspan="3" class="px-4 py-2 bg-gray-50 text-sm">
+                                    <div class="space-y-3">
+                                            <div class="grid grid-cols-3 gap-4 items-center">
+                                                <span>
+                                                    <strong>Clase:</strong> {{ $resultado['course'] }}
+                                                </span>
+                                                <span>
+                                                    <strong>Calificación:</strong> {{ $resultado['score'] }}
+                                                </span>
+                                                <span>
+                                                    <strong>Evaluaciones estudiantes &rarr;</strong>
+                                                <a href="{{ route('adminStudentView', ['courseId' => $resultado['courseId'],'course' => $resultado['course'], 'profesor' => $resultado['profesor'], 'annualYear' => request('annualYear'), 'annualPeriod' => request('annualPeriod')]) }}" class="ml-2 p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition">
+                                                        <strong>Ver más</strong>
+                                                    </a>
+                                                </span>
                                             </div>
-
-                                            <!-- Columna 2: Sección -->
-                                            <div class="text-left truncate">
-                                                <strong>Sección:</strong> {{ $courses['sectionCode'] }}
-                                            </div>
-
-                                            <!-- Columna 3: Calificación -->
-                                            <div class="text-left truncate">
-                                                <strong>Calificación:</strong> {{ $courses['totPerCourse'] }}
-                                            </div>
-
-                                            <!-- Columna 4: Botón Ver más -->
-                                            <div class="text-right">
-                                                <a href="{{ route('adminStudentView', [
-                                                    'courseId' => $courses['sectionId'],
-                                                    'course' => $courses['course'],
-                                                    'profesor' => $resultado['professorName'],
-                                                    'annualYear' => request('annualYear'),
-                                                    'annualPeriod' => request('annualPeriod')
-                                                ]) }}"
-                                                class="px-2 py-0.5 bg-blue-600 text-white rounded-sm hover:bg-blue-700 text-xs transition whitespace-nowrap">
-                                                    Ver más
-                                                </a>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </td>
+                                    </div>
+                                </td>
                             </tr>
                             @endforeach
-                        @endif
+                        @endif --}}
                     </tbody>
                 </table>
-                <!-- Paginación Condicional noInfo-->  
-                {{-- <div class="w-full flex justify-center py-4">
+                {{-- <!-- Paginación -->
+                <div class="w-full flex justify-center py-4">
                     {{ $courses->links() }} 
                 </div> --}}
             </div>

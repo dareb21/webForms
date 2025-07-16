@@ -275,11 +275,11 @@ class DeanController extends Controller
         return $pdf->download('resultados-escuelas.pdf');
     }
 
-    public function deanSchoolExcel()
-    {
-        $i = 0;
-        $schools = School::select("id")->get();
-        $schoolsId = $schools->pluck("id")->toArray();
+public function deanSchoolExcel() //ponerle parametro
+{
+    $i=0;
+        $schools = School::select("id")->get(); //quitar en especifico
+        $schoolsId = $schools->pluck("id")->toArray(); //quitar en especifico
         $thisYear = now()->year;
         $surveysOfThisYear = Survey::whereYear("dateStart", $thisYear)->select("id")->get();
         $school = [];

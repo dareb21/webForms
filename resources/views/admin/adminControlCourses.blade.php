@@ -25,7 +25,7 @@
                 <div class="w-full flex flex-col items-start pt-3">
                     <div class="flex gap-x-4 flex-wrap py-4">  
                         <form action="{{ route('searchCourse') }}" method="GET" class="flex flex-wrap items-center gap-x-4">
-                            <label for="catedraticoBusqueda">Búsqueda por nombre</label>
+                            <label for="courseSearch">Búsqueda por nombre</label>
                             <input type="text" name="courseSearch" id="courseSearch"
                                 value="{{ request('courseSearch') }}"
                                 class="shadow-sm ml-2 border border-gray-200">
@@ -52,11 +52,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @if (isset($noInfo) && $noInfo)
+                        @if (isset($noInfo) && $noInfo)
                             @for ($i=1; $i<=6; $i++)
                                 <td class="border border-gray-400 px-4 py-2 text-center"></td>
                             @endfor
-                        @else --}}
+                        @else
                             @foreach ($courses as $course)
                                 <tr>
                                     <td class="border border-gray-400 px-4 py-2 text-center">{{ $course['courseProfessor'] }}</td>
@@ -72,13 +72,13 @@
                                         <div class="flex flex-col sm:flex-row sm:justify-center sm:items-center gap-1">
                                             <form action="{{ route('blockCourse', ['courseId'=> $course['courseId']]) }}" method="POST">
                                                 @csrf
-                                                <button class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-1 rounded w-full sm:w-auto">
+                                                <button class="bg-red-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-1 rounded w-full sm:w-auto">
                                                     Bloquear
                                                 </button>
                                             </form>
                                             <form action="{{ route('unblockCourse', ['courseId'=> $course['courseId']]) }}" method="POST">
                                                 @csrf
-                                                <button class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-1 rounded w-full sm:w-auto">
+                                                <button class="bg-green-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-1 rounded w-full sm:w-auto">
                                                     Desbloquear
                                                 </button>
                                             </form>
@@ -87,14 +87,13 @@
 
                                 </tr>
                             @endforeach
-                            
-                        {{-- @endif --}}
+                        @endif
                     </tbody>
                 </table>
-                <!-- Paginación -->
+                {{-- <!-- Paginación -->
                 <div class="w-full flex justify-center py-4">
                     {{ $data->links() }}
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

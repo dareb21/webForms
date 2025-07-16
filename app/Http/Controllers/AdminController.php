@@ -78,7 +78,7 @@ if ($thisSurvey->status === 1)
     ->groupBy('schools.id')
     ->get();
 
-  $allSections= $sections->sum("section_count"); //Esto no lo mando
+  $allSections = $sections->sum("section_count"); //Esto no lo mando
   $sectionsWithSubmits= $sections->sum("sections_with_submits"); //mandar esto 
  $sectionsLeft = $allSections-$sectionsWithSubmits; // mandar esto
 
@@ -119,7 +119,7 @@ if ($thisSurvey->status === 1)
     }    
     $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
 
-        return view("admin.adminDashboard",compact("resultados","anual","allProfessor","professorsEvaluated" ));
+        return view("admin.adminDashboard",compact("resultados","anual","sectionsWithSubmits","allSections" ));
     }
 
 
@@ -607,7 +607,6 @@ $thisYear = session()->pull('year', now()->year);
                 "coursesData" => $coursesDataArray,
             ];
         }
-
   return view('admin.adminResults',compact("years","dataResults","courses"));
 }
 
@@ -810,16 +809,13 @@ public function adminResultsExcel()
   return Excel::download(new adminResultsExcel($resultados), 'reporteAdmin-resultados.xlsx');
 }
 
-public function allClases()
-{
-  $letras = range('a', 'z');        // Genera de 'a' a 'z'
-$numeros = range(0, 9);           // Genera del 0 al 9
-$alfanumerico = array_merge($letras, $numeros);
-$codigo = implode('', array_map(fn($i) => $alfanumerico[array_rand($alfanumerico)], range(1, 5)));
-dd($codigo);
- $schools = School::with("courses")->count();
- dd($schools);
+public function adminDcaDashboard(){
+  return view("adminDCA.dcaDashboard");
 }
+public function adminDcaResults(){
+  return view("adminDCA.dcaResults");
+}
+
 
 
 }

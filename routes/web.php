@@ -69,6 +69,7 @@ Route::get('/deanSchools', [DeanController::class, "deanSchools"])->name("deanSc
 Route::get('/deanStudentView/{sectionId}', [DeanController::class, "deanStudentView"])->name("deanStudentView");
 Route::get("/deanViewAnswer/{submitId}", [DeanController::class, "deanViewAnswer"])->name("deanViewAnswer");
 Route::get('/deanSchools/Filter', [DeanController::class, "deanSchoolFilter"])->name("deanSchoolFilter");
+Route::get('/deanResult/Filter', [DeanController::class, "deanResultsFilter"])->name("deanResultsFilter");
 
 #Rutas directores
 Route::get('/directorDashboard', [DirectorController::class, "directorDashboard"])->name("directorDashboard");

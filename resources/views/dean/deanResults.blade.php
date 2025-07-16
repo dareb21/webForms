@@ -11,38 +11,45 @@
             </div>
             <!-- Segmentación por años y períodos -->
             <div class="w-full h-full mt-6 overflow-x-auto">
-                <div class="w-full flex flex-col items-start pt-3">
+                <form action="{{route('deanResultsFilter')}}" method="GET">
+                  
+            <div class="w-full flex flex-col items-start pt-3">
                     <div class="flex gap-x-4 flex-wrap py-4">  
                     <label for="catedraticoBusqueda">Búsqueda por nombre </label>
                     <input type="text" name="catedraticoBusqueda" id="catedraticoBusqueda" class="shadow-sm ml-2 border-1 border-gray-200">
                     <div>
                     <label for="anualYear">Año</label>
                     <select name="anualYear" id="anualYear" class="shadow-md border border-gray-200">
-                        <option value="anualY1">2025</option>
-                        <option value="anualY2">2024</option>
-                        <option value="anualY2">2023</option>
+                        <option value="2025">2025</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
                     </select>
                     <label for="anualPeriod">Período</label>
                     <select name="anualPeriod" id="anualPeriod" class="shadow-md border border-gray-200">
-                        <option value="anualP1">Anual</option>
-                        <option value="anualP2">Período 1</option>
-                        <option value="anualP3">Período 2</option>
-                        <option value="anualP4">Período 3</option>
+                        <option value="4">Anual</option>
+                        <option value="1">Período 1</option>
+                        <option value="2">Período 2</option>
+                        <option value="3">Período 3</option>
                     </select>
                 </div>
+                <input type="hidden" name="schoolId" id="schoolId" value="{{ $schoolId }}">
                     <button class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold px-3 rounded">
                         Buscar
                     </button>
+                    
                     <a href="{{ route('deanResults',['schoolId' => $schoolId]) }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                         Refrescar
                     </a>
+            
                     <a href="{{ route('dean.deanSchoolPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                         PDF
                     </a>
                     <a href="{{ route('director.directorPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                         EXCEL
                     </a>
+                
                 </div>
+                </form>
             <!-- Seccion de evaluaciones -->
             <div class="w-full h-full overflow-x-auto">
                 <div class="overflow-x-auto w-full mt-4">

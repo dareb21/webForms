@@ -17,7 +17,15 @@ return new class extends Migration
             $table->foreignId("course_id")->constrained();
             $table->foreignId("user_id")->constrained();
             $table->timestamps();
-        });
+          /*
+          Indexar los campos
+            $table->integer("term");
+            $table->integer("year");
+            $table->index('year');
+            $table->index('term');
+            $table->index(['term', 'year'], 'idx_term_year');
+        */ 
+            });
     }
 
     /**

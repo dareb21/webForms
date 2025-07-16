@@ -70,14 +70,15 @@ Route::get('/adminDcaResults', [AdminController::class, "adminDcaResults"])->nam
 Route::get('/deanDashboard', [DeanController::class, "deanDashboard"])->name("deanDashboard");
 Route::get('/deanResults/{schoolId}', [DeanController::class, "deanResults"])->name("deanResults");
 Route::get('/deanSchools', [DeanController::class, "deanSchools"])->name("deanSchools");
-Route::get('/deanStudentView/{courseId}', [DeanController::class, "deanStudentView"])->name("deanStudentView");
+Route::get('/deanStudentView/{sectionId}', [DeanController::class, "deanStudentView"])->name("deanStudentView");
 Route::get("/deanViewAnswer/{submitId}", [DeanController::class, "deanViewAnswer"])->name("deanViewAnswer");
 Route::get('/deanSchools/Filter', [DeanController::class, "deanSchoolFilter"])->name("deanSchoolFilter");
+Route::get('/deanResult/Filter', [DeanController::class, "deanResultsFilter"])->name("deanResultsFilter");
 
 #Rutas directores
 Route::get('/directorDashboard', [DirectorController::class, "directorDashboard"])->name("directorDashboard");
 Route::get('/directorResults', [DirectorController::class, "directorResults"])->name("directorResults");
-Route::get('/directorStudentView/{courseId}', [DirectorController::class, "directorStudentView"])->name("directorStudentView");
+Route::get('/directorStudentView/{sectionId}', [DirectorController::class, "directorStudentView"])->name("directorStudentView");
 Route::get('/directorViewAnswer/{submitId}', [DirectorController::class, "directorViewAnswer"])->name("directorViewAnswer");
 Route::get('/directorFilter', [DirectorController::class, "directorFilter"])->name("directorFilter");
 
@@ -95,7 +96,7 @@ Route::get('/dean/excel', [DeanController::class, 'deanSchoolExcel'])->name('rep
 Route::get('/director/excel', [DirectorController::class, 'directorResultsExcel'])->name('reporte.directorResultsExcel');
 Route::get('/admin/excel', [AdminController::class, 'adminResultsExcel'])->name('reporte.adminResultsExcel');
 
-#ruta no autirzado
+#ruta no autorizado
 Route::get('/unauthorized',[LoginController::class,"unauthorized"])->name('unauthorized');
 
 #Ruta sesion muerta

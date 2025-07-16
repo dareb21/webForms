@@ -13,18 +13,16 @@ class Course extends Model
         "status",
   ];
 
-  public function professor()
-  {
-    return $this->belongsTo(User::class,'user_id');
-  }
+ 
 
 public function thisSchool()
 {
   return $this->belongsTo(School::class,"school_id");
 }
 
-  public function submits()
-  {
-    return $this->hasMany(SurveySubmit::class);
-  }
+public function sections()
+{
+  return $this->hasMany(Section::class);
+}
+
 }

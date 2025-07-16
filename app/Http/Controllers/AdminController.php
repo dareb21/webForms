@@ -8,6 +8,8 @@ use App\Models\QuestionGroup;
 use App\Models\QuestionOption;
 use App\Models\SurveySubmit;
 use App\Models\Course;
+use App\Models\School;
+use App\Models\Section;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\adminResultsExcel;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Cache;
 
 class AdminController extends Controller
 {
@@ -26,7 +29,6 @@ class AdminController extends Controller
     {
       return redirect()->back()->with('alert','Ya hay una evaluacion Activa');
     }
-     $thisSurvey = 
     $dateNow = Carbon::now('etc/GMT+6');
     $thisSurvey = Survey::find($surveyId);
 
@@ -38,6 +40,7 @@ class AdminController extends Controller
     $thisSurvey->update([
       "status" =>1,
     ]);
+    Survey::CacheActiveSurvey();
     return redirect()->route("adminEvaluation");
   }
 
@@ -45,9 +48,14 @@ class AdminController extends Controller
 
 public function UnableEvaluation($surveyId)
 {
-    Survey::where("id", $surveyId)->update([
-    "status" => 0,
-    ]);
+  $thisSurvey= Survey::select("status","id")->where("id", $surveyId)->first();
+if ($thisSurvey->status === 1)
+  {
+   $thisSurvey->status = 0;
+    $thisSurvey->save();
+  Survey::ForgetCache();
+  } 
+    
     return redirect()->route("adminEvaluation");
 }
 
@@ -55,12 +63,32 @@ public function UnableEvaluation($surveyId)
 
   public function adminDashboard()
     {
+
+    $schoolsId= School::pluck("id")->toArray();
+   $sections = DB::table('schools')
+    ->join('courses', 'schools.id', '=', 'courses.school_id')
+    ->join('sections', 'courses.id', '=', 'sections.course_id')
+    ->leftJoin('survey_submits', 'sections.id', '=', 'survey_submits.section_id')
+    ->whereIn('schools.id', $schoolsId)
+    ->select(
+        'schools.id',
+        DB::raw('COUNT(DISTINCT sections.id) as section_count'),
+        DB::raw('COUNT(DISTINCT CASE WHEN survey_submits.id IS NOT NULL THEN sections.id END) as sections_with_submits')
+    )
+    ->groupBy('schools.id')
+    ->get();
+
+  $allSections= $sections->sum("section_count"); //Esto no lo mando
+  $sectionsWithSubmits= $sections->sum("sections_with_submits"); //mandar esto 
+ $sectionsLeft = $allSections-$sectionsWithSubmits; // mandar esto
+
       $i=1;
       $resultados = collect();
       $thisYear= now()->year;
       $surveysOfThisYear=Survey::whereYear("created_at",$thisYear)->select("id")->get();
      // $thisIds =  $surveysOfThisYear->pluck("id");
     
+     
      foreach($surveysOfThisYear as $survey)
       {
        $data = DB::table("surveys as s")
@@ -90,12 +118,6 @@ public function UnableEvaluation($surveyId)
     $i+=1;
     }    
     $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
-
-
-  $allProfessor = User::where("role","professor")->count();
-  $amountProfessors =Course::has('submits')->get();
-  $professorsEvaluated=$amountProfessors->pluck("user_id")->unique()->count();
-
 
         return view("admin.adminDashboard",compact("resultados","anual","allProfessor","professorsEvaluated" ));
     }
@@ -802,4 +824,7 @@ public function adminDcaDashboard(){
 public function adminDcaResults(){
   return view("adminDCA.dcaResults");
 }
+
+
+
 }

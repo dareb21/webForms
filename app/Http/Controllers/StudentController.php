@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 use App\Models\QuestionOption;
 use App\Models\QuestionGroup;
 use App\Models\SurveySubmit;
@@ -14,6 +15,13 @@ use App\Models\Survey;
 
 class StudentController extends Controller
 {
+    private $cacheSurvey;
+
+    public function __construct()
+    {
+    $this->cacheSurvey =  Cache::get("cacheActiveSurvey");   
+    }
+
     public function studentDashboard()
     {
     
@@ -22,16 +30,15 @@ class StudentController extends Controller
 
     public function studentEvaluation(Request $request)
     {
-    $thisSurvey=Survey::with(["QuestionGroup.QuestionOption"])->where("status",1)->first();
-    
-    if(is_null($thisSurvey))
+    $thisSurvey = $this->cacheSurvey; 
+    if(!$thisSurvey)
     {
         return view("student.studentInactiveEvaluation");
     }
 
     $courseArrayPosition = $request->query('courseArrayPosition');
     $coursesId = $request->query('courseId');
-    if(SurveySubmit::where("user_id",23)->where("course_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
+    if(SurveySubmit::where("user_id",23)->where("section_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
     {
               return view("student.thankyouView");
      }
@@ -54,12 +61,11 @@ return view('student.studentEvaluation', compact('courseArrayPosition','coursesI
     }
     public Function studentSubmit(Request $request, $courseId)
     {
-       
-       $survey = Survey::select("id")->where("status", 1)->first();  // Guardar en cache en caso que escale
+         $thisSurvey = $this->cacheSurvey;  
         $surveySubmit=SurveySubmit::create([
         "DateSubmmited"=>now(),
-        "survey_id"=>$survey->id,
-        "course_id"=>$courseId,
+        "survey_id"=>$thisSurvey->id,
+        "section_id"=>$courseId,
         "user_id"=>23,
         "observations"=>$request->observaciones,
       ]);

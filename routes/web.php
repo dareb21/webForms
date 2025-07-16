@@ -64,6 +64,7 @@ Route::get('/adminSearchCourses', [AdminController::class,"searchCourse"])->name
 
 #Rutas admin DCA
 Route::get('/adminDcaDashboard', [AdminController::class, "adminDcaDashboard"])->name("adminDcaDashboard");
+Route::get('/adminDcaResults', [AdminController::class, "adminDcaResults"])->name("adminDcaResults");
 
 #Rutas decanos
 Route::get('/deanDashboard', [DeanController::class, "deanDashboard"])->name("deanDashboard");

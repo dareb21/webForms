@@ -1,4 +1,4 @@
-@extends('admin.adminLayout')
+@extends('adminDCA.adminDCALayout')
 @section('content')
 
 <!-- Main Content -->
@@ -61,7 +61,7 @@
                                 beginAtZero: true,
                                 suggestedMax: 25,
                                 ticks: {
-                                    stepSize: 5
+                                    stepSize: 1
                                 }
                             },
                             x: {
@@ -78,60 +78,66 @@
         <!-- Gráfico principal -->
         <div class="bg-white rounded-lg shadow-md p-6 flex-1">
             <div class="flex justify-between items-center mt-4 mb-4">
-                <h2 class="text-2xl text-gray-800 font-bold">Bienvenido Administrador</h2>
+                <h2 class="text-2xl text-gray-800 font-bold">Bienvenido Administrador DCA</h2>
             </div>
             <div class="flex justify-center items-center mb-2">
                 <h3 class="text-gray-700 font-bold md:mt-10 mb-2">Satisfacción por períodos</h3>
             </div>
             <div class="flex justify-center items-center">
-                <div class="md:w-85 md:h-85 relative">
+                <div class="w-full h-full md:max-w-[700px] md:h-[350px] relative">
                     <canvas id="revenueChart" class="w-full h-full"></canvas>
                 </div>
             </div>
+
         </div>
 
         <!-- Stats por período -->
         <div class="grid grid-cols-1 bg-orange-100 text-center sm:grid-cols-2 md:grid-cols-1 gap-4 md:w-64">
             <!-- Catedráticos evaluados -->
-            <div class="bg-white p-2 rounded-lg shadow-md">
-                <p class="font-bold text-gray-800 text-xl">Catedráticos evaluados</p>
-                <canvas id="progressChart" class="w-36 h-36 mx-auto"></canvas>
+            <div class="bg-white p-1 rounded-lg shadow-md">
+                <p class="font-bold text-gray-800 text-xl">Clases evaluadas</p>
+                <canvas id="progressChart" class="mt-2 w-36 h-30 mx-auto"></canvas>
             </div>
 
             <!-- Período 1 -->
-            <div class="bg-white p-2 rounded-lg shadow-md">
-                <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
-                    Período 1
-                    <a @click="showModalChart('Período 1',
-                          ['Maestro A', 'Maestro B', 'Maestro C', 'Maestro D', 'Maestro E'],
-                          [12, 17, 15, 14, 18])"
-                        class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white cursor-pointer">
-                        Ver más
-                    </a>
-                </p>
+            <div
+                class="bg-white p-2 rounded-lg shadow-md cursor-pointer hover:bg-blue-50 transition"
+                @click="showModalChart(
+                    'Período 1',
+                    ['Maestro A', 'Maestro B', 'Maestro C', 'Maestro D', 'Maestro E'],
+                    [12, 17, 15, 14, 18]
+                )"
+            >
+                <p class="font-bold text-gray-800 text-xl">Período 1</p>
+                <h2 class="text-3xl font-bold mt-2 text-gray-600">20</h2>
             </div>
 
             <!-- Período 2 -->
-            <div class="bg-white p-2 rounded-lg shadow-md">
-                <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
-                    Período 2
-                    <a @click="showModalChart('Período 1', [12, 15, 18, 14, 17])"
-                       class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white cursor-pointer">
-                        Ver más
-                    </a>
-                </p>
+            <div
+                class="bg-white p-2 rounded-lg shadow-md cursor-pointer hover:bg-blue-50 transition"
+                @click="showModalChart(
+                    'Período 2',
+                    ['Maestro F', 'Maestro G', 'Maestro H', 'Maestro I', 'Maestro J'],
+                    [12, 15, 18, 14, 17]
+                )"
+            >
+                <p class="font-bold text-gray-800 text-xl">Período 2</p>
+                <h2 class="text-3xl font-bold mt-2 text-gray-600">20</h2>
             </div>
 
             <!-- Período 3 -->
-            <div class="bg-white p-2 rounded-lg shadow-md">
-                <p class="font-bold text-gray-800 text-xl flex justify-between items-center">
-                    Período 3
-                    <a @click="showModalChart('Período 1', [12, 15, 18, 14, 17])"
-                       class="p-1 font-normal bg-white text-gray-700 border border-gray-500 rounded-md hover:bg-blue-600 hover:text-white cursor-pointer">
-                        Ver más
-                    </a>
-                </p>
+            <div
+                class="bg-white p-2 rounded-lg shadow-md cursor-pointer hover:bg-blue-50 transition"
+                @click="showModalChart(
+                    'Período 3',
+                    ['Maestro K', 'Maestro L', 'Maestro M', 'Maestro N', 'Maestro O'],
+                    [12, 15, 18, 14, 17]
+                )"
+            >
+                <p class="font-bold text-gray-800 text-xl">Período 3</p>
+                <h2 class="text-3xl font-bold mt-2 text-gray-600">20</h2>
             </div>
+
         </div>
     </div>
 
@@ -157,45 +163,54 @@
 <!-- Gráfico principal (torta de períodos) -->
 <script>
     new Chart(document.getElementById('revenueChart'), {
-        type: 'pie',
-        data: {
-            labels: ["Período 1", "Período 2", "Período 3"],
-            datasets: [{
-                label: 'Promedios por Período',
-                data: [17, 13, 20],
-                backgroundColor: ['#FF5C00', '#0000FF', '#00FFFF'],
-                borderColor: '#ffffff',
-                borderWidth: 2
-            }]
+    type: 'bar',
+    data: {
+        labels: ["Período 1", "Período 2", "Período 3"],
+        datasets: [{
+            label: 'Promedios por Período',
+            data: [17, 13, 20],
+            backgroundColor: ['#f7dc6f', '#0000FF', '#58d68d'],
+            borderColor: '#ffffff',
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false 
+            },
+            tooltip: { enabled: true }
         },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'bottom'
+        scales: {
+            y: {
+                min: 0,
+                max: 21,
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1,
+                }
                 },
-                tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            const label = context.label || '';
-                            const value = context.raw || 0;
-                            return `${label}: ${value}`;
-                        }
-                    }
+            x: {
+                title: {
+                    display: true,
+                    text: 'Períodos Académicos'
                 }
             }
+            
         }
-    });
+    }
+});
 
-    // Gráfico de catedráticos evaluados
+
+    // Gráfico de clases evaluados
     const value = 75;
     const remaining = 100 - value;
 
     new Chart(document.getElementById('progressChart'), {
         type: 'doughnut',
         data: {
-            labels: ['Progreso', 'Restante'],
+            labels: ['Clases evaluadas', 'Clases Restantes'],
             datasets: [{
                 data: [value, remaining],
                 backgroundColor: ['#0000FF', '#e5e7eb'],
@@ -207,7 +222,7 @@
             responsive: true,
             plugins: {
                 legend: { display: false },
-                tooltip: { enabled: false }
+                tooltip: { enabled: true }
             }
         }
     });

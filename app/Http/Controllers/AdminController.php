@@ -797,6 +797,9 @@ public function adminResultsExcel()
 }
 
 public function adminDcaDashboard(){
-  return view("admin.dcaDashboard");
+  return view("adminDCA.dcaDashboard");
+}
+public function adminDcaResults(){
+  return view("adminDCA.dcaResults");
 }
 }

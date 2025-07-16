@@ -607,7 +607,6 @@ $thisYear = session()->pull('year', now()->year);
                 "coursesData" => $coursesDataArray,
             ];
         }
-
   return view('admin.adminResults',compact("years","dataResults","courses"));
 }
 

@@ -468,111 +468,84 @@ switch ($action){
    public function adminStudentView($courseId, Request $request){
   
 
-      if (is_null($request->annualPeriod))
-      {
-      $data = DB::table('survey_submits as sb')
-      ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
-      ->join('courses as c', 'sb.course_id', '=', 'c.id')
-      ->join('users as u', 'sb.user_id', '=', 'u.id') 
-      ->join('users as prof', 'c.user_id', '=', 'prof.id') 
-      ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
-      ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-      ->where('c.id', $courseId)
-      ->whereYear('s.created_at',now()->year)
-      ->select(
-          'c.name as course',
-          'sb.id as submitId',
-          'prof.name as professorName',
-          'u.name as student',
-          DB::raw('SUM(qo.calification) as scoreStudent'),
-      )
-      ->groupBy('prof.name', 'c.name','submitId')
-      ->paginate(10);
-      }
-      else
-      {
+     $section = Section::with("professor", "course")->find($courseId);
+        $profesor = $section->professor->name;
+        $courseName = $section->course->name;
 
-$data = DB::table('survey_submits as sb')
-      ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
-      ->join('courses as c', 'sb.course_id', '=', 'c.id')
-      ->join('users as u', 'sb.user_id', '=', 'u.id') 
-      ->join('users as prof', 'c.user_id', '=', 'prof.id') 
-      ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
-      ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-      ->where('c.id', $courseId)
-      ->where('s.term', $request->annualPeriod) 
-      ->whereYear('s.created_at',$request->annualYear)
-      ->select(
-          'c.name as course',
-          'sb.id as submitId',
-          'prof.name as professorName',
-          'u.name as student',
-          DB::raw('SUM(qo.calification) as scoreStudent'),
-      )
-      ->groupBy('prof.name', 'c.name','submitId')
-      ->paginate(10);
-      }
+        $data = DB::table('survey_submits as sb')
+            ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+            ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
+            ->join("courses as c", "sec.course_id", "=", "c.id")
+            ->join('users as u', 'sb.user_id', '=', 'u.id')
+            ->join('users as prof', 'sec.user_id', '=', 'prof.id')
+            ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+            ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+            ->where('sec.id', $section->id)
+            ->whereYear('s.created_at', now()->year)
+            ->select(
+                'c.name as course',
+                'sec.code as section',
+                'sb.id as submitId',
+                'prof.name as professorName',
+                'u.name as student',
+                DB::raw('SUM(qo.calification) as scoreStudent'),
+            )
+            ->groupBy('prof.name', 'c.name', 'submitId')
+            ->paginate(10);
+        if ($data->isEmpty()) {
+            $noInfo = True;
+            return view('admin.adminStudentView', compact("noInfo"));
+        }
+        foreach ($data as $item) {
+            $resultados[] = [
+                "score" => $item->scoreStudent,
+                "profesor" => $profesor,
+                "course" => $courseName,
+                "nameStudent" => $item->student,
+                "submitId" => $item->submitId,
+            ];
+        }
 
-      if ($data)
-      {
-      foreach ($data as $item) {
-          $resultados[] = [            
-              "score" => $item->scoreStudent,
-              "profesor" => $item->professorName,
-              "course" => $item->course,
-              "nameStudent" => $item->student,
-              "submitId"=>$item->submitId,
-          ];
-          }    
-        }else{
-          $resultados[] = [
-            "score" => 0,
-            "profesor" => "n/a",
-            "course" => $course->name,
-            "courseId" =>0
-        ];
-      }
-  
+
   $years = Survey::selectRAW("Year(dateStart)")
       ->distinct()
       ->get();
-
+     
       return view('admin.adminStudentView',compact("years","resultados","data"));
+
   }
 
 public function adminViewAnswer($submitId)
 {
-    $submit = SurveySubmit::with(['user', 'course', 'survey'])->findOrFail($submitId);    
-$data = DB::table('surveys as s')
-    ->select(
-        'qg.groupName as indicator',
-        'qo.option as answer',
-        'sb.observations as observation'
-    )
-    ->join('question_groups as qg', 's.id', '=', 'qg.survey_id')
-    ->join('question_options as qo', 'qg.id', '=', 'qo.question_group_id')
-    ->join('response_submits as rs', 'qo.id', '=', 'rs.question_option_id')
-    ->join('survey_submits as sb', 'rs.survey_submit_id', '=', 'sb.id')
-    ->join('courses as c', 'sb.course_id', '=', 'c.id')
-    ->join('users as u', 'sb.user_id', '=', 'u.id')
-    ->where('s.id', $submit->survey_id)
-    ->where('u.id', $submit->user_id)
-    ->where('c.id', $submit->course_id)
-    ->distinct()
-    ->orderBy('qg.groupName')
-    ->get();
-    foreach($data as $item)
-    {
-      $answer[]= [
-        "indicator" =>$item->indicator,
-        "answer" =>$item->answer, 
-      ];
-    }
-     $answer[]= [
-       "observation" =>$data[0]->observation, 
-     ];
-
-return $answer; 
+  $submit = SurveySubmit::findOrFail($submitId);
+        $data = DB::table('surveys as s')
+            ->join('question_groups as qg', 's.id', '=', 'qg.survey_id')
+            ->join('question_options as qo', 'qg.id', '=', 'qo.question_group_id')
+            ->join('response_submits as rs', 'qo.id', '=', 'rs.question_option_id')
+            ->join('survey_submits as sb', 'rs.survey_submit_id', '=', 'sb.id')
+            ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
+            ->join('users as u', 'sb.user_id', '=', 'u.id')
+            ->where('s.id', $submit->survey_id)
+            ->where('u.id', $submit->user_id)
+            ->where('sec.id', $submit->section_id)
+            ->select(
+                'qg.groupName as indicator',
+                'qo.option as answer',
+                'sb.observations as observation'
+            )
+            ->distinct()
+            ->orderBy('qg.groupName')
+            ->get();
+        foreach ($data as $item) {
+            $answer[] = [
+                "indicator" => $item->indicator,
+                "answer" => $item->answer,
+            ];
+        }
+        $answer[] = [
+            "observation" => $data[0]->observation,
+        ];
+    return $answer; 
 }
 
 public function adminResults(){
@@ -584,41 +557,60 @@ if($courses -> isEmpty()){
   $noInfo=True;
   return view('admin.adminResults',compact("noInfo"));
 }
+$coursesId=$courses->pluck("id")->toArray();
 $thisYear = session()->pull('year', now()->year);
-    foreach ($courses as $course)
-     {
-        $data = DB::table('survey_submits as sb')
+    
+    $data = DB::table('survey_submits as sb')
         ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
-        ->join('courses as c', 'sb.course_id', '=', 'c.id')
-        ->join('users as u', 'sb.user_id', '=', 'u.id') 
-        ->join('users as prof', 'c.user_id', '=', 'prof.id') 
-        ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
-        ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-        ->where('c.id', $course->id) 
+            ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
+            ->join('courses as c', 'sec.course_id', '=', 'c.id')
+            ->join('users as u', 'sb.user_id', '=', 'u.id')
+            ->join('users as prof', 'sec.user_id', '=', 'prof.id')
+            ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+            ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+        ->whereIn('sec.id', $coursesId) 
         ->whereYear('s.created_at',$thisYear)
         ->select(
-            'prof.name as professorName',
+               'prof.name as professorName',
+                'prof.id as professorId',
+                'c.name as courses',
+                'sec.id as sectionId',
+                'sec.code as sectionCode',
             DB::raw('SUM(qo.calification) as totSurvey'),
             DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
             )
-        ->groupBy('prof.name')
-        ->first();
-      if (!$data)
-    {
-      $noInfo=True;
-        return view('admin.adminResults',compact("years","noInfo"));
-    }  
-      $score = round(($data->totSurvey / $data->totStudents));
-      $resultados[] = [
-            "score" => $score,
-            "profesor" => $data->professorName,
-            "course" => $course->name,
-            "courseId" =>$course->id
-        ];
+        ->groupBy('prof.name', 'sec.id')
+    ->paginate(10);
+    $dataResults = [];
+    $dataId = $data->pluck("professorId")->unique();
+     foreach ($dataId as $index => $id) {
+            $thisItem = $data->where("professorId", $id);
+            $totsurvey = ($thisItem->pluck("totSurvey"))->sum();
+            $divisor = ($thisItem->pluck("totStudents"))->sum();
+            $avgScore = round($totsurvey / $divisor);
 
+            $coursesData = $thisItem->map(function ($i) {
+                $totSurveyPerCourse = $i->totSurvey;
+                $totStudentPerCourse = $i->totStudents;
+                $totPerCourse = round($totSurveyPerCourse / $totStudentPerCourse);
+                return [
+                    "sectionId" => $i->sectionId,
+                    "sectionCode" => $i->sectionCode,
+                    "course" => $i->courses,
+                    "totPerCourse" => $totPerCourse
+                ];
+            });
+            $coursesDataArray = $coursesData->toArray();
+            $dataResults[] = [
+                "professorName" => $data[$index]->professorName,
+                "professorScoreAvg" => $avgScore,
+                "coursesData" => $coursesDataArray,
+            ];
+        }
+
+  return view('admin.adminResults',compact("years","dataResults","courses"));
 }
-  return view('admin.adminResults',compact("years","resultados","courses"));
-}
+
 
 
 

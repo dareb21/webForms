@@ -78,7 +78,7 @@ if ($thisSurvey->status === 1)
     ->groupBy('schools.id')
     ->get();
 
-  $allSections= $sections->sum("section_count"); //Esto no lo mando
+  $allSections = $sections->sum("section_count"); //Esto no lo mando
   $sectionsWithSubmits= $sections->sum("sections_with_submits"); //mandar esto 
  $sectionsLeft = $allSections-$sectionsWithSubmits; // mandar esto
 
@@ -119,7 +119,7 @@ if ($thisSurvey->status === 1)
     }    
     $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
 
-        return view("admin.adminDashboard",compact("resultados","anual","allProfessor","professorsEvaluated" ));
+        return view("admin.adminDashboard",compact("resultados","anual","sectionsWithSubmits","allSections" ));
     }
 
 
@@ -579,7 +579,7 @@ public function adminResults(){
 $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-$courses = Course::has('submits')->paginate(10);
+$courses = Section::has('submits')->paginate(10);
 if($courses -> isEmpty()){
   $noInfo=True;
   return view('admin.adminResults',compact("noInfo"));

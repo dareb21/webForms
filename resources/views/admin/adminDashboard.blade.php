@@ -19,7 +19,7 @@
             </div>     
             <div class="flex justify-between items-center mb-2">
                 <h3 class="text-gray-700 font-bold md:mt-10 mb-2 text-left">Satisfacción por períodos</h3>
-                <span class="text-md font-medium text-right">Catedráticos evaluados: {{ $professorsEvaluated }}  / {{ $allProfessor }}</span>
+                <span class="text-md font-medium text-right">Clases evaluadas: {{ $sectionsWithSubmits }}  / {{ $allSections}}</span>
             </div>
             <canvas id="revenueChart" height="120"></canvas>
         </div>

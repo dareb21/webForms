@@ -53,17 +53,17 @@
                                 </select>
                             </div>
 
-                            <button type="submit" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold py-1 px-4 rounded">
+                            <button type="submit" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold py-1 px-3 rounded">
                                 Buscar
                             </button>
 
-                            <a href="{{ route('adminResults') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                            <a href="{{ route('adminResults') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-3 rounded">
                                 Refrescar
                             </a>
-                            <a href="{{ route('admin.adminPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                            <a href="{{ route('admin.adminPDF') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-3 rounded">
                                 PDF
                             </a>
-                            <a href="{{ route('reporte.adminResultsExcel') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
+                            <a href="{{ route('reporte.adminResultsExcel') }}" class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-3 rounded">
                                 EXCEL
                             </a>
                         </form>
@@ -78,13 +78,14 @@
                         <tr>
                             <th class="px-4 py-2 text-center">Catedrático</th>
                             <th class="px-4 py-2 text-center">Promedio</th>
+                            <th class="px-4 py-2 text-center">Sección</th>
                             <th class="px-4 py-2 text-center">Acción</th>
                         </tr>
                     </thead>
                     
                         @if (isset($noInfo) && $noInfo)
                             <tbody x-data="{ open: false }" class="border-b">
-                            @for ($i=1; $i<=5; $i++)
+                            @for ($i=1; $i<=4; $i++)
                                 <td class="px-4 py-2 text-center"></td>
                             @endfor
                         @else
@@ -124,10 +125,10 @@
                         @endif
                     </tbody>
                 </table>
-                <!-- Paginación -->
+                {{-- <!-- Paginación -->
                 <div class="w-full flex justify-center py-4">
                     {{ $courses->links() }} 
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

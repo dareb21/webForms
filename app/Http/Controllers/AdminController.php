@@ -743,35 +743,65 @@ if(!$data->courses)
 
 public function exportarResultadosPDF()
 {
-  $courses = Course::has('submits')->paginate(10);
-  $thisYear = session()->pull('year', now()->year);
-    foreach ($courses as $course)
-     {
-        $data = DB::table('survey_submits as sb')
+  $years = Survey::selectRAW("Year(dateStart)")
+    ->distinct()
+    ->get();
+$courses = Section::has('submits')->paginate(10);
+if($courses -> isEmpty()){
+  $noInfo=True;
+  return view('admin.adminResults',compact("noInfo"));
+}
+$coursesId=$courses->pluck("id")->toArray();
+$thisYear = session()->pull('year', now()->year);
+    
+    $data = DB::table('survey_submits as sb')
         ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
-        ->join('courses as c', 'sb.course_id', '=', 'c.id')
-        ->join('users as u', 'sb.user_id', '=', 'u.id') 
-        ->join('users as prof', 'c.user_id', '=', 'prof.id') 
-        ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
-        ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-        ->where('c.id', $course->id) 
+            ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
+            ->join('courses as c', 'sec.course_id', '=', 'c.id')
+            ->join('users as u', 'sb.user_id', '=', 'u.id')
+            ->join('users as prof', 'sec.user_id', '=', 'prof.id')
+            ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+            ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+        ->whereIn('sec.id', $coursesId) 
         ->whereYear('s.created_at',$thisYear)
         ->select(
-            'prof.name as professorName',
+               'prof.name as professorName',
+                'prof.id as professorId',
+                'c.name as courses',
+                'sec.id as sectionId',
+                'sec.code as sectionCode',
             DB::raw('SUM(qo.calification) as totSurvey'),
             DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
             )
-        ->groupBy('prof.name')
-        ->first();
-        $score = round(($data->totSurvey / $data->totStudents));
-        $resultados[] = [
-            "score" => $score,
-            "profesor" => $data->professorName,
-            "course" => $course->name,
-            "courseId" =>$course->id
-        ];
-      }
-  return Pdf::loadView('pdf.adminResultsPDF', compact('resultados'))
+        ->groupBy('prof.name', 'sec.id')
+    ->paginate(10);
+    $dataResults = [];
+    $dataId = $data->pluck("professorId")->unique();
+     foreach ($dataId as $index => $id) {
+            $thisItem = $data->where("professorId", $id);
+            $totsurvey = ($thisItem->pluck("totSurvey"))->sum();
+            $divisor = ($thisItem->pluck("totStudents"))->sum();
+            $avgScore = round($totsurvey / $divisor);
+
+            $coursesData = $thisItem->map(function ($i) {
+                $totSurveyPerCourse = $i->totSurvey;
+                $totStudentPerCourse = $i->totStudents;
+                $totPerCourse = round($totSurveyPerCourse / $totStudentPerCourse);
+                return [
+                    "sectionId" => $i->sectionId,
+                    "sectionCode" => $i->sectionCode,
+                    "course" => $i->courses,
+                    "totPerCourse" => $totPerCourse
+                ];
+            });
+            $coursesDataArray = $coursesData->toArray();
+            $dataResults[] = [
+                "professorName" => $data[$index]->professorName,
+                "professorScoreAvg" => $avgScore,
+                "coursesData" => $coursesDataArray,
+            ];
+        }
+  return Pdf::loadView('pdf.adminResultsPDF', compact('dataResults'))
               ->setPaper('a4', 'portrait')
               ->download('admin-resultados.pdf');
 }

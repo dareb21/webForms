@@ -25,28 +25,28 @@
 </head>
 <body>
     <h2>Resultados por Evaluación</h2>
-    <table class="table-auto border border-gray-400 w-full min-w-[600px] text-left">
-        <thead>
+    <table class="min-w-full border border-gray-300 divide-y divide-gray-200">
+        <thead class="bg-blue-600 text-white">
             <tr>
-                <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Catedrático</th>
-                <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Clase</th>
-                <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Sección</th>
-                <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Calificación</th>
+                <th class="px-4 py-2 text-center">Catedrático</th>
+                <th class="px-4 py-2 text-center">Promedio</th>
             </tr>
         </thead>
-        <tbody>
+        
             @if (isset($noInfo) && $noInfo)
-                @for ($i=1; $i<=6; $i++)
-                    <td class="border border-gray-400 px-4 py-2 text-center"></td>
+                <tbody x-data="{ open: false }" class="border-b">
+                @for ($i=1; $i<=4; $i++)
+                    <td class="px-4 py-2 text-center"></td>
                 @endfor
             @else
-                @foreach ($resultados as $resultado)
+                @foreach ($dataResults as $resultado)
+                <tbody x-data="{ open: false }" class="border-b">
                     <tr>
-                        <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['profesor'] }}</td>
-                        <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['course'] }}</td>
-                        <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                        <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['score'] }}</td>
+                        <td class="px-4 py-2 text-center">{{ $resultado['professorName'] }}</td>
+                        <td class="px-4 py-2 text-center">{{ $resultado['professorScoreAvg'] }}</td>
                     </tr>
+                </td>
+                </tr>
                 @endforeach
             @endif
         </tbody>

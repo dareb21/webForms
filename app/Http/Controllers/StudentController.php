@@ -42,7 +42,7 @@ class StudentController extends Controller
 
     $courseArrayPosition = $request->query('courseArrayPosition');
     $coursesId = $request->query('courseId');
-    if(SurveySubmit::where("user_id",23)->where("section_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
+    if(SurveySubmit::where("user_id",24)->where("section_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
     {
               return view("student.thankyouView");
      }
@@ -70,7 +70,7 @@ return view('student.studentEvaluation', compact('courseArrayPosition','coursesI
         "DateSubmmited"=>now(),
         "survey_id"=>$thisSurvey->id,
         "section_id"=>$courseId,
-        "user_id"=>23,
+        "user_id"=>24,
         "observations"=>$request->observaciones,
       ]);
       

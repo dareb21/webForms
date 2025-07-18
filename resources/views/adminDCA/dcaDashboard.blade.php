@@ -1,6 +1,9 @@
 @extends('adminDCA.adminDCALayout')
 @section('content')
-
+@php
+    $k = 0;
+    $j = 0;
+@endphp
 <!-- Main Content -->
 <!-- Chart de períodos -->
 <div class="flex-1 ml-0 md:h-full md:ml-64 p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto"
@@ -80,8 +83,21 @@
             <div class="flex justify-between items-center mt-4 mb-4">
                 <h2 class="text-2xl text-gray-800 font-bold">Bienvenido Administrador DCA</h2>
             </div>
-            <div class="flex justify-center items-center mb-2">
-                <h3 class="text-gray-700 font-bold md:mt-10 mb-2">Satisfacción por períodos</h3>
+            <div class="flex flex-col md:flex-row justify-between md:items-center space-y-2 md:space-y-0 md:space-x-1 w-full mt-10 mb-2">
+                <div class="text-gray-700 font-bold">
+                    <h3>Satisfacción por períodos</h3>
+                </div>
+                <div>
+                    <label for="schoolSegmentation" class="text-gray-700 font-bold">Segmentación: </label>
+                    <select name="schoolSegmentation" id="schoolSegmentation" class="rounded-sm p-1 shadow-md">
+                        <option value="">Datos Generales</option>
+                        <option value="">Escuela de Ciencias Informáticas</option>
+                        <option value="">Escuela de Ciencias Exactas</option>
+                        <option value="">Escuela de Derecho</option>
+                        <option value="">Escuela de Comunicación</option>
+                        <option value="">Escuela de Agronómicas</option>
+                    </select>
+                </div>
             </div>
             <div class="flex justify-center items-center">
                 <div class="w-full h-full md:max-w-[700px] md:h-[350px] relative">
@@ -137,10 +153,43 @@
                 <p class="font-bold text-gray-800 text-xl">Período 3</p>
                 <h2 class="text-3xl font-bold mt-2 text-gray-600">20</h2>
             </div>
-
         </div>
     </div>
-
+    <!-- Puntuación docentes --->
+    <!-- Mayores a 15 -->
+    <div class="flex flex-col-2 mt-6 md:h-full md:flex-row gap-6">
+        <div class="bg-white text-center p-2 rounded-lg shadow-m w-1/2">
+            <p class="font-bold text-gray-800 text-xl">Docentes Mayor a 15</p>
+            <div class="mt-2">
+                <table class="mx-auto w-4/5">
+                    <tbody>
+                        @for ($k; $k <= 10; $k++)
+                            <tr class="border-b">
+                                <td class="py-2 text-gray-700 text-left">Maestro {{ chr(65 + $k) }}</td>
+                                <td class="py-2 text-gray-900 text-right font-bold">{{ rand(16, 20) }}</td>
+                            </tr>
+                        @endfor
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Menores a 10 -->
+        <div class="bg-white text-center p-2 rounded-lg shadow-m w-1/2">
+            <p class="font-bold text-gray-800 text-xl">Docentes Menor a 10</p>
+            <div class="mt-2">
+                <table class="mx-auto w-4/5">
+                    <tbody>
+                        @for ($j; $j <= 10; $j++)
+                            <tr class="border-b">
+                                <td class="py-2 text-gray-700 text-left">Maestro {{ chr(65 + $j) }}</td>
+                                <td class="py-2 text-gray-900 text-right font-bold">{{ rand(0, 9) }}</td>
+                            </tr>
+                        @endfor
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     <!-- Modal -->
     <div x-show="openModal" x-cloak
         class="fixed inset-0 bg-gray-900/30 backdrop-blur-sm z-50 flex items-center justify-center">

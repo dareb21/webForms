@@ -77,20 +77,37 @@
                                     <td colspan="3" class="px-4 py-2 bg-gray-50 text-sm">
                                         <div class="space-y-3">
                                             @foreach ($results['coursesData'] as $course)
-                                                <div class="grid grid-cols-3 gap-4 items-center">
-                                                    <span>
-                                                        <strong>Clase:</strong> {{ $course['course'] }}
-                                                    </span>
-                                                    <span>
-                                                        <strong>Calificación:</strong> {{ $course['totPerCourse'] }}
-                                                    </span>
-                                                    <span>
-                                                        <strong>Evaluaciones estudiantes &rarr;</strong>
-                                                    <a href="{{ route('deanStudentView', ['sectionId' => $course['sectionId'] ?? '0', 'Professor' => $results['professorName'], 'courses' => $course['course']]) }}" class="ml-2 p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition">
-                                                            <strong>Ver más</strong>
-                                                        </a>
-                                                    </span>
+                                                <div class="w-full max-w-4xl grid grid-cols-4 gap-x-6 items-center border border-gray-200 rounded px-4 py-2 bg-white shadow-sm">
+                                            
+                                                <!-- Columna 1: Clase -->
+                                                <div class="text-left truncate">
+                                                    <strong>Clase:</strong> {{ $course['course'] }}
                                                 </div>
+
+                                                <!-- Columna 2: Sección -->
+                                                <div class="text-left truncate">
+                                                    <strong>Sección:</strong> {{ $course['sectionCode'] }}
+                                                </div>
+
+                                                <!-- Columna 3: Calificación -->
+                                                <div class="text-left truncate">
+                                                    <strong>Calificación:</strong> {{ $course['totPerCourse'] }}
+                                                </div>
+
+                                                <!-- Columna 4: Botón Ver más -->
+                                                <div class="text-right">
+                                                    <a href="{{ route('adminStudentView', [
+                                                        'courseId' => $course['sectionId'],
+                                                        'course' => $course['course'],
+                                                        'profesor' => $results['professorName'],
+                                                        'annualYear' => request('annualYear'),
+                                                        'annualPeriod' => request('annualPeriod')
+                                                    ]) }}"
+                                                    class="px-2 py-0.5 bg-blue-600 text-white rounded-sm hover:bg-blue-700 text-xs transition whitespace-nowrap">
+                                                        Ver más
+                                                    </a>
+                                                </div>
+                                            </div>
                                             @endforeach
                                         </div>
                                     </td>

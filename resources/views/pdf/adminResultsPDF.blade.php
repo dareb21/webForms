@@ -21,10 +21,13 @@
         th {
             background-color: #eee;
         }
+        h2{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <h2>Resultados por Evaluación</h2>
+    <h2>Resultados Evaluaciones</h2>
     <table class="min-w-full border border-gray-300 divide-y divide-gray-200">
         <thead class="bg-blue-600 text-white">
             <tr>

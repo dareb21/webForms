@@ -10,6 +10,14 @@
                 icon: "warning"
             });
         </script>
+    @elseif(session('success'))
+        <script>
+            Swal.fire({
+                title: "Exitoso",
+                text: {!! json_encode(session('success')) !!},
+                icon: "success"
+            });
+        </script>
     @endif
 
 <!-- Main Content -->
@@ -53,7 +61,7 @@
                     </thead>
                     <tbody>
                         @if (isset($noInfo) && $noInfo)
-                            @for ($i=1; $i<=6; $i++)
+                            @for ($i=1; $i<=5; $i++)
                                 <td class="border border-gray-400 px-4 py-2 text-center"></td>
                             @endfor
                         @else
@@ -62,7 +70,7 @@
                                     <td class="border border-gray-400 px-4 py-2 text-center">{{ $course['courseProfessor'] }}</td>
                                     <td class="border border-gray-400 px-4 py-2 text-center">{{ $course['courseName'] }}</td>
                                     <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
-                                    @if ($course['courseStatus'] ===1)
+                                    @if ($course['courseStatus'] === 1 )
                                         <td class="border border-gray-400 px-4 py-2 text-center">Activo</td>
                                     @else
                                         <td class="border border-gray-400 px-4 py-2 text-center">Inactivo</td>
@@ -70,13 +78,13 @@
                                     
                                     <td class="md:w-40 border border-gray-400 px-4 py-2 text-center">
                                         <div class="flex flex-col sm:flex-row sm:justify-center sm:items-center gap-1">
-                                            <form action="{{ route('blockCourse', ['courseId'=> $course['courseId']]) }}" method="POST">
+                                            <form action="{{ route('blockCourse', ['sectionId'=> $course['sectionId']]) }}" method="POST">
                                                 @csrf
                                                 <button class="bg-red-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-1 rounded w-full sm:w-auto">
                                                     Bloquear
                                                 </button>
                                             </form>
-                                            <form action="{{ route('unblockCourse', ['courseId'=> $course['courseId']]) }}" method="POST">
+                                            <form action="{{ route('unblockCourse', ['sectionId'=> $course['sectionId']]) }}" method="POST">
                                                 @csrf
                                                 <button class="bg-green-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-1 rounded w-full sm:w-auto">
                                                     Desbloquear
@@ -84,16 +92,17 @@
                                             </form>
                                         </div>
                                     </td>
-
                                 </tr>
                             @endforeach
                         @endif
                     </tbody>
                 </table>
-                {{-- <!-- Paginación -->
-                <div class="w-full flex justify-center py-4">
-                    {{ $data->links() }}
-                </div> --}}
+                <!-- Paginación -->
+                @if ($changePagination)
+                    <div class="w-full flex justify-center py-4">
+                        {{ $data->links() }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>

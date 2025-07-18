@@ -684,7 +684,7 @@ if (!$hasData)
 public function adminControlCourses()
 {
   $courses = [];
-  $data = Course::with(["professor"])->paginate(10);
+  $data = Section::with(["professor"])->paginate(10);
   if(!$data)
   {
     $noInfo = True;
@@ -695,26 +695,26 @@ public function adminControlCourses()
     $courses[]=[
       "courseName" => $item->name,
       "courseProfessor"=>$item->professor->name,
-      "courseId" =>$item->id,
+      "sectionId" =>$item->id,
       "courseStatus"=>$item->status,
     ];
   }
-  return view("admin.adminControlCourses",compact("courses","data"));
+  $changePagination = true;
+  return view("admin.adminControlCourses",compact("courses","data","changePagination"));
 }
 
 
-public function blockCourse($courseId)
+public function blockCourse($sectionId)
 {
-  return response()->json('ok');
-$thisCourse = Course::findOrFail($courseId);
+$thisCourse = Section::findOrFail($sectionId);
 $thisCourse->update(["status" => 0]);
-return response('ok');
+return back()->with('success', 'Curso bloqueado correctamente');
 
 }
 
-public function unblockCourse($courseId)
+public function unblockCourse($sectionId)
 {
-   $thisCourse = Course::findOrFail($courseId);
+   $thisCourse = Course::findOrFail($sectionId);
 $thisCourse->update(["status" => 1]);
 return back()->with('success', 'Curso activado correctamente');
 
@@ -723,22 +723,25 @@ return back()->with('success', 'Curso activado correctamente');
 public function searchCourse(Request $request)
 {
 $userSearch = User::where("name", "LIKE", $request->courseSearch. "%")->where("role","professor")->select("id","name")->first(); /*$request->courseSearch*/
-$data = User::with(["Courses"])->findOrFail($userSearch->id);
-if(!$data->courses)
+$data = User::with(["Section"])->findOrFail($userSearch->id);
+if(!$data->section)
   {
+    $changePagination = false;
     $noInfo = True;
-    return view("admin.adminControlCourses",compact("noInfo"));
+    return view("admin.adminControlCourses",compact("noInfo","changePagination"));
   }
-  foreach ($data->courses as $item)
+  foreach ($data->section as $item)
   {
     $courses[]=[
       "courseName" => $item->name,
       "courseProfessor"=>$data->name,
-      "courseId" =>$item->id,
+      "sectionId" =>$item->id,
       "courseStatus"=>$item->status,
     ];
   }
-  return view("admin.adminControlCourses",compact("courses"));
+  
+  $changePagination = false;
+  return view("admin.adminControlCourses",compact("courses","changePagination"));
 }
 
 public function exportarResultadosPDF()
@@ -846,6 +849,9 @@ public function adminDcaResults(){
   return view("adminDCA.dcaResults");
 }
 
+public function adminDcaStudentView(){
+  return view("adminDCA.dcaStudentView");
+}
 
 
 }

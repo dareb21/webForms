@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("code");
             $table->foreignId("course_id")->constrained();
             $table->foreignId("user_id")->constrained();
+            $table->boolean("status");
             $table->timestamps();
           /*
           Indexar los campos

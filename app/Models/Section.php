@@ -10,7 +10,8 @@ class Section extends Model
       protected $fillable = [
         'code',
         'course_id',
-        'user_id'
+        'user_id',
+        "status",
     ];
 
   public function professor()

@@ -566,7 +566,6 @@ foreach ($schools as $index => $school) {
     foreach ($classList as $className) {
         Course::create([
             'name' => $className,
-            'status' =>1,
             'school_id' => $school->id,
         ]);
     }
@@ -589,7 +588,8 @@ foreach ($courses as $course) {
         Section::create([
             'course_id' => $course->id,
             'code' => strtoupper($codigo),
-            'user_id' => $professor->id, // Asegúrate que la columna exista
+            'user_id' => $professor->id,
+            'status' => 1, // Asegúrate que la columna exista
         ]);
     }
 }

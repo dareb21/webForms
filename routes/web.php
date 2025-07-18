@@ -58,13 +58,14 @@ Route::get('/adminEvaluation/search', [AdminController::class,"evaluationSearch"
 Route::get('/adminResults/search', [AdminController::class,"resultSearch"])->name("adminResultSearch");
 Route::get('/adminStudent/search', [AdminController::class,"studentSearch"])->name("adminStudentSearch");
 Route::get('/adminControlCourses', [AdminController::class,"adminControlCourses"])->name("adminControlCourses");
-Route::post('/adminControlCourses/block/{courseId}', [AdminController::class,"blockCourse"])->name("blockCourse");
-Route::post('/adminControlCourses/unblock/{courseId}', [AdminController::class,"unblockCourse"])->name("unblockCourse");
+Route::post('/adminControlCourses/block/{sectionId}', [AdminController::class,"blockCourse"])->name("blockCourse");
+Route::post('/adminControlCourses/unblock/{sectionId}', [AdminController::class,"unblockCourse"])->name("unblockCourse");
 Route::get('/adminSearchCourses', [AdminController::class,"searchCourse"])->name("searchCourse");
 
 #Rutas admin DCA
 Route::get('/adminDcaDashboard', [AdminController::class, "adminDcaDashboard"])->name("adminDcaDashboard");
 Route::get('/adminDcaResults', [AdminController::class, "adminDcaResults"])->name("adminDcaResults");
+Route::get('/adminDcaStudentView', [AdminController::class, "adminDcaStudentView"])->name("adminDcaStudentView");
 
 #Rutas decanos
 Route::get('/deanDashboard', [DeanController::class, "deanDashboard"])->name("deanDashboard");

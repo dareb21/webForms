@@ -93,7 +93,7 @@
 
         <!-- Stats por período -->
         <div class="grid grid-cols-1 bg-orange-100 text-center sm:grid-cols-2 md:grid-cols-1 gap-4 md:w-64">
-            <!-- Catedráticos evaluados -->
+            <!-- Clases evaluados -->
             <div class="bg-white p-1 rounded-lg shadow-md">
                 <p class="font-bold text-gray-800 text-xl">Clases evaluadas</p>
                 <canvas id="progressChart" class="mt-2 w-36 h-30 mx-auto"></canvas>
@@ -167,11 +167,12 @@
     data: {
         labels: ["Período 1", "Período 2", "Período 3"],
         datasets: [{
-            label: 'Promedios por Período',
+            label: 'Puntaje',
             data: [17, 13, 20],
             backgroundColor: ['#f7dc6f', '#0000FF', '#58d68d'],
             borderColor: '#ffffff',
-            borderWidth: 2
+            borderWidth: 2,
+            maxBarThickness: 100,
         }]
     },
     options: {
@@ -204,7 +205,7 @@
 
 
     // Gráfico de clases evaluados
-    const value = 75;
+    const value = 55;
     const remaining = 100 - value;
 
     new Chart(document.getElementById('progressChart'), {
@@ -218,11 +219,15 @@
             }]
         },
         options: {
-            cutout: '80%',
+            cutout: '70%',
             responsive: true,
             plugins: {
                 legend: { display: false },
                 tooltip: { enabled: true }
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true,
             }
         }
     });

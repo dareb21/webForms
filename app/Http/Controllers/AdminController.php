@@ -18,9 +18,16 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\adminResultsExcel;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Cache;
+use App\Services\AdminServices;
 
 class AdminController extends Controller
 {
+
+  private $adminServices;
+  public function __construct(AdminServices $adminServices)
+  {
+        $this->adminServices = $adminServices;
+  }
 
   public function enableEvaluation($surveyId)
   {
@@ -63,72 +70,17 @@ if ($thisSurvey->status === 1)
 
   public function adminDashboard()
     {
-
-    $schoolsId= School::pluck("id")->toArray();
-   $sections = DB::table('schools')
-    ->join('courses', 'schools.id', '=', 'courses.school_id')
-    ->join('sections', 'courses.id', '=', 'sections.course_id')
-    ->leftJoin('survey_submits', 'sections.id', '=', 'survey_submits.section_id')
-    ->whereIn('schools.id', $schoolsId)
-    ->select(
-        'schools.id',
-        DB::raw('COUNT(DISTINCT sections.id) as section_count'),
-        DB::raw('COUNT(DISTINCT CASE WHEN survey_submits.id IS NOT NULL THEN sections.id END) as sections_with_submits')
-    )
-    ->groupBy('schools.id')
-    ->get();
-
-  $allSections = $sections->sum("section_count"); //Esto no lo mando
-  $sectionsWithSubmits= $sections->sum("sections_with_submits"); //mandar esto 
- $sectionsLeft = $allSections-$sectionsWithSubmits; // mandar esto
-
-      $i=1;
-      $resultados = collect();
-      $thisYear= now()->year;
-      $surveysOfThisYear=Survey::whereYear("created_at",$thisYear)->select("id")->get();
-     // $thisIds =  $surveysOfThisYear->pluck("id");
-    
-     
-     foreach($surveysOfThisYear as $survey)
-      {
-       $data = DB::table("surveys as s")
-    ->join("survey_submits as sb", "s.id", "=", "sb.survey_id")
-    ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
-    ->join("question_options as qo", "rs.question_option_id", "=", "qo.id")
-    ->where('s.id', $survey->id)
-    ->select(
-        DB::raw('SUM(qo.calification) as SumaNotaPeriodo'),
-        DB::raw('count(distinct(sb.id)) as Divisor'),
-    )
-    ->get();
-    
-    $numerador=$data->pluck("SumaNotaPeriodo");
-    $divisor=$data->pluck("Divisor");
-   if($divisor[0] == 0)
-   {
-    $notaperiodo=0;
-   }else
-   {
-    $notaperiodo=ceil($numerador[0]/$divisor[0]);
-   }
-   $resultados->push([
-        "termScore" => $notaperiodo,
-        "term" => $i,
-    ]);
-    $i+=1;
-    }    
-    $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
-
-        return view("admin.adminDashboard",compact("resultados","anual","sectionsWithSubmits","allSections" ));
+    $dashboard = $this->adminServices->dashboard();
+     return view("admin.adminDashboard",compact("dashboard"));
     }
 
 
   public function adminEvaluation()
     {
-      
     $surveys = Survey::paginate(10); 
     return view("admin.adminEvaluation",compact("surveys"));
-    }
+    
+  }
 
 
     public function adminEvaluationEdit($id)
@@ -465,150 +417,27 @@ switch ($action){
 }
 
 
-   public function adminStudentView($courseId, Request $request){
-  
-
-     $section = Section::with("professor", "course")->find($courseId);
-        $profesor = $section->professor->name;
-        $courseName = $section->course->name;
-
-        $data = DB::table('survey_submits as sb')
-            ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
-            ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
-            ->join("courses as c", "sec.course_id", "=", "c.id")
-            ->join('users as u', 'sb.user_id', '=', 'u.id')
-            ->join('users as prof', 'sec.user_id', '=', 'prof.id')
-            ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
-            ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-            ->where('sec.id', $section->id)
-            ->whereYear('s.created_at', now()->year)
-            ->select(
-                'c.name as course',
-                'sec.code as section',
-                'sb.id as submitId',
-                'prof.name as professorName',
-                'u.name as student',
-                DB::raw('SUM(qo.calification) as scoreStudent'),
-            )
-            ->groupBy('prof.name', 'c.name', 'submitId')
-            ->paginate(10);
-        if ($data->isEmpty()) {
-            $noInfo = True;
-            return view('admin.adminStudentView', compact("noInfo"));
-        }
-        foreach ($data as $item) {
-            $resultados[] = [
-                "score" => $item->scoreStudent,
-                "profesor" => $profesor,
-                "course" => $courseName,
-                "nameStudent" => $item->student,
-                "submitId" => $item->submitId,
-            ];
-        }
-
-
+   public function adminStudentView($courseId)
+   {
+  $adminStudentView = $this->adminServices->adminStudentView($courseId);
   $years = Survey::selectRAW("Year(dateStart)")
       ->distinct()
-      ->get();
-     
-      return view('admin.adminStudentView',compact("years","resultados","data"));
-
+      ->get(); 
+  return view('admin.adminStudentView',compact("years","resultados","data"));
   }
 
 public function adminViewAnswer($submitId)
 {
-  $submit = SurveySubmit::findOrFail($submitId);
-        $data = DB::table('surveys as s')
-            ->join('question_groups as qg', 's.id', '=', 'qg.survey_id')
-            ->join('question_options as qo', 'qg.id', '=', 'qo.question_group_id')
-            ->join('response_submits as rs', 'qo.id', '=', 'rs.question_option_id')
-            ->join('survey_submits as sb', 'rs.survey_submit_id', '=', 'sb.id')
-            ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
-            ->join('users as u', 'sb.user_id', '=', 'u.id')
-            ->where('s.id', $submit->survey_id)
-            ->where('u.id', $submit->user_id)
-            ->where('sec.id', $submit->section_id)
-            ->select(
-                'qg.groupName as indicator',
-                'qo.option as answer',
-                'sb.observations as observation'
-            )
-            ->distinct()
-            ->orderBy('qg.groupName')
-            ->get();
-        foreach ($data as $item) {
-            $answer[] = [
-                "indicator" => $item->indicator,
-                "answer" => $item->answer,
-            ];
-        }
-        $answer[] = [
-            "observation" => $data[0]->observation,
-        ];
-    return $answer; 
+     $this->adminServices->adminViewAnswer($submitId);
 }
 
 public function adminResults(){
+$adminResults = $this->adminServices->adminResults();
 $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-$courses = Section::has('submits')->paginate(10);
-if($courses -> isEmpty()){
-  $noInfo=True;
-  return view('admin.adminResults',compact("noInfo"));
-}
-$coursesId=$courses->pluck("id")->toArray();
-$thisYear = session()->pull('year', now()->year);
-    
-    $data = DB::table('survey_submits as sb')
-        ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
-            ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
-            ->join('courses as c', 'sec.course_id', '=', 'c.id')
-            ->join('users as u', 'sb.user_id', '=', 'u.id')
-            ->join('users as prof', 'sec.user_id', '=', 'prof.id')
-            ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
-            ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-        ->whereIn('sec.id', $coursesId) 
-        ->whereYear('s.created_at',$thisYear)
-        ->select(
-               'prof.name as professorName',
-                'prof.id as professorId',
-                'c.name as courses',
-                'sec.id as sectionId',
-                'sec.code as sectionCode',
-            DB::raw('SUM(qo.calification) as totSurvey'),
-            DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
-            )
-        ->groupBy('prof.name', 'sec.id')
-    ->paginate(10);
-    $dataResults = [];
-    $dataId = $data->pluck("professorId")->unique();
-     foreach ($dataId as $index => $id) {
-            $thisItem = $data->where("professorId", $id);
-            $totsurvey = ($thisItem->pluck("totSurvey"))->sum();
-            $divisor = ($thisItem->pluck("totStudents"))->sum();
-            $avgScore = round($totsurvey / $divisor);
 
-            $coursesData = $thisItem->map(function ($i) {
-                $totSurveyPerCourse = $i->totSurvey;
-                $totStudentPerCourse = $i->totStudents;
-                $totPerCourse = round($totSurveyPerCourse / $totStudentPerCourse);
-                return [
-                    "sectionId" => $i->sectionId,
-                    "sectionCode" => $i->sectionCode,
-                    "course" => $i->courses,
-                    "totPerCourse" => $totPerCourse
-                ];
-            });
-            $coursesDataArray = $coursesData->toArray();
-            $dataResults[] = [
-                "professorName" => $data[$index]->professorName,
-                "professorScoreAvg" => $avgScore,
-                "coursesData" => $coursesDataArray,
-            ];
-        }
-  return view('admin.adminResults',compact("years","dataResults","courses"));
-}
+  return view('admin.adminResults',compact("years"));}
 
 
 
@@ -618,7 +447,6 @@ public function resultSearch(Request $request)
      $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-  
      $thisYear=$request->annualYear;
      $term=$request->annualPeriod;
      if ($term==4)

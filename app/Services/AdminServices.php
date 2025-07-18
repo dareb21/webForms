@@ -51,6 +51,7 @@ foreach ($data as $item) {
 }
 $resultados=$resultadosCol->toArray();
 $anual = round($resultadosCol->pluck("termScore")->sum() / max(count($resultadosCol), 1));
+
 return ["resultsPerTerm" =>$resultados,"anual" =>$anual,"withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections];
 }
 
@@ -110,9 +111,9 @@ if($data->isEmpty()){
         }
     return ["dataResults"=> $dataResults,"dataPaginate"=>$data];
 }
-public function adminStudentView($courseId)
+public function adminStudentView($sectionId)
 {
-     //$section = Section::with("professor", "course")->find($courseId);
+     //$section = Section::with("professor", "course")->find($sectionId);
         $data = DB::table('survey_submits as sb')
             ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
             ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
@@ -121,7 +122,7 @@ public function adminStudentView($courseId)
             ->join('users as prof', 'sec.user_id', '=', 'prof.id')
             ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
             ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-            ->where('sec.id', $courseId)
+            ->where('sec.id', $sectionId)
             ->whereYear('s.created_at', now()->year)
             ->select(
                 'c.name as course',
@@ -145,9 +146,10 @@ public function adminStudentView($courseId)
                 "course" => $item->course,
                 "nameStudent" => $item->student,  
                 "submitId" => $item->submitId,
+                "sectionCode" => $item->section,
             ];
         }
-   return [$resultados,$data];     
+   return ['adminStudentView' => $resultados,'paginate' => $data];     
 }
 
 public function adminViewAnswer($submitId)

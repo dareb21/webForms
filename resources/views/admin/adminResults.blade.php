@@ -88,7 +88,7 @@
                                 <td class="px-4 py-2 text-center"></td>
                             @endfor
                         @else
-                            @foreach ($dataResults as $resultado)
+                            @foreach ($adminResults['dataResults'] as $resultado)
                             <tbody x-data="{ open: false }" class="border-b">
                                 <tr>
                                     <td class="px-4 py-2 text-center">{{ $resultado['professorName'] }}</td>

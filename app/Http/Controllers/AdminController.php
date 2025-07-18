@@ -20,13 +20,14 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Cache;
 use App\Services\AdminServices;
 
+
 class AdminController extends Controller
 {
 
   private $adminServices;
   public function __construct(AdminServices $adminServices)
   {
-        $this->adminServices = $adminServices;
+      $this->adminServices = $adminServices;
   }
 
   public function enableEvaluation($surveyId)
@@ -417,18 +418,20 @@ switch ($action){
 }
 
 
-   public function adminStudentView($courseId)
+   public function adminStudentView($sectionId)
    {
-  $adminStudentView = $this->adminServices->adminStudentView($courseId);
+  $adminStudentView = $this->adminServices->adminStudentView($sectionId);
   $years = Survey::selectRAW("Year(dateStart)")
       ->distinct()
       ->get(); 
-  return view('admin.adminStudentView',compact("years","resultados","data"));
+
+  return view('admin.adminStudentView',compact("years","adminStudentView"));
   }
 
 public function adminViewAnswer($submitId)
 {
-     $this->adminServices->adminViewAnswer($submitId);
+    return $this->adminServices->adminViewAnswer($submitId);
+     
 }
 
 public function adminResults(){
@@ -437,7 +440,7 @@ $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
 
-  return view('admin.adminResults',compact("years"));}
+  return view('admin.adminResults',compact("years","adminResults"));}
 
 
 

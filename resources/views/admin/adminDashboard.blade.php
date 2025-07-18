@@ -1,11 +1,11 @@
 @extends('admin.adminLayout')
 @section('content')
 @php
-    $pAnual = $anual;
+    $pAnual = $dashboard['anual'];
 
-    $p1 = isset($resultados[0]['termScore']) ? $resultados[0]['termScore'] : 0;
-    $p2 = isset($resultados[1]['termScore']) ? $resultados[1]['termScore'] : 0;
-    $p3 = isset($resultados[2]['termScore']) ? $resultados[2]['termScore'] : 0;
+    $p1 = isset($dashboard['resultsPerTerm'][0]['termScore']) ? $dashboard['resultsPerTerm'][0]['termScore']: 0;
+    $p2 = isset($dashboard['resultsPerTerm'][1]['termScore']) ? $dashboard['resultsPerTerm'][1]['termScore']: 0;
+    $p3 = isset($dashboard['resultsPerTerm'][2]['termScore']) ? $dashboard['resultsPerTerm'][2]['termScore']: 0;
 @endphp
 
 <!-- Main Content -->
@@ -19,7 +19,7 @@
             </div>     
             <div class="flex justify-between items-center mb-2">
                 <h3 class="text-gray-700 font-bold md:mt-10 mb-2 text-left">Satisfacción por períodos</h3>
-                <span class="text-md font-medium text-right">Clases evaluadas: {{ $sectionsWithSubmits }}  / {{ $allSections}}</span>
+                <span class="text-md font-medium text-right">Clases evaluadas: {{ $dashboard['withSubmits'] }}  / {{ $dashboard['sections']}}</span>
             </div>
             <canvas id="revenueChart" height="120"></canvas>
         </div>

@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\AdminServices;
 
 class DcaController extends Controller
 {
+     private $adminServices;
+  public function __construct(AdminServices $adminServices)
+  {
+      $this->adminServices = $adminServices;
+  }
     public function dcaDashboard()
         {
         $dashboard = $this->adminServices->dashboard();
@@ -31,7 +37,7 @@ $adminStudentView = $this->adminServices->adminStudentView($courseId);
 
         public function dcaAnswerView()
         {
-        $this->adminServices->adminViewAnswer($submitId);
+        return $this->adminServices->adminViewAnswer($submitId);
         }
 
     }

@@ -29,7 +29,7 @@ public function handdleCallBack()
                 ->join('users as Student','enrollments.user_id','=','Student.id')
                 ->select('courses.name as course_name','sections.id as section_id','sections.code as sections_code','Prof.name as Teacher')
                 ->where('enrollments.user_id',23)
-                ->where('courses.status',1)
+                ->where('sections.status',1)
                 ->get(); 
             
                 $courseNames = $classes->pluck('course_name');  

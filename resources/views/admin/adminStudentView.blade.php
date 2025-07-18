@@ -28,12 +28,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($resultados as $resultado)
+                            @foreach ($adminStudentView['adminStudentView'] as $resultado)
                             <tr>
                                 <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['nameStudent'] }}</td>
                                 <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['profesor'] }}</td>
                                 <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['course'] }}</td>
-                                <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
+                                <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['sectionCode'] }}</td>
                                 <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['score'] }}</td>
                                 <!-- Agrega este bloque dentro de tu <td> en la tabla -->
                                 <td class="border border-gray-400 px-4 py-2 text-center">
@@ -106,7 +106,7 @@
 
             <!-- Paginación -->
             <div class="w-full flex justify-center py-4">
-                {{ $data->links() }}  <!-- Aquí agregamos la paginación -->
+                {{ $adminStudentView['paginate']->links() }}  <!-- Aquí agregamos la paginación -->
             </div>
 
             <div class="p-6 flex justify-center">

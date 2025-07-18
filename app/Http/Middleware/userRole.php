@@ -15,12 +15,12 @@ class userRole
      */
     public function handle(Request $request, Closure $next, ...$roleArray): Response
     { 
-        $user = (object) session('google_user');
+        $user = (object) session('userInfo');
 
-         if (in_array($user->name,$roleArray))
+         if (in_array($user->nameUser,$roleArray))
             {
                 return $next($request);
             }
-       return abort(404);
+       return redirect()->route("unauthorized");
     }
 }

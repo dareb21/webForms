@@ -1,7 +1,10 @@
 import './bootstrap';
 
-import Alpine from 'alpinejs';
+// resources/js/app.js
+import { initSidebar } from './sidebar';
 
-window.Alpine = Alpine;
-
-Alpine.start();
+// Un único listener para arrancar TODO
+document.addEventListener('DOMContentLoaded', () => {
+  initSidebar();
+  // aquí podrías llamar a initOtroMódulo(), initChart(), etc.
+});

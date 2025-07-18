@@ -15,9 +15,10 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="//unpkg.com/alpinejs" defer></script>
   <style>[x-cloak] { display: none !important; }</style>
 </head>
-<body class="bg-gray-100">
+<body class="">
 
 <!-- Botón para mostrar sidebar en móviles -->
 <div class="md:hidden fixed top-0 left-0 z-50">
@@ -101,6 +102,12 @@
       </ul>
     </div>
 
+    <div class="flex justify-center items-center mt-10 md:mt-36">
+      <button id="chargeButton" class="sidebar-exempt rounded p-1 text-xl bg-orange-500 text-white hover:cursor-pointer hover:bg-blue-700">
+        Cargar
+      </button>
+
+    </div>
     <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2">
       <img src="{{ asset('img/usapblue.png') }}" alt="Logo" class="h-14">
     </div>
@@ -111,9 +118,24 @@
     @yield('content')
   </main>
 </div>
-
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="//unpkg.com/alpinejs" defer></script>
 </body>
+
+<script>
+function toggleChargeButton(k) {
+    const btn = document.getElementById('chargeButton');
+    if (!btn) return;
+    btn.disabled = !!k;
+    if (k) {
+        btn.className = "sidebar-exempt rounded p-1 text-xl opacity-50 cursor-not-allowed";
+    } else {
+        btn.className = "sidebar-exempt rounded p-1 text-xl bg-orange-500 text-white hover:cursor-pointer hover:bg-blue-700";
+    }
+}
+
+let k = true; 
+toggleChargeButton(k);
+
+// let k = false; 
+// toggleChargeButton(k);
+</script>
 </html>

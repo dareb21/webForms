@@ -97,6 +97,7 @@
                 </div>
                 <div>
                     <label for="schoolSegmentation" class="text-gray-700 font-bold">Segmentación: </label>
+                    <!-- Form para seleccionar la segmentación de escuelas -->
                     <select name="schoolSegmentation" id="schoolSegmentation" class="rounded-sm p-1 shadow-md">
                         <option value="">Datos Generales</option>
                         <option value="">Escuela de Ciencias Informáticas</option>

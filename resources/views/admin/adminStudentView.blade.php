@@ -6,7 +6,7 @@
         <div class="flex flex-col items-center">
             <div class="bg-white p-4 text-center text-2xl font-bold">
                 <h1 class="uppercase">
-                    EVALUACIONES DE <span class="italic">{{ request('course') }}</span>
+                    EVALUACIONES DE <span class="italic">{{ request('course') }}</span> - <span class="italic">{{ request('sectionCode') }}</span>
                 </h1>
                 <h1 class="text-xl mt-4 uppercase">
                     CATEDRÁTICO <span class="italic">{{ request('profesor') }}</span>
@@ -20,9 +20,6 @@
                         <thead>
                             <tr>
                                 <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Estudiante</th>
-                                <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Catedrático</th>
-                                <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Clase</th>
-                                <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Sección</th>
                                 <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Calificación</th>
                                 <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Accion</th>
                             </tr>
@@ -31,9 +28,6 @@
                             @foreach ($adminStudentView['adminStudentView'] as $resultado)
                             <tr>
                                 <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['nameStudent'] }}</td>
-                                <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['profesor'] }}</td>
-                                <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['course'] }}</td>
-                                <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['sectionCode'] }}</td>
                                 <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['score'] }}</td>
                                 <!-- Agrega este bloque dentro de tu <td> en la tabla -->
                                 <td class="border border-gray-400 px-4 py-2 text-center">
@@ -60,7 +54,7 @@
                                                         class="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl">
                                                     &times;
                                                 </button>
-                                                <h2 class="text-xl font-bold mb-4">Detalles de la Evaluación</h2>
+                                                <h2 class="text-xl font-bold mb-4">Evaluación de {{ $resultado['nameStudent']  }}</h2>
 
                                                 <!-- Spinner -->
                                                 <template x-if="loading">

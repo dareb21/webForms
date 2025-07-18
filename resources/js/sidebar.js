@@ -5,7 +5,9 @@ export function initSidebar() {
   const toggleBtn   = document.getElementById('sidebarToggle');
   const profileBtn  = document.getElementById('profileBtn');
   const dropdown    = document.getElementById('dropdownMenu');
-  const buttons     = Array.from(document.querySelectorAll('#sidebar button'));
+  const buttons = Array.from(document.querySelectorAll('#sidebar button'))
+  .filter(btn => !btn.classList.contains('sidebar-exempt'));
+
   const STORAGE_KEY = 'selectedSidebarIndex';
 
   // Limpiar el localStorage cuando se carga la página 'studentDashboard'
@@ -75,4 +77,6 @@ export function initSidebar() {
     el.querySelector('svg')
       .classList.replace('text-white', 'text-blue-500');
   }
+
+  
 }

@@ -77,7 +77,7 @@
         </li>
       </ul>
     </div>
-
+    
     <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2">
       <img src="{{ asset('img/usapblue.png') }}" alt="Logo" class="h-14">
     </div>

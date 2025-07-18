@@ -128,7 +128,8 @@
                                                     'course' => $courses['course'],
                                                     'profesor' => $resultado['professorName'],
                                                     'annualYear' => request('annualYear'),
-                                                    'annualPeriod' => request('annualPeriod')
+                                                    'annualPeriod' => request('annualPeriod'),
+                                                    'sectionCode' => $courses['sectionCode']
                                                 ]) }}"
                                                 class="px-2 py-0.5 bg-blue-600 text-white rounded-sm hover:bg-blue-700 text-xs transition whitespace-nowrap">
                                                     Ver más

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Resultados</title>
@@ -8,21 +9,26 @@
             font-family: DejaVu Sans, sans-serif;
             font-size: 12px;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #aaa;
             padding: 6px;
             text-align: center;
         }
+
         th {
             background-color: #eee;
         }
     </style>
 </head>
+
 <body>
     <h2>Resultados por Evaluación</h2>
     <table>
@@ -44,4 +50,5 @@
         </tbody>
     </table>
 </body>
+
 </html>

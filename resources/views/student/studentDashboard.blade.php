@@ -12,21 +12,16 @@
                 <article>
                     <h2 class="font-bold text-lg mb-2">INSTRUCCIONES</h2>
                     <p class="p-2 leading-relaxed text-gray-700">
-                        Estimado estudiante, queremos conocer aspectos pedagógicos y metodológicos del desarrollo de la clase,
+                        Estimado estudiante, queremos conocer aspectos pedagógicos y metodológicos del desarrollo de la
+                        clase,
                         para ello se le presentarán parejas de enunciados en donde usted deberá seleccionar uno,
                         considerando el que es más afín a lo que sucede en clase. Recuerde solo debe seleccionar una
                         alternativa y no deje de responder ninguna pregunta, debe seleccionar la opción deseada.
                         Trate de ser lo más objetivo posible.
                     </p>
-                    <img
-                        src="{{ asset('img/usapstudent.webp') }}"
-                        alt="Estudiante USAP"
-                        class="mx-auto mt-4 shadow-md rounded-md"
-                        loading="eager"
-                        decoding="async"
-                        width="400"
-                        height="auto"
-                    >
+                    <img src="{{ asset('img/usapstudent.webp') }}" alt="Estudiante USAP"
+                        class="mx-auto mt-4 shadow-md rounded-md" loading="eager" decoding="async" width="400"
+                        height="auto">
                 </article>
             </section>
         </section>

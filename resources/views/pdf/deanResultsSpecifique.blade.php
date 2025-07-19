@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Resultados</title>
@@ -8,21 +9,26 @@
             font-family: DejaVu Sans, sans-serif;
             font-size: 12px;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #aaa;
             padding: 6px;
             text-align: center;
         }
+
         th {
             background-color: #eee;
         }
     </style>
 </head>
+
 <body>
     <table class="min-w-full border border-gray-300 divide-y divide-gray-200">
         <thead class="bg-blue-600 text-white">
@@ -57,7 +63,8 @@
                                     </span>
                                     <span>
                                         <strong>Evaluaciones estudiantes &rarr;</strong>
-                                    <a href="{{ route('deanStudentView', ['courseId' => $course['courseId'] ?? '0', 'Professor' => $results['professorName'], 'courses' => $course['course']]) }}" class="ml-2 p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition">
+                                        <a href="{{ route('deanStudentView', ['courseId' => $course['courseId'] ?? '0', 'Professor' => $results['professorName'], 'courses' => $course['course']]) }}"
+                                            class="ml-2 p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition">
                                             <strong>Ver más</strong>
                                         </a>
                                     </span>
@@ -70,4 +77,5 @@
         @endforeach
     </table>
 </body>
+
 </html>

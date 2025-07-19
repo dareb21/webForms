@@ -1,10 +1,10 @@
 @extends('admin.adminLayout')
 @section('content')
-@php
-    $minimo = 10;
-    $i = 1;
-@endphp
-<!-- Sweet Alert -->
+    @php
+        $minimo = 10;
+        $i = 1;
+    @endphp
+    <!-- Sweet Alert -->
     @if (session('alert'))
         <script>
             Swal.fire({
@@ -30,11 +30,13 @@
                     <div class="flex flex-col gap-4 w-full md:w-auto">
                         <div class="flex flex-col md:flex-row items-center gap-2">
                             <label for="evaluationName">Evaluación -</label>
-                            <input type="text" name="evaluationName" value="{{ old('evaluationName') }}" class="shadow-md border border-gray-200 w-full md:w-auto">
+                            <input type="text" name="evaluationName" value="{{ old('evaluationName') }}"
+                                class="shadow-md border border-gray-200 w-full md:w-auto">
                         </div>
                         <div class="flex flex-col md:flex-row items-center gap-2">
                             <label for="term" class="md:pr-5">Período -</label>
-                            <select name="term" id="term" class="shadow-md border border-gray-200 w-full md:w-auto text-center">
+                            <select name="term" id="term"
+                                class="shadow-md border border-gray-200 w-full md:w-auto text-center">
                                 <option value="1">Período 1</option>
                                 <option value="2">Período 2</option>
                                 <option value="3">Período 3</option>
@@ -46,11 +48,13 @@
                     <div class="flex flex-col gap-4 w-full md:w-auto">
                         <div class="flex flex-col md:flex-row items-center gap-2">
                             <label for="dateStart">Fecha Inicio -</label>
-                            <input type="date" name="dateStart" value="{{ old('dateStart') }}" class="shadow-md border border-gray-200 w-full md:w-auto">
+                            <input type="date" name="dateStart" value="{{ old('dateStart') }}"
+                                class="shadow-md border border-gray-200 w-full md:w-auto">
                         </div>
                         <div class="flex flex-col md:flex-row items-center gap-2">
                             <label for="dateEnd">Fecha Cierre -</label>
-                            <input type="date" name="dateEnd" value="{{ old('dateEnd') }}" class="shadow-md border border-gray-200 w-full md:w-auto">
+                            <input type="date" name="dateEnd" value="{{ old('dateEnd') }}"
+                                class="shadow-md border border-gray-200 w-full md:w-auto">
                         </div>
                     </div>
                 </div>
@@ -69,20 +73,18 @@
 
                                 <label for="g{{ $i }}c1">Calificación</label>
                                 <input type="number" name="cal[{{ $i }}][c1]" id="g{{ $i }}c1"
-                                    value="{{ old("cal.$i.c1") }}"
-                                    class="shadow-md border border-gray-200 w-16">
+                                    value="{{ old("cal.$i.c1") }}" class="shadow-md border border-gray-200 w-16">
                             </div>
 
                             <div class="flex flex-col md:flex-row items-center gap-2 w-full">
                                 <label for="g{{ $i }}p2">Pregunta 2 -</label>
-                                <input type="text" name="questions[{{ $i }}][p2]" id="g{{ $i }}p2"
-                                    value="{{ old("questions.$i.p2") }}"
+                                <input type="text" name="questions[{{ $i }}][p2]"
+                                    id="g{{ $i }}p2" value="{{ old("questions.$i.p2") }}"
                                     class="shadow-md border border-gray-200 w-full md:flex-1">
 
                                 <label for="g{{ $i }}c2">Calificación</label>
                                 <input type="number" name="cal[{{ $i }}][c2]" id="g{{ $i }}c2"
-                                    value="{{ old("cal.$i.c2") }}"
-                                    class="shadow-md border border-gray-200 w-16">
+                                    value="{{ old("cal.$i.c2") }}" class="shadow-md border border-gray-200 w-16">
                             </div>
                         </div>
                     @endfor
@@ -91,69 +93,72 @@
 
             <!-- Botones AGREGAR y BORRAR -->
             <div class="w-full flex flex-col md:flex-row justify-center gap-4 py-4 bg-white mt-8">
-                <a id="agregar-grupo" class="bg-blue-600 hover:cursor-pointer hover:bg-orange-500 text-white font-bold py-2 px-6 rounded text-center">AGREGAR</a>
-                <a id="borrar-grupo" class="bg-blue-600 hover:cursor-pointer hover:bg-orange-500 text-white font-bold py-2 px-6 rounded text-center">BORRAR</a>
+                <a id="agregar-grupo"
+                    class="bg-blue-600 hover:cursor-pointer hover:bg-orange-500 text-white font-bold py-2 px-6 rounded text-center">AGREGAR</a>
+                <a id="borrar-grupo"
+                    class="bg-blue-600 hover:cursor-pointer hover:bg-orange-500 text-white font-bold py-2 px-6 rounded text-center">BORRAR</a>
             </div>
 
             <!-- Botones GUARDAR, LIMPIAR y REGRESAR -->
             <div class="w-full flex flex-col md:flex-row justify-center gap-4 py-4 bg-white mt-4">
-                <button onclick="document.getElementById('form-evaluacion').submit()" class="bg-blue-600 hover:cursor-pointer hover:bg-orange-500 text-white font-bold py-2 px-6 rounded">GUARDAR</button>
-                <a href="javascript:void(0);" 
-                    onclick="document.getElementById('form-evaluacion').reset();" 
+                <button onclick="document.getElementById('form-evaluacion').submit()"
+                    class="bg-blue-600 hover:cursor-pointer hover:bg-orange-500 text-white font-bold py-2 px-6 rounded">GUARDAR</button>
+                <a href="javascript:void(0);" onclick="document.getElementById('form-evaluacion').reset();"
                     class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded text-center">
                     LIMPIAR
                 </a>
-                <a href="{{ route('adminEvaluation') }}" class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-2 px-6 rounded text-center">REGRESAR</a>
+                <a href="{{ route('adminEvaluation') }}"
+                    class="bg-blue-600 hover:bg-orange-500 text-white font-bold py-2 px-6 rounded text-center">REGRESAR</a>
             </div>
         </div>
     </div>
 
-<script>
-    const oldQuestions = @json(old('questions') ?? []);
-    const oldCal = @json(old('cal') ?? []);
-</script>
+    <script>
+        const oldQuestions = @json(old('questions') ?? []);
+        const oldCal = @json(old('cal') ?? []);
+    </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const container = document.getElementById("grupos-container");
-    const agregarBtn = document.getElementById("agregar-grupo");
-    const borrarBtn = document.getElementById("borrar-grupo");
-    
-    const oldQuestions = @json(old('questions') ?? []);
-    const oldCal = @json(old('cal') ?? []);
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const container = document.getElementById("grupos-container");
+            const agregarBtn = document.getElementById("agregar-grupo");
+            const borrarBtn = document.getElementById("borrar-grupo");
 
-    let grupoActual = 10;
+            const oldQuestions = @json(old('questions') ?? []);
+            const oldCal = @json(old('cal') ?? []);
 
-    const indicesOld = Object.keys(oldQuestions)
-        .map(i => parseInt(i))
-        .filter(i => !isNaN(i) && i > 10);
+            let grupoActual = 10;
 
-    if (indicesOld.length > 0) {
-        const maxIndex = Math.max(...indicesOld);
-        grupoActual = maxIndex;
+            const indicesOld = Object.keys(oldQuestions)
+                .map(i => parseInt(i))
+                .filter(i => !isNaN(i) && i > 10);
 
-        indicesOld.sort((a, b) => a - b).forEach(i => {
-            addGrupo(i, oldQuestions[i], oldCal?.[i] ?? {});
-        });
-    }
+            if (indicesOld.length > 0) {
+                const maxIndex = Math.max(...indicesOld);
+                grupoActual = maxIndex;
 
-    agregarBtn.addEventListener("click", function () {
-        grupoActual++;
-        addGrupo(grupoActual);
-    });
+                indicesOld.sort((a, b) => a - b).forEach(i => {
+                    addGrupo(i, oldQuestions[i], oldCal?.[i] ?? {});
+                });
+            }
 
-    borrarBtn.addEventListener("click", function () {
-        const gruposDinamicos = container.querySelectorAll(".grupo-dinamico");
-        if (gruposDinamicos.length > 0) {
-            gruposDinamicos[gruposDinamicos.length - 1].remove();
-            grupoActual--;
-        }
-    });
+            agregarBtn.addEventListener("click", function() {
+                grupoActual++;
+                addGrupo(grupoActual);
+            });
 
-    function addGrupo(index, preguntas = {}, cal = {}) {
-        const grupoDiv = document.createElement("div");
-        grupoDiv.className = "flex flex-col gap-4 py-4 grupo-dinamico";
-        grupoDiv.innerHTML = `
+            borrarBtn.addEventListener("click", function() {
+                const gruposDinamicos = container.querySelectorAll(".grupo-dinamico");
+                if (gruposDinamicos.length > 0) {
+                    gruposDinamicos[gruposDinamicos.length - 1].remove();
+                    grupoActual--;
+                }
+            });
+
+            function addGrupo(index, preguntas = {}, cal = {}) {
+                const grupoDiv = document.createElement("div");
+                grupoDiv.className = "flex flex-col gap-4 py-4 grupo-dinamico";
+                grupoDiv.innerHTML = `
             <p class="font-bold text-lg">Indicador ${index}</p>
             <div class="flex flex-col md:flex-row items-center gap-2 w-full">
                 <label for="g${index}p1" class="whitespace-nowrap">Pregunta 1 -</label>
@@ -176,8 +181,8 @@ document.addEventListener("DOMContentLoaded", function () {
                        class="shadow-md border border-gray-200 w-16">
             </div>
         `;
-        container.appendChild(grupoDiv);
-    }
-});
-</script>
+                container.appendChild(grupoDiv);
+            }
+        });
+    </script>
 @endsection

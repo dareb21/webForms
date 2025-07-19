@@ -1,36 +1,42 @@
 @extends('adminDCA.adminDCALayout')
 @section('content')
-<!-- Main Content -->
-<div class="flex-1 ml-0 md:ml-64 h-full p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
-    <div class="bg-white rounded-xl shadow-lg p-6 w-full min-h-[calc(100vh-3rem)]">
-        <div class="flex flex-col items-center">
-            <div class="bg-white p-4 text-center text-2xl font-bold">
-                <h1 class="uppercase">
-                    EVALUACIONES DE <span class="italic"></span>
-                </h1>
-                <h1 class="text-xl mt-4 uppercase">
-                    CATEDRÁTICO <span class="italic"></span>
-                </h1>
-            </div>
+    <!-- Main Content -->
+    <div class="flex-1 ml-0 md:ml-64 h-full p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
+        <div class="bg-white rounded-xl shadow-lg p-6 w-full min-h-[calc(100vh-3rem)]">
+            <div class="flex flex-col items-center">
+                <div class="bg-white p-4 text-center text-2xl font-bold">
+                    <h1 class="uppercase">
+                        EVALUACIONES DE <span class="italic"></span>
+                    </h1>
+                    <h1 class="text-xl mt-4 uppercase">
+                        CATEDRÁTICO <span class="italic"></span>
+                    </h1>
+                </div>
 
-            <div class="w-full h-full mt-6 overflow-x-auto">
-                <!-- Sección de evaluaciones sin scroll, el div blanco se alargará -->
-                <div class="w-full mt-6">
-                    <table class="table-auto border border-gray-400 w-full min-w-[600px] text-left">
-                        <thead>
-                            <tr>
-                                <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Estudiante</th>
-                                <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Catedrático</th>
-                                <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Clase</th>
-                                <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Sección</th>
-                                <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Calificación</th>
-                                <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Accion</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{-- @foreach ($resultados as $resultado) --}}
-                            <tr>
-                                {{-- <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['nameStudent'] }}</td>
+                <div class="w-full h-full mt-6 overflow-x-auto">
+                    <!-- Sección de evaluaciones sin scroll, el div blanco se alargará -->
+                    <div class="w-full mt-6">
+                        <table class="table-auto border border-gray-400 w-full min-w-[600px] text-left">
+                            <thead>
+                                <tr>
+                                    <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">
+                                        Estudiante</th>
+                                    <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">
+                                        Catedrático</th>
+                                    <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Clase
+                                    </th>
+                                    <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Sección
+                                    </th>
+                                    <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">
+                                        Calificación</th>
+                                    <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Accion
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{-- @foreach ($resultados as $resultado) --}}
+                                <tr>
+                                    {{-- <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['nameStudent'] }}</td>
                                 <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['profesor'] }}</td>
                                 <td class="border border-gray-400 px-4 py-2 text-center">{{ $resultado['course'] }}</td>
                                 <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
@@ -97,58 +103,59 @@
                                         </div>
                                     </div>
                                 </td> --}}
-                            </tr>
-                            {{-- @endforeach --}}
-                        </tbody>
-                    </table>
+                                </tr>
+                                {{-- @endforeach --}}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Paginación -->
-            <div class="w-full flex justify-center py-4">
-                {{-- {{ $data->links() }}  --}}
-            </div>
+                <!-- Paginación -->
+                <div class="w-full flex justify-center py-4">
+                    {{-- {{ $data->links() }}  --}}
+                </div>
 
-            <div class="p-6 flex justify-center">
-                <a href="{{ route('adminDcaResults') }}" class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
-                    REGRESAR
-                </a>
+                <div class="p-6 flex justify-center">
+                    <a href="{{ route('adminDcaResults') }}"
+                        class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
+                        REGRESAR
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-  function adminAnswers() {
-    return {
-      open: false,
-      loading: false,
-      answers: [],
-      observation: '',
+    <script>
+        function adminAnswers() {
+            return {
+                open: false,
+                loading: false,
+                answers: [],
+                observation: '',
 
-      fetchAnswers(submitId) {
-        this.open = true;
-        this.loading = true;
-        fetch(`/adminViewAnswer/${submitId}`)
-          .then(res => res.json())
-          .then(data => {
-            this.observation = '';
-            this.answers = data.filter(item => item.indicator);
-            const obsItem = data.find(item => item.observation);
-            if (obsItem) {
-              this.observation = obsItem.observation;
+                fetchAnswers(submitId) {
+                    this.open = true;
+                    this.loading = true;
+                    fetch(`/adminViewAnswer/${submitId}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            this.observation = '';
+                            this.answers = data.filter(item => item.indicator);
+                            const obsItem = data.find(item => item.observation);
+                            if (obsItem) {
+                                this.observation = obsItem.observation;
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            this.answers = [];
+                            this.observation = '';
+                        })
+                        .finally(() => {
+                            this.loading = false;
+                        });
+                }
             }
-          })
-          .catch(err => {
-            console.error(err);
-            this.answers = [];
-            this.observation = '';
-          })
-          .finally(() => {
-            this.loading = false;
-          });
-      }
-    }
-  }
-</script>
+        }
+    </script>
 @endsection

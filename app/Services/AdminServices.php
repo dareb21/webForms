@@ -32,7 +32,12 @@ $sections = DB::table('schools')
     ->groupBy('schools.id')
     ->get();
 $schoolsCollection=$sections->pluck("schoolsId","schoolsName");
-$schools=$schoolsCollection->toArray();
+$schools = $schoolsCollection->map(function ($id, $name) {
+    return [
+        'id' => $id,
+        'name' => $name,
+    ];
+})->values()->toArray();
 $allSections=$sections->sum("section_count");
 $sectionsWithSubmits=$sections->sum("sections_with_submits");
 $sectionsLeft = $allSections -$sectionsWithSubmits;
@@ -114,7 +119,6 @@ $higher15Query=DB::table('users as prof')
 
 $higher15=$higher15Query->toArray();
 $lower10=$lower10Query->toArray();
-
 return ["resultsPerTerm" =>$infoPerTermArray,"anual" =>$anualScore,"withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections,"schoolsInfo"=>$schools,"lower10"=>$lower10,"higher15"=>$higher15];
 }
 

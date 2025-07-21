@@ -97,14 +97,17 @@
                     </div>
                     <div>
                         <label for="schoolSegmentation" class="text-gray-700 font-bold">Segmentación: </label>
-                        <select name="schoolSegmentation" id="schoolSegmentation" class="rounded-sm p-1 shadow-md">
-                            <option value="">Datos Generales</option>
-                            <option value="">Escuela de Ciencias Informáticas</option>
-                            <option value="">Escuela de Ciencias Exactas</option>
-                            <option value="">Escuela de Derecho</option>
-                            <option value="">Escuela de Comunicación</option>
-                            <option value="">Escuela de Agronómicas</option>
-                        </select>
+                        <form action="{{ route('adminDashboard') }}" method="GET" class="inline-block">
+                            <select name="schoolSegmentation" id="schoolSegmentation" onchange="this.form.submit()"
+                                class="rounded-sm p-1 shadow-md">
+                                @foreach ($dashboard['schoolsInfo'] as $school)
+                                    <option value="{{ $school['id'] }}"
+                                        {{ request('schoolSegmentation') == $school['id'] ? 'selected' : '' }}>
+                                        {{ $school['name'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </form>
                     </div>
                 </div>
                 <div class="flex justify-center items-center">

@@ -33,7 +33,7 @@ public function handdleCallBack()
                 ->get(); 
             
                 $courseNames = $classes->pluck('course_name');  
-                $coursesId=$classes->pluck('section_id');
+                $sections=$classes->pluck('sections_code','section_id');
                 $teacher=$classes->pluck('Teacher');
                 session([
                 'userInfo' => [

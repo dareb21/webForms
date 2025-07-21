@@ -30,10 +30,7 @@ class StudentController extends Controller
 
     public function studentEvaluation(Request $request)
     {
-    if (!session()->has('userInfo')) {
-    return redirect()->route('sessionDead')->with('expired', true);
-}
-
+    
     $thisSurvey = $this->cacheSurvey; 
     if(!$thisSurvey)
     {

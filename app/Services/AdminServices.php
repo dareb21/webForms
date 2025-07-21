@@ -5,30 +5,52 @@ use Carbon\Carbon;
 
 Class AdminServices
 {
-    public function dashboard()
+   
+    public function dashboard(Request $request=null)
     {
+    $thisSchool = null;
+    if ($request)
+    {
+        $thisSchool = $request->schoolId;
+    }
+
+
+//Esto es para sacar las secciones con envio contra las que no tienen envio
 $sections = DB::table('schools')
     ->join('courses', 'schools.id', '=', 'courses.school_id')
     ->join('sections', 'courses.id', '=', 'sections.course_id')
     ->leftJoin('survey_submits', 'sections.id', '=', 'survey_submits.section_id')
+    ->when($thisSchool >0, function ($query) use ($thisSchool) {
+        $query->where('schools.id', $thisSchool);
+    })
     ->select(
-        'schools.id',
+        'schools.id as schoolsId',
+        'schools.name as schoolsName',
         DB::raw('COUNT(DISTINCT sections.id) as section_count'),
         DB::raw('COUNT(DISTINCT CASE WHEN survey_submits.id IS NOT NULL THEN sections.id END) as sections_with_submits')
     )
     ->groupBy('schools.id')
     ->get();
+$schoolsCollection=$sections->pluck("schoolsId","schoolsName");
+$schools=$schoolsCollection->toArray();
+$allSections=$sections->sum("section_count");
+$sectionsWithSubmits=$sections->sum("sections_with_submits");
+$sectionsLeft = $allSections -$sectionsWithSubmits;
 
-$allSections = $sections->sum("section_count");
-$sectionsWithSubmits = $sections->sum("sections_with_submits");
-$sectionsLeft = $allSections - $sectionsWithSubmits;
 
+//Esto es para el dashboard principal ya sea general o escuela
 $thisYear = now()->year;
 
 $data = DB::table("surveys as s")
     ->join("survey_submits as sb", "s.id", "=", "sb.survey_id")
     ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
     ->join("question_options as qo", "rs.question_option_id", "=", "qo.id")
+    ->when($thisSchool >0, function ($query) use ($thisSchool) {
+        $query->join("sections as sec","sb.section_id","=","sec.id")
+        ->join("courses as c","sec.course_id","=","c.id")
+        ->join("schools as sc","c.school_id","sc.id")
+        ->where('sc.id', $thisSchool);
+    })
     ->whereYear("s.dateStart", $thisYear)
     ->select(
         "s.id as survey_id",
@@ -38,47 +60,88 @@ $data = DB::table("surveys as s")
     ->groupBy("s.id")
     ->get();
 
-$resultadosCol = collect();
+$infoPerTerm = collect();
 $i = 1;
 
 foreach ($data as $item) {
     $notaPeriodo = $item->Divisor == 0 ? 0 : round($item->SumaNotaPeriodo / $item->Divisor);
-    $resultadosCol->push([
+    $infoPerTerm->push([
         "termScore" => $notaPeriodo,
         "term" => $i,
     ]);
     $i++;
 }
-$resultados=$resultadosCol->toArray();
-$anual = round($resultadosCol->pluck("termScore")->sum() / max(count($resultadosCol), 1));
 
-return ["resultsPerTerm" =>$resultados,"anual" =>$anual,"withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections];
+$anualScore = round($infoPerTerm->pluck("termScore")->sum() / max(count($infoPerTerm), 1));
+$infoPerTermArray=$infoPerTerm->toArray();
+
+//Esto es para sacar el top 10 mayores a 15 y menores a 10
+$lower10Query = DB::table('users as prof')
+    ->join('sections as sec', 'prof.id', '=', 'sec.user_id')
+    ->join('survey_submits as sb', 'sec.id', '=', 'sb.section_id')
+    ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+    ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+    ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+    ->select('prof.name', DB::raw('AVG(qo.calification) * 10 as Calification'))
+    ->when($thisSchool >0, function ($query) use ($thisSchool) {
+        $query->join("courses as c","sec.course_id","=","c.id")
+        ->join("schools as sc", "c.school_id", "=", "sc.id")
+        ->where('sc.id', $thisSchool);
+    })
+    ->groupBy('prof.id', 'prof.name')
+    ->having('Calification', '<', 10)
+    ->orderBy('Calification', 'asc')
+    ->limit(10)
+    ->get();
+
+$higher15Query=DB::table('users as prof')
+    ->join('sections as sec', 'prof.id', '=', 'sec.user_id')
+    ->join('survey_submits as sb', 'sec.id', '=', 'sb.section_id')
+    ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+    ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+    ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+    ->select('prof.name', DB::raw('AVG(qo.calification) * 10 as Calification'))
+    ->when($thisSchool >0, function ($query) use ($thisSchool) {
+        $query->join("courses as c","sec.course_id","=","c.id")
+        ->join("schools as sc", "c.school_id", "=", "sc.id")
+        ->where('sc.id', $thisSchool);
+    })
+    ->groupBy('prof.id', 'prof.name')
+    ->having('Calification', '>', 15)
+    ->orderBy('Calification', 'desc')
+    ->limit(10)
+    ->get();
+
+$higher15=$higher15Query->toArray();
+$lower10=$lower10Query->toArray();
+
+return ["resultsPerTerm" =>$infoPerTermArray,"anual" =>$anualScore,"withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections,"schoolsInfo"=>$schools,"lower10"=>$lower10,"higher15"=>$higher15];
 }
 
 
 public function adminResults()
 {
 $thisYear = session()->pull('year', now()->year);    
-    $data = DB::table('survey_submits as sb')
-        ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
-            ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
-            ->join('courses as c', 'sec.course_id', '=', 'c.id')
-            ->join('users as u', 'sb.user_id', '=', 'u.id')
-            ->join('users as prof', 'sec.user_id', '=', 'prof.id')
-            ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
-            ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-        ->whereYear('s.created_at',$thisYear)
-        ->select(
-               'prof.name as professorName',
-                'prof.id as professorId',
-                'c.name as courses',
-                'sec.id as sectionId',
-                'sec.code as sectionCode',
-            DB::raw('SUM(qo.calification) as totSurvey'),
-            DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
-            )
-        ->groupBy('prof.name', 'sec.id')
-    ->paginate(10);
+        $data = DB::table('survey_submits as sb')
+            ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+                ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
+                ->join('courses as c', 'sec.course_id', '=', 'c.id')
+                ->join('users as u', 'sb.user_id', '=', 'u.id')
+                ->join('users as prof', 'sec.user_id', '=', 'prof.id')
+                ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+                ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+            ->whereYear('s.created_at',$thisYear)
+            ->select(
+                'prof.name as professorName',
+                    'prof.id as professorId',
+                    'c.name as courses',
+                    'sec.id as sectionId',
+                    'sec.code as sectionCode',
+                DB::raw('SUM(qo.calification) as totSurvey'),
+                DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
+                )
+            ->groupBy('prof.name', 'sec.id')
+        ->paginate(10);
 
 if($data->isEmpty()){
   return $noInfo=True;

@@ -1,6 +1,12 @@
 @extends('admin.adminLayout')
 
 @section('content')
+    @php
+        $currentPage = $data->currentPage();
+        $lastPage = $data->lastPage();
+        $start = max(1, $currentPage - 2);
+        $end = min($lastPage, $currentPage + 2);
+    @endphp
     <!-- Sweet Alert -->
     @if (session('alert'))
         <script>
@@ -110,8 +116,27 @@
                     </table>
                     <!-- Paginación -->
                     @if ($changePagination)
-                        <div class="w-full flex justify-center py-4">
-                            {{ $data->links() }}
+                        <div class="w-full flex flex-wrap justify-center gap-2 py-4 text-sm font-medium">
+
+                            @if ($currentPage > 3)
+                                <a href="{{ $data->url(1) }}"
+                                    class="px-2 py-1 rounded text-blue-600 hover:underline">Inicio</a>
+                                <span class="text-gray-400">…</span>
+                            @endif
+
+                            @for ($i = $start; $i <= $end; $i++)
+                                <a href="{{ $data->url($i) }}"
+                                    class="px-2 py-1 rounded {{ $currentPage == $i ? 'bg-blue-600 text-white' : 'text-blue-600 hover:underline' }}">
+                                    {{ $i }}
+                                </a>
+                            @endfor
+
+                            @if ($currentPage < $lastPage - 2)
+                                <span class="text-gray-400">…</span>
+                                <a href="{{ $data->url($lastPage) }}"
+                                    class="px-2 py-1 rounded text-blue-600 hover:underline">Final</a>
+                            @endif
+
                         </div>
                     @endif
                 </div>

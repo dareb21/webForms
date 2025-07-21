@@ -22,26 +22,24 @@ class DirectorController extends Controller
     public function directorDashboard(){
 
   $i=1;
-  $user = User::with('school.courses.professor')->find(64);  
+  $user = User::with('school.courses.sections.professor')->find(64);  
   $thisSchool =$user->school;  
   $schoolId = $thisSchool->id;
 
     $resultados = collect();
     $thisYear= now()->year;
-    $surveysOfThisYear=Survey::whereYear("created_at",$thisYear)->select("id")->get();
-     foreach($surveysOfThisYear as $survey)
-      {
-       $data = DB::table("surveys as s")
+
+    $data = DB::table("surveys as s")
     ->join("survey_submits as sb", "s.id", "=", "sb.survey_id")
     ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
     ->join("question_options as qo", "rs.question_option_id", "=", "qo.id")
-    ->join("courses as c","sb.course_id","=","c.id")
-    ->where('s.id', $survey->id)
-    ->where("c.school_id",$schoolId)
+    ->whereYear("s.dateStart", $thisYear)
     ->select(
-        DB::raw('SUM(qo.calification) as SumaNotaPeriodo'),
-        DB::raw('count(distinct(sb.id)) as Divisor'),
+        "s.id as survey_id",
+        DB::raw("SUM(qo.calification) as SumaNotaPeriodo"),
+        DB::raw("COUNT(DISTINCT sb.id) as Divisor")
     )
+    ->groupBy("s.id")
     ->get();
     
     $numerador=$data->pluck("SumaNotaPeriodo");
@@ -57,17 +55,11 @@ class DirectorController extends Controller
         "termScore" => $notaperiodo,
         "term" => $i,
     ]);
-    $i+=1;
-    }    
+    $i+=1;    
     $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
-
-   
     $coursesofThisSchool=$thisSchool->courses;
-
     $allProfessor = count($coursesofThisSchool->pluck("user_id")->unique());
-
    $coursesId = $coursesofThisSchool->pluck("id")->toArray();
-
   $professorsEvaluated =count(Course::has('submits')->whereIn("id",$coursesId)->pluck("user_id")->unique());
   $schoolName = $thisSchool->name;
 

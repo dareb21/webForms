@@ -29,6 +29,7 @@ class DeanController extends Controller
                 ->join("survey_submits as sb", "s.id", "=", "sb.survey_id")
                 ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
                 ->join("question_options as qo", "rs.question_option_id", "=", "qo.id")
+                
                 ->where('s.id', $survey->id)
                 ->select(
                     DB::raw('SUM(qo.calification) as SumaNotaPeriodo'),

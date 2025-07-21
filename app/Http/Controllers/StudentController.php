@@ -30,10 +30,7 @@ class StudentController extends Controller
 
     public function studentEvaluation(Request $request)
     {
-    if (!session()->has('userInfo')) {
-    return redirect()->route('sessionDead')->with('expired', true);
-}
-
+    
     $thisSurvey = $this->cacheSurvey; 
     if(!$thisSurvey)
     {
@@ -42,7 +39,7 @@ class StudentController extends Controller
 
     $courseArrayPosition = $request->query('courseArrayPosition');
     $coursesId = $request->query('courseId');
-    if(SurveySubmit::where("user_id",23)->where("section_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
+    if(SurveySubmit::where("user_id",14)->where("section_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
     {
               return view("student.thankyouView");
      }
@@ -70,7 +67,7 @@ return view('student.studentEvaluation', compact('courseArrayPosition','coursesI
         "DateSubmmited"=>now(),
         "survey_id"=>$thisSurvey->id,
         "section_id"=>$courseId,
-        "user_id"=>23,
+        "user_id"=>1,
         "observations"=>$request->observaciones,
       ]);
       

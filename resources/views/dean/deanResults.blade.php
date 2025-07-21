@@ -21,9 +21,16 @@
                                 <div>
                                     <label for="anualYear">Año</label>
                                     <select name="anualYear" id="anualYear" class="shadow-md border border-gray-200">
-                                        <option value="2025">2025</option>
-                                        <option value="2024">2024</option>
-                                        <option value="2023">2023</option>
+                                        @if (isset($noInfo) && $noInfo)
+                                            <option value="noInfo">None</option>
+                                        @else
+                                            {{-- @foreach ($years as $year)
+                                                <option value="{{ $year->{'Year(dateStart)'} }}"
+                                                    {{ request('annualYear') == $year->{'Year(dateStart)'} ? 'selected' : '' }}>
+                                                    {{ $year->{'Year(dateStart)'} }}
+                                                </option>
+                                            @endforeach --}}
+                                        @endif
                                     </select>
                                     <label for="anualPeriod">Período</label>
                                     <select name="anualPeriod" id="anualPeriod" class="shadow-md border border-gray-200">
@@ -73,11 +80,12 @@
                                             </td>
                                             <td class="px-4 py-2 text-center">{{ $results['professorScoreAvg'] }}</td>
                                             <td class="px-4 py-2 text-center">
-                                                <button @click="open = !open"
+                                                <button type="button" @click="open = !open"
                                                     class="text-blue-600 hover:underline focus:outline-none">
                                                     <span x-show="!open" class="hover:cursor-pointer">Ver detalles</span>
                                                     <span x-show="open" class="hover:cursor-pointer">Ocultar</span>
                                                 </button>
+
                                             </td>
                                         </tr>
                                         <tr x-show="open" x-cloak>
@@ -105,9 +113,11 @@
 
                                                             <!-- Columna 4: Botón Ver más -->
                                                             <div class="text-right">
-                                                                <a href="{{ route('adminStudentView', [
+                                                                <a href="{{ route('deanStudentView', [
                                                                     'courseId' => $course['sectionId'],
                                                                     'course' => $course['course'],
+                                                                    'sectionId' => $course['sectionId'],
+                                                                    'sectionCode' => $course['sectionCode'],
                                                                     'profesor' => $results['professorName'],
                                                                     'annualYear' => request('annualYear'),
                                                                     'annualPeriod' => request('annualPeriod'),

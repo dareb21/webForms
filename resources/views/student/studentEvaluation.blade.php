@@ -5,6 +5,7 @@
         $userInfo = session('userInfo');
         $courses = $userInfo['courses'];
         $profe = $userInfo['teacher'];
+        #$section = $userInfo['section'];
     @endphp
 
     <main class="flex-1 ml-0 md:ml-80 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">

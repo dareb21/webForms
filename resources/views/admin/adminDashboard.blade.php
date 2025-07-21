@@ -2,7 +2,8 @@
 @section('content')
     @php
         $pAnual = $dashboard['anual'];
-
+    $j=0;
+    $k=0;
         $p1 = isset($dashboard['resultsPerTerm'][0]['termScore']) ? $dashboard['resultsPerTerm'][0]['termScore'] : 0;
         $p2 = isset($dashboard['resultsPerTerm'][1]['termScore']) ? $dashboard['resultsPerTerm'][1]['termScore'] : 0;
         $p3 = isset($dashboard['resultsPerTerm'][2]['termScore']) ? $dashboard['resultsPerTerm'][2]['termScore'] : 0;
@@ -96,7 +97,8 @@
                         <form action="{{ route('adminDashboard') }}" method="GET" class="inline-block">
                             <select name="schoolSegmentation" id="schoolSegmentation" onchange="this.form.submit()"
                                 class="rounded-sm p-1 shadow-md">
-                                @foreach ($dashboard['schoolsInfo'] as $school)
+                                <option value="0">General</option>
+                                @foreach ($schoolInfo['schoolsInfo'] as $school)
                                     <option value="{{ $school['id'] }}"
                                         {{ request('schoolSegmentation') == $school['id'] ? 'selected' : '' }}>
                                         {{ $school['name'] }}
@@ -164,10 +166,10 @@
                 <div class="mt-2">
                     <table class="mx-auto w-4/5">
                         <tbody>
-                            @foreach ( as )
+                            @foreach ($lowerAndHigher['higher15'] as $higher)
                                 <tr class="border-b">
-                                    <td class="py-2 text-gray-700 text-left">Maestro {{ chr(65 + $k) }}</td>
-                                    <td class="py-2 text-gray-900 text-right font-bold">{{ rand(16, 20) }}</td>
+                                    <td class="py-2 text-gray-700 text-left">Maestro {{ $higher->name }}</td>
+                                    <td class="py-2 text-gray-900 text-right font-bold">{{ round($higher->Calification) }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -180,12 +182,12 @@
                 <div class="mt-2">
                     <table class="mx-auto w-4/5">
                         <tbody>
-                            @for ($j; $j <= 10; $j++)
+                            @foreach ($lowerAndHigher['lower10'] as $lower)
                                 <tr class="border-b">
-                                    <td class="py-2 text-gray-700 text-left">Maestro {{ chr(65 + $j) }}</td>
-                                    <td class="py-2 text-gray-900 text-right font-bold">{{ rand(0, 9) }}</td>
+                                    <td class="py-2 text-gray-700 text-left">Maestro {{ $lower->name }}</td>
+                                    <td class="py-2 text-gray-900 text-right font-bold">{{ round($lower->Calification) }}</td>
                                 </tr>
-                            @endfor
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -256,8 +258,8 @@
 
 
         // Gráfico de clases evaluados
-        const value = {{ $dashboard['withSubmits'] }};
-        const remaining = {{ $dashboard['sections'] }} - value;
+        const value = {{ $schoolInfo['withSubmits'] }};
+        const remaining = {{ $schoolInfo['sections'] }} - value;
 
         new Chart(document.getElementById('progressChart'), {
             type: 'doughnut',

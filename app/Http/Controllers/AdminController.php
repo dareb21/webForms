@@ -69,7 +69,7 @@ if ($thisSurvey->status === 1)
 
 
 
-  public function adminDashboard(Request $request=null)
+  public function adminDashboard(Request $request)
     {
     $thisSchool = 0;
     if ($request)
@@ -79,8 +79,8 @@ if ($thisSurvey->status === 1)
      $schoolInfo =$this->adminServices->schools($thisSchool); 
     $dashboard = $this->adminServices->dashboard($thisSchool);
     $lowerAndHigher = $this->adminServices->lowerAndHigher($thisSchool);
-    dd($schoolInfo,$dashboard,$lowerAndHigher);
-     return view("admin.adminDashboard",compact("dashboard"));
+    
+     return view("admin.adminDashboard",compact("dashboard","schoolInfo","lowerAndHigher"));
     }
 
 

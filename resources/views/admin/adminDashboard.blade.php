@@ -2,8 +2,6 @@
 @section('content')
     @php
         $pAnual = $dashboard['anual'];
-    $j=0;
-    $k=0;
         $p1 = isset($dashboard['resultsPerTerm'][0]['termScore']) ? $dashboard['resultsPerTerm'][0]['termScore'] : 0;
         $p2 = isset($dashboard['resultsPerTerm'][1]['termScore']) ? $dashboard['resultsPerTerm'][1]['termScore'] : 0;
         $p3 = isset($dashboard['resultsPerTerm'][2]['termScore']) ? $dashboard['resultsPerTerm'][2]['termScore'] : 0;
@@ -11,76 +9,7 @@
     <!-- Main Content -->
     <!-- Chart de períodos -->
     <div class="flex-1 ml-0 md:h-full md:ml-64 p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto"
-        x-data="{
-            openModal: false,
-            modalChartLabels: [],
-            modalChartData: [],
-            modalTitle: '',
-            showModalChart(title, labels, data) {
-                this.modalTitle = title;
-                this.modalChartLabels = labels;
-                this.modalChartData = data;
-                this.openModal = true;
-        
-                this.$nextTick(() => {
-                    const ctx = document.getElementById('modalChart').getContext('2d');
-        
-                    // Destruir gráfico anterior si existe
-                    if (window.modalChartInstance) {
-                        window.modalChartInstance.destroy();
-                    }
-        
-                    // Crear gráfico de línea conectado
-                    window.modalChartInstance = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: this.modalChartLabels, // nombres de los maestros
-                            datasets: [{
-                                label: 'Evaluaciones',
-                                data: this.modalChartData,
-                                borderColor: '#3b82f6',
-                                backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                                fill: true,
-                                tension: 0.4,
-                                pointRadius: 6,
-                                pointHoverRadius: 8
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: true,
-                                    position: 'bottom'
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function(context) {
-                                            const label = context.label || '';
-                                            const value = context.raw || 0;
-                                            return `${label}: ${value}`;
-                                        }
-                                    }
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    suggestedMax: 25,
-                                    ticks: {
-                                        stepSize: 1
-                                    }
-                                },
-                                x: {
-                                    display: true
-                                }
-                            }
-                        }
-                    });
-                });
-            }
-        }">
-
+        x-data="modalChartComponent()"> <!-- Aca agrega los datos mediante arroba json(variable) -->
         <div class="flex flex-col md:h-full md:flex-row gap-6">
             <!-- Gráfico principal -->
             <div class="bg-white rounded-lg shadow-md p-6 flex-1">
@@ -113,7 +42,6 @@
                         <canvas id="revenueChart" class="w-full h-full"></canvas>
                     </div>
                 </div>
-
             </div>
 
             <!-- Stats por período -->
@@ -168,8 +96,9 @@
                         <tbody>
                             @foreach ($lowerAndHigher['higher15'] as $higher)
                                 <tr class="border-b">
-                                    <td class="py-2 text-gray-700 text-left">Maestro {{ $higher->name }}</td>
-                                    <td class="py-2 text-gray-900 text-right font-bold">{{ round($higher->Calification) }}</td>
+                                    <td class="py-2 text-gray-700 text-left">{{ $higher->name }}</td>
+                                    <td class="py-2 text-gray-900 text-right font-bold">{{ round($higher->Calification) }}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -185,7 +114,8 @@
                             @foreach ($lowerAndHigher['lower10'] as $lower)
                                 <tr class="border-b">
                                     <td class="py-2 text-gray-700 text-left">Maestro {{ $lower->name }}</td>
-                                    <td class="py-2 text-gray-900 text-right font-bold">{{ round($lower->Calification) }}</td>
+                                    <td class="py-2 text-gray-900 text-right font-bold">{{ round($lower->Calification) }}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -206,9 +136,7 @@
                 </div>
             </div>
         </div>
-
     </div>
-
     </div>
 
     <!-- Gráfico principal (torta de períodos) -->

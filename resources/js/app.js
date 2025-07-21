@@ -1,10 +1,11 @@
 import './bootstrap';
 
-// resources/js/app.js
 import { initSidebar } from './sidebar';
+import { modalChartComponent } from './graficopopup';
 
-// Un único listener para arrancar TODO
+
+window.modalChartComponent = modalChartComponent;
+
 document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
-  // aquí podrías llamar a initOtroMódulo(), initChart(), etc.
 });

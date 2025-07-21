@@ -1,12 +1,12 @@
 // resources/js/sidebar.js
 
 export function initSidebar() {
-  const sidebar     = document.getElementById('sidebar');
-  const toggleBtn   = document.getElementById('sidebarToggle');
-  const profileBtn  = document.getElementById('profileBtn');
-  const dropdown    = document.getElementById('dropdownMenu');
+  const sidebar = document.getElementById('sidebar');
+  const toggleBtn = document.getElementById('sidebarToggle');
+  const profileBtn = document.getElementById('profileBtn');
+  const dropdown = document.getElementById('dropdownMenu');
   const buttons = Array.from(document.querySelectorAll('#sidebar button'))
-  .filter(btn => !btn.classList.contains('sidebar-exempt'));
+    .filter(btn => !btn.classList.contains('sidebar-exempt'));
 
   const STORAGE_KEY = 'selectedSidebarIndex';
 
@@ -17,15 +17,26 @@ export function initSidebar() {
 
   // — Sidebar toggle para móvil
   toggleBtn?.addEventListener('click', () => {
+    const isOpen = !sidebar.classList.contains('-translate-x-full');
     sidebar.classList.toggle('-translate-x-full');
-  });
-  document.addEventListener('click', e => {
-    if (window.innerWidth < 768 &&
-        !sidebar.contains(e.target) &&
-        !toggleBtn.contains(e.target)) {
-      sidebar.classList.add('-translate-x-full');
+
+    // Ocultar el botón si ahora está abierto
+    if (isOpen) {
+      toggleBtn.classList.remove('hidden');
+    } else {
+      toggleBtn.classList.add('hidden');
     }
   });
+
+  document.addEventListener('click', e => {
+    if (window.innerWidth < 768 &&
+      !sidebar.contains(e.target) &&
+      !toggleBtn.contains(e.target)) {
+      sidebar.classList.add('-translate-x-full');
+      toggleBtn.classList.remove('hidden'); // mostrar el botón al cerrar
+    }
+  });
+
 
   // — Dropdown de perfil
   profileBtn?.addEventListener('click', e => {
@@ -34,7 +45,7 @@ export function initSidebar() {
   });
   document.addEventListener('click', e => {
     if (!profileBtn.contains(e.target) &&
-        !dropdown.contains(e.target)) {
+      !dropdown.contains(e.target)) {
       dropdown.classList.add('hidden');
     }
   });
@@ -78,5 +89,5 @@ export function initSidebar() {
       .classList.replace('text-white', 'text-blue-500');
   }
 
-  
+
 }

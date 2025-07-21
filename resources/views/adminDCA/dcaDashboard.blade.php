@@ -7,75 +7,7 @@
     <!-- Main Content -->
     <!-- Chart de períodos -->
     <div class="flex-1 ml-0 md:h-full md:ml-64 p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto"
-        x-data="{
-            openModal: false,
-            modalChartLabels: [],
-            modalChartData: [],
-            modalTitle: '',
-            showModalChart(title, labels, data) {
-                this.modalTitle = title;
-                this.modalChartLabels = labels;
-                this.modalChartData = data;
-                this.openModal = true;
-        
-                this.$nextTick(() => {
-                    const ctx = document.getElementById('modalChart').getContext('2d');
-        
-                    // Destruir gráfico anterior si existe
-                    if (window.modalChartInstance) {
-                        window.modalChartInstance.destroy();
-                    }
-        
-                    // Crear gráfico de línea conectado
-                    window.modalChartInstance = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: this.modalChartLabels, // nombres de los maestros
-                            datasets: [{
-                                label: 'Evaluaciones',
-                                data: this.modalChartData,
-                                borderColor: '#3b82f6',
-                                backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                                fill: true,
-                                tension: 0.4,
-                                pointRadius: 6,
-                                pointHoverRadius: 8
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: true,
-                                    position: 'bottom'
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function(context) {
-                                            const label = context.label || '';
-                                            const value = context.raw || 0;
-                                            return `${label}: ${value}`;
-                                        }
-                                    }
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    suggestedMax: 25,
-                                    ticks: {
-                                        stepSize: 1
-                                    }
-                                },
-                                x: {
-                                    display: true
-                                }
-                            }
-                        }
-                    });
-                });
-            }
-        }">
+        x-data="modalChartComponent()">
 
         <div class="flex flex-col md:h-full md:flex-row gap-6">
             <!-- Gráfico principal -->
@@ -160,7 +92,7 @@
                         <tbody>
                             @for ($k; $k <= 10; $k++)
                                 <tr class="border-b">
-                                    <td class="py-2 text-gray-700 text-left">Maestro {{ chr(65 + $k) }}</td>
+                                    <td class="py-2 text-gray-700 text-left">{{ chr(65 + $k) }}</td>
                                     <td class="py-2 text-gray-900 text-right font-bold">{{ rand(16, 20) }}</td>
                                 </tr>
                             @endfor

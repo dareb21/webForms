@@ -5,17 +5,10 @@ use Carbon\Carbon;
 
 Class AdminServices
 {
-   
-    public function dashboard(Request $request=null)
-    {
-    $thisSchool = null;
-    if ($request)
-    {
-        $thisSchool = $request->schoolId;
-    }
+   public function schools($thisSchool)
+   {
 
 
-//Esto es para sacar las secciones con envio contra las que no tienen envio
 $sections = DB::table('schools')
     ->join('courses', 'schools.id', '=', 'courses.school_id')
     ->join('sections', 'courses.id', '=', 'sections.course_id')
@@ -41,11 +34,14 @@ $schools = $schoolsCollection->map(function ($id, $name) {
 $allSections=$sections->sum("section_count");
 $sectionsWithSubmits=$sections->sum("sections_with_submits");
 $sectionsLeft = $allSections -$sectionsWithSubmits;
+return ["schoolsInfo"=>$schools,"withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections];
+}
 
 
-//Esto es para el dashboard principal ya sea general o escuela
+    public function dashboard($thisSchool)
+    {
+
 $thisYear = now()->year;
-
 $data = DB::table("surveys as s")
     ->join("survey_submits as sb", "s.id", "=", "sb.survey_id")
     ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
@@ -79,8 +75,12 @@ foreach ($data as $item) {
 
 $anualScore = round($infoPerTerm->pluck("termScore")->sum() / max(count($infoPerTerm), 1));
 $infoPerTermArray=$infoPerTerm->toArray();
+return ["resultsPerTerm" =>$infoPerTermArray,"anual" =>$anualScore];
 
-//Esto es para sacar el top 10 mayores a 15 y menores a 10
+}
+public function lowerAndHigher($thisSchool)
+{
+    
 $lower10Query = DB::table('users as prof')
     ->join('sections as sec', 'prof.id', '=', 'sec.user_id')
     ->join('survey_submits as sb', 'sec.id', '=', 'sb.section_id')
@@ -119,9 +119,9 @@ $higher15Query=DB::table('users as prof')
 
 $higher15=$higher15Query->toArray();
 $lower10=$lower10Query->toArray();
-return ["resultsPerTerm" =>$infoPerTermArray,"anual" =>$anualScore,"withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections,"schoolsInfo"=>$schools,"lower10"=>$lower10,"higher15"=>$higher15];
-}
 
+return ["lower10"=>$lower10,"higher15"=>$higher15];
+}
 
 public function adminResults()
 {

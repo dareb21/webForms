@@ -1,15 +1,11 @@
 @extends('admin.adminLayout')
 @section('content')
     @php
-        $k = 0;
-        $j = 0;
-
         $pAnual = $dashboard['anual'];
 
         $p1 = isset($dashboard['resultsPerTerm'][0]['termScore']) ? $dashboard['resultsPerTerm'][0]['termScore'] : 0;
         $p2 = isset($dashboard['resultsPerTerm'][1]['termScore']) ? $dashboard['resultsPerTerm'][1]['termScore'] : 0;
         $p3 = isset($dashboard['resultsPerTerm'][2]['termScore']) ? $dashboard['resultsPerTerm'][2]['termScore'] : 0;
-
     @endphp
     <!-- Main Content -->
     <!-- Chart de períodos -->
@@ -168,12 +164,12 @@
                 <div class="mt-2">
                     <table class="mx-auto w-4/5">
                         <tbody>
-                            @for ($k; $k <= 10; $k++)
+                            @foreach ( as )
                                 <tr class="border-b">
                                     <td class="py-2 text-gray-700 text-left">Maestro {{ chr(65 + $k) }}</td>
                                     <td class="py-2 text-gray-900 text-right font-bold">{{ rand(16, 20) }}</td>
                                 </tr>
-                            @endfor
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

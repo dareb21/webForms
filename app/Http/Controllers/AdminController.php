@@ -69,9 +69,17 @@ if ($thisSurvey->status === 1)
 
 
 
-  public function adminDashboard()
+  public function adminDashboard(Request $request=null)
     {
-    $dashboard = $this->adminServices->dashboard();
+    $thisSchool = 0;
+    if ($request)
+    {
+        $thisSchool = $request->schoolId;
+    }
+     $schoolInfo =$this->adminServices->schools($thisSchool); 
+    $dashboard = $this->adminServices->dashboard($thisSchool);
+    $lowerAndHigher = $this->adminServices->lowerAndHigher($thisSchool);
+    dd($schoolInfo,$dashboard,$lowerAndHigher);
      return view("admin.adminDashboard",compact("dashboard"));
     }
 
@@ -515,7 +523,7 @@ if (!$hasData)
 public function adminControlCourses()
 {
   $courses = [];
-  $data = Section::with(["professor"])->paginate(10);
+  $data = Section::with(["professor","course"])->paginate(10);
   if(!$data)
   {
     $noInfo = True;
@@ -524,9 +532,10 @@ public function adminControlCourses()
   foreach ($data as $item)
   {
     $courses[]=[
-      "courseName" => $item->name,
+      "courseName" => $item->course->name,
       "courseProfessor"=>$item->professor->name,
       "sectionId" =>$item->id,
+      "sectionCode"=>$item->code,
       "courseStatus"=>$item->status,
     ];
   }

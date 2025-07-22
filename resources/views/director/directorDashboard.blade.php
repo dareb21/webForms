@@ -1,15 +1,11 @@
 @extends('director.directorLayout')
 @section('content')
     @php
-        $k = 0;
-        $j = 0;
+        $pAnual = $dashboard['anual'];
 
-        // $pAnual = $dashboard['anual'];
-
-        // $p1 = isset($dashboard['resultsPerTerm'][0]['termScore']) ? $dashboard['resultsPerTerm'][0]['termScore']: 0;
-        // $p2 = isset($dashboard['resultsPerTerm'][1]['termScore']) ? $dashboard['resultsPerTerm'][1]['termScore']: 0;
-        // $p3 = isset($dashboard['resultsPerTerm'][2]['termScore']) ? $dashboard['resultsPerTerm'][2]['termScore']: 0;
-
+        $p1 = isset($dashboard['resultsPerTerm'][0]['termScore']) ? $dashboard['resultsPerTerm'][0]['termScore']: 0;
+        $p2 = isset($dashboard['resultsPerTerm'][1]['termScore']) ? $dashboard['resultsPerTerm'][1]['termScore']: 0;
+        $p3 = isset($dashboard['resultsPerTerm'][2]['termScore']) ? $dashboard['resultsPerTerm'][2]['termScore']: 0;
     @endphp
     <!-- Main Content -->
     <!-- Chart de períodos -->
@@ -29,15 +25,17 @@
                     </div>
                     <div>
                         <label for="schoolSegmentation" class="text-gray-700 font-bold">Segmentación: </label>
-                        <!-- Form para seleccionar la segmentación de escuelas -->
-                        <select name="schoolSegmentation" id="schoolSegmentation" class="rounded-sm p-1 shadow-md">
-                            <option value="">Datos Generales</option>
-                            <option value="">Escuela de Ciencias Informáticas</option>
-                            <option value="">Escuela de Ciencias Exactas</option>
-                            <option value="">Escuela de Derecho</option>
-                            <option value="">Escuela de Comunicación</option>
-                            <option value="">Escuela de Agronómicas</option>
-                        </select>
+                        <form action="{{ route('deanDashboard') }}" method="GET" class="inline-block">
+                            <select name="schoolSegmentation" id="schoolSegmentation" onchange="this.form.submit()"
+                                class="rounded-sm p-1 md:w-80 shadow-md">
+                                {{-- @foreach ($schoolInfo['schoolsInfo'] as $school)
+                                    <option value="{{ $school['id'] }}"
+                                        {{ request('schoolSegmentation') == $school['id'] ? 'selected' : '' }}>
+                                        {{ $school['name'] }}
+                                    </option>
+                                @endforeach --}}
+                            </select>
+                        </form>
                     </div>
                 </div>
                 <div class="flex justify-center items-center">
@@ -64,7 +62,7 @@
                     [12, 17, 15, 14, 18]
                 )">
                     <p class="font-bold text-gray-800 text-xl">Período 1</p>
-                    {{-- <h2 class="text-3xl font-bold mt-2 text-gray-600">{{ $p1 }}</h2> --}}
+                    <h2 class="text-3xl font-bold mt-2 text-gray-600">{{ $p1 }}</h2>
                 </div>
 
                 <!-- Período 2 -->
@@ -75,7 +73,7 @@
                     [12, 15, 18, 14, 17]
                 )">
                     <p class="font-bold text-gray-800 text-xl">Período 2</p>
-                    {{-- <h2 class="text-3xl font-bold mt-2 text-gray-600">{{ $p2 }}</h2> --}}
+                    <h2 class="text-3xl font-bold mt-2 text-gray-600">{{ $p2 }}</h2>
                 </div>
 
                 <!-- Período 3 -->
@@ -86,7 +84,7 @@
                     [12, 15, 18, 14, 17]
                 )">
                     <p class="font-bold text-gray-800 text-xl">Período 3</p>
-                    {{-- <h2 class="text-3xl font-bold mt-2 text-gray-600">{{ $p3 }}</h2> --}}
+                    <h2 class="text-3xl font-bold mt-2 text-gray-600">{{ $p3 }}</h2>
                 </div>
             </div>
         </div>
@@ -98,12 +96,13 @@
                 <div class="mt-2">
                     <table class="mx-auto w-4/5">
                         <tbody>
-                            @for ($k; $k <= 10; $k++)
+                            @foreach ($higherOrLower['higher15'] as $higher)
                                 <tr class="border-b">
-                                    <td class="py-2 text-gray-700 text-left">{{ chr(65 + $k) }}</td>
-                                    <td class="py-2 text-gray-900 text-right font-bold">{{ rand(16, 20) }}</td>
+                                    <td class="py-2 text-gray-700 text-left">{{ $higher->name }}</td>
+                                    <td class="py-2 text-gray-900 text-right font-bold">{{ round($higher->Calification) }}
+                                    </td>
                                 </tr>
-                            @endfor
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -114,12 +113,13 @@
                 <div class="mt-2">
                     <table class="mx-auto w-4/5">
                         <tbody>
-                            @for ($j; $j <= 10; $j++)
+                            @foreach ($higherOrLower['lower10'] as $lower)
                                 <tr class="border-b">
-                                    <td class="py-2 text-gray-700 text-left">Maestro {{ chr(65 + $j) }}</td>
-                                    <td class="py-2 text-gray-900 text-right font-bold">{{ rand(0, 9) }}</td>
+                                    <td class="py-2 text-gray-700 text-left">Maestro {{ $lower->name }}</td>
+                                    <td class="py-2 text-gray-900 text-right font-bold">{{ round($lower->Calification) }}
+                                    </td>
                                 </tr>
-                            @endfor
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -151,7 +151,7 @@
                 labels: ["Período 1", "Período 2", "Período 3"],
                 datasets: [{
                     label: 'Puntaje',
-                    data: [12, 20, 13],
+                    data: [{{ $p1 }},{{ $p2 }},{{ $p3 }}],
                     backgroundColor: ['#f7dc6f', '#0000FF', '#58d68d'],
                     borderColor: '#ffffff',
                     borderWidth: 2,
@@ -190,8 +190,8 @@
 
 
         // Gráfico de clases evaluados
-        const value = 55;
-        const remaining = 325 - value;
+        const value = {{ $schoolInfo['withSubmits'] }};
+        const remaining = {{ $schoolInfo['sections'] }} - value;
 
         new Chart(document.getElementById('progressChart'), {
             type: 'doughnut',

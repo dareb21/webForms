@@ -43,6 +43,9 @@ return view('dean.deanDashboard', compact("schoolInfo", "dashboard", "lowerAndHi
 
     public function deanResults($schoolId)
     {
+        $years = Survey::selectRAW("Year(dateStart)")
+            ->distinct()
+            ->get();
         $thisYear = session()->pull('year', now()->year);
         $data = DB::table('survey_submits as sb')
             ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
@@ -95,9 +98,9 @@ return view('dean.deanDashboard', compact("schoolInfo", "dashboard", "lowerAndHi
             ];
 
         }
-        $schoolName = $data->schoolName;
+        $schoolName = $data[0]->schoolName;
 
-        return view('dean.deanResults', compact("dataResults", "schoolName", "schoolId"));
+        return view('dean.deanResults', compact("dataResults", "schoolName", "schoolId","years"));
     }
 
 

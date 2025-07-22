@@ -26,9 +26,9 @@ class DirectorController extends Controller
 
     public function directorDashboard(){
 $thisSchool = School::select("id")->where("director_id",61)->first();        
-$dashboard = $this->directorService->dashboardSubmits($thisSchool);
+$dashboard = $this->directorService->dashboard($thisSchool);
 $higherOrLower=$this->directorService->higherOrLower($thisSchool);
-return view('director.directorDashboard',compact("submits","dashboard","higherOrLower"));
+return view('director.directorDashboard',compact("dashboard","higherOrLower"));
 
     }
 

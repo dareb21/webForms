@@ -25,7 +25,7 @@
                         <label for="schoolSegmentation" class="text-gray-700 font-bold">Segmentación: </label>
                         <form action="{{ route('adminDashboard') }}" method="GET" class="inline-block">
                             <select name="schoolSegmentation" id="schoolSegmentation" onchange="this.form.submit()"
-                                class="rounded-sm p-1 shadow-md">
+                                class="rounded-sm p-1 md:w-80 shadow-md">
                                 <option value="0">General</option>
                                 @foreach ($schoolInfo['schoolsInfo'] as $school)
                                     <option value="{{ $school['id'] }}"

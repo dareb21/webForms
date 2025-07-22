@@ -48,12 +48,12 @@
                                     <th class="px-4 py-2 text-center">Acción</th>
                                 </tr>
                             </thead>
-                            <tbody class="border-b">
+                            <tbody class="border-b border-gray-300">
                                 @foreach ($school as $results)
                                     <tr>
-                                        <td class="px-4 py-2 text-center">{{ $results['Name'] }}</td>
-                                        <td class="px-4 py-2 text-center">{{ $results['score'] }}</td>
-                                        <td class="px-4 py-2 text-center">
+                                        <td class="border-b border-gray-300 px-4 py-2 text-center">{{ $results['Name'] }}</td>
+                                        <td class="border-b border-gray-300 px-4 py-2 text-center">{{ $results['score'] }}</td>
+                                        <td class="border-b border-gray-300 px-4 py-2 text-center">
                                             <a href="{{ route('deanResults', ['schoolId' => $results['id']]) }}"
                                                 class="bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold py-1 px-3 rounded">VER
                                                 ESCUELA</a>

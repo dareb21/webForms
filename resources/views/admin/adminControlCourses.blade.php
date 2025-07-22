@@ -47,7 +47,6 @@
                                     class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white text-center font-bold py-1 px-4 rounded">
                                     Buscar
                                 </button>
-
                                 <a href="{{ route('adminControlCourses') }}"
                                     class="inline-block bg-orange-500 hover:bg-blue-700 hover:cursor-pointer text-white font-bold py-1 px-4 rounded">
                                     Refrescar
@@ -76,18 +75,18 @@
                             @else
                                 @foreach ($courses as $course)
                                     <tr>
-                                        <td class="border border-gray-400 px-4 py-2 text-center">
+                                        <td class="border-b border-gray-400 px-4 py-2 text-center">
                                             {{ $course['courseProfessor'] }}</td>
-                                        <td class="border border-gray-400 px-4 py-2 text-center">{{ $course['courseName'] }}
+                                        <td class="border-b border-gray-400 px-4 py-2 text-center">{{ $course['courseName'] }}
                                         </td>
-                                        <td class="border border-gray-400 px-4 py-2 text-center">Hola</td>
+                                        <td class="border-b border-gray-400 px-4 py-2 text-center">{{ $course['sectionCode'] }}</td>
                                         @if ($course['courseStatus'] === 1)
-                                            <td class="border border-gray-400 px-4 py-2 text-center">Activo</td>
+                                            <td class="border-b border-gray-400 px-4 py-2 text-center">Activo</td>
                                         @else
-                                            <td class="border border-gray-400 px-4 py-2 text-center">Inactivo</td>
+                                            <td class="border-b border-gray-400 px-4 py-2 text-center">Inactivo</td>
                                         @endif
 
-                                        <td class="md:w-40 border border-gray-400 px-4 py-2 text-center">
+                                        <td class="border-b border-gray-400 md:w-40  px-4 py-2 text-center">
                                             <div class="flex flex-col sm:flex-row sm:justify-center sm:items-center gap-1">
                                                 <form
                                                     action="{{ route('blockCourse', ['sectionId' => $course['sectionId']]) }}"

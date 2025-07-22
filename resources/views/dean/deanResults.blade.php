@@ -24,12 +24,12 @@
                                         @if (isset($noInfo) && $noInfo)
                                             <option value="noInfo">None</option>
                                         @else
-                                            {{-- @foreach ($years as $year)
+                                            @foreach ($years as $year)
                                                 <option value="{{ $year->{'Year(dateStart)'} }}"
                                                     {{ request('annualYear') == $year->{'Year(dateStart)'} ? 'selected' : '' }}>
                                                     {{ $year->{'Year(dateStart)'} }}
                                                 </option>
-                                            @endforeach --}}
+                                            @endforeach
                                         @endif
                                     </select>
                                     <label for="anualPeriod">Período</label>
@@ -76,10 +76,10 @@
                                 @foreach ($dataResults as $results)
                                     <tbody x-data="{ open: false }" class="border-b">
                                         <tr>
-                                            <td class="px-4 py-2 text-center">Catedrático {{ $results['professorName'] }}
+                                            <td class="border-b border-gray-400 px-4 py-2 text-center">Catedrático {{ $results['professorName'] }}
                                             </td>
-                                            <td class="px-4 py-2 text-center">{{ $results['professorScoreAvg'] }}</td>
-                                            <td class="px-4 py-2 text-center">
+                                            <td class="border-b border-gray-400 px-4 py-2 text-center">{{ $results['professorScoreAvg'] }}</td>
+                                            <td class="border-b border-gray-400 px-4 py-2 text-center">
                                                 <button type="button" @click="open = !open"
                                                     class="text-blue-600 hover:underline focus:outline-none">
                                                     <span x-show="!open" class="hover:cursor-pointer">Ver detalles</span>

@@ -92,13 +92,13 @@
                         </thead>
 
                         @if (isset($noInfo) && $noInfo)
-                            <tbody x-data="{ open: false }" class="border-b">
+                            <tbody x-data="{ open: false }" class="border-b border-gray-300">
                                 @for ($i = 1; $i <= 4; $i++)
                                     <td class="px-4 py-2 text-center"></td>
                                 @endfor
                             @else
                                 @foreach ($adminResults['dataResults'] as $resultado)
-                            <tbody x-data="{ open: false }" class="border-b">
+                            <tbody x-data="{ open: false }" class="border-b border-gray-300">
                                 <tr>
                                     <td class="px-4 py-2 text-center">{{ $resultado['professorName'] }}</td>
                                     <td class="px-4 py-2 text-center">{{ $resultado['professorScoreAvg'] }}</td>

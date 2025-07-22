@@ -22,13 +22,13 @@
                         <table class="table-auto border border-gray-400 w-full min-w-[600px] text-left">
                             <thead>
                                 <tr>
-                                    <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">
+                                    <th class="border-b border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">
                                         Estudiante
                                     </th>
-                                    <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">
+                                    <th class="border-b border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">
                                         Calificación
                                     </th>
-                                    <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">
+                                    <th class="border-b border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">
                                         Accion
                                     </th>
                                 </tr>
@@ -36,14 +36,14 @@
                             <tbody>
                                 @foreach ($adminStudentView['adminStudentView'] as $resultado)
                                     <tr>
-                                        <td class="border border-gray-400 px-4 py-2 text-center">
+                                        <td class="border-b border-gray-400 px-4 py-2 text-center">
                                             {{ $resultado['nameStudent'] }}
                                         </td>
-                                        <td class="border border-gray-400 px-4 py-2 text-center">
+                                        <td class="border-b border-gray-400 px-4 py-2 text-center">
                                             {{ $resultado['score'] }}
                                         </td>
                                         <!-- Agrega este bloque dentro de tu <td> en la tabla -->
-                                        <td class="border border-gray-400 px-4 py-2 text-center">
+                                        <td class="border-b border-gray-400 px-4 py-2 text-center">
                                             <div x-data="adminAnswers()" class="relative">
                                                 <!-- Botón que activa el modal y carga las respuestas -->
                                                 <a @click="fetchAnswers({{ $resultado['submitId'] }})"

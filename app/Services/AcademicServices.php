@@ -33,7 +33,7 @@ $schools = $schoolsCollection->map(function ($id, $name) {
 })->values()->toArray();
 $allSections=$sections->sum("section_count");
 $sectionsWithSubmits=$sections->sum("sections_with_submits");
-return ["withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections];
+return ["withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections, "schoolsInfo" => $schools];
 }
 
 

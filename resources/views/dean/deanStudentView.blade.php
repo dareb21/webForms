@@ -25,13 +25,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($resultados as $results)
+                            @foreach ($resultados['adminStudentView'] as $results)
                                 <tr>
-                                    <td class="border border-gray-400 px-4 py-2 text-center">{{ $results['nameStudent'] }}
+                                    <td class="border-b border-gray-300 px-4 py-2 text-center">{{ $results['nameStudent'] }}
                                     </td>
-                                    <td class="border border-gray-400 px-4 py-2 text-center">{{ $results['score'] }}</td>
+                                    <td class="border-b border-gray-300 px-4 py-2 text-center">{{ $results['score'] }}</td>
                                     <!-- Agrega este bloque dentro de tu <td> en la tabla -->
-                                    <td class="border border-gray-400 px-4 py-2 text-center">
+                                    <td class="border-b border-gray-300 px-4 py-2 text-center">
                                         <div x-data="deanAnswers()" class="relative">
                                             <!-- Botón que activa el modal y carga las respuestas -->
                                             <a @click="fetchAnswers({{ $results['submitId'] }})"

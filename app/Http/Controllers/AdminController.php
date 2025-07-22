@@ -77,8 +77,7 @@ if ($thisSurvey->status === 1)
     $schoolInfo =$this->adminService->sections($thisSchool); 
     $dashboard = $this->adminService->dashboard($thisSchool);
     $lowerAndHigher = $this->adminService->lowerAndHigher($thisSchool);
-    dd($dropDown,$schoolInfo,$dashboard,$lowerAndHigher);
-     return view("admin.adminDashboard",compact("dashboard","schoolInfo","lowerAndHigher"));
+     return view("admin.adminDashboard",compact("dashboard","dropDown","schoolInfo","lowerAndHigher"));
     }
 
 
@@ -561,7 +560,7 @@ return back()->with('success', 'Curso activado correctamente');
 public function searchCourse(Request $request)
 {
 $userSearch = User::where("name", "LIKE", $request->courseSearch. "%")->where("role","professor")->select("id","name")->first(); /*$request->courseSearch*/
-$data = User::with(["Section"])->findOrFail($userSearch->id);
+$data = User::with(["section.Course"])->findOrFail($userSearch->id);
 if(!$data->section)
   {
     $changePagination = false;
@@ -571,10 +570,11 @@ if(!$data->section)
   foreach ($data->section as $item)
   {
     $courses[]=[
-      "courseName" => $item->name,
+      "courseName" => $item->course->name,
       "courseProfessor"=>$data->name,
       "sectionId" =>$item->id,
       "courseStatus"=>$item->status,
+      "sectionCode"=>$item->code,
     ];
   }
   

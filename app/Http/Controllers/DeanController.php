@@ -31,12 +31,12 @@ public function deanDashboard(Request $request)
     {
         $thisSchool = $request->schoolSegmentation;
     }
-    $dropDown =$this->adminService->dropDown();
-     $schoolInfo =$this->deanService->sections($thisSchool); 
+    $dropDown =$this->deanService->dropDown();
+    $schoolInfo =$this->deanService->sections($thisSchool); 
     $dashboard = $this->deanService->dashboard($thisSchool);
     $lowerAndHigher = $this->deanService->lowerAndHigher($thisSchool);
 
-return view('dean.deanDashboard', compact("schoolInfo", "dashboard", "lowerAndHigher"));
+return view('dean.deanDashboard', compact("schoolInfo", "dashboard","dropDown","lowerAndHigher"));
 
     }
 

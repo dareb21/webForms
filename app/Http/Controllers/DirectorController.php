@@ -28,9 +28,9 @@ class DirectorController extends Controller
 $thisSchool = School::select("id","director_id")->where("director_id",61)->first(); //Aca ver como poner el auth
 
 $sections = $this->directorService->sections($thisSchool->id);
-$dashBoard = $this->directorService-> dashboard($thisSchool->director_id);
+$dashboard = $this->directorService-> dashboard($thisSchool->director_id);
 $higherOrLower=$this->directorService->higherOrLower($thisSchool->id);
-return view('director.directorDashboard',compact("sections","dashBoard","higherOrLower"));
+return view('director.directorDashboard',compact("sections","dashboard","higherOrLower"));
 
     }
 

@@ -27,7 +27,7 @@
                             <select name="schoolSegmentation" id="schoolSegmentation" onchange="this.form.submit()"
                                 class="rounded-sm p-1 md:w-80 shadow-md">
                                 <option value="0">General</option>
-                                @foreach ($schoolInfo['schoolsInfo'] as $school)
+                                @foreach ($dropDown as $school)
                                     <option value="{{ $school['id'] }}"
                                         {{ request('schoolSegmentation') == $school['id'] ? 'selected' : '' }}>
                                         {{ $school['name'] }}

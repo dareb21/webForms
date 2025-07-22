@@ -2,8 +2,13 @@
 
 @section('content')
     @php
-        $currentPage = $data->currentPage();
-        $lastPage = $data->lastPage();
+        if ($changePagination) {
+            $currentPage = $data->currentPage();
+            $lastPage = $data->lastPage();
+        }else{
+            $currentPage = 1;
+            $lastPage = 1;
+        }
         $start = max(1, $currentPage - 2);
         $end = min($lastPage, $currentPage + 2);
     @endphp

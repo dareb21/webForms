@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\School;
 Class AcademicServices
 {
-    public function dropdown()
+    public function dropDown()
 {
     return Cache::remember('schools', 600, function () {
         return School::select('id', 'name')->get()
@@ -36,7 +36,7 @@ $sections = DB::table('schools')
     ->get();
 $allSections=$sections->sum("section_count");
 $sectionsWithSubmits=$sections->sum("sections_with_submits");
-return ["withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections, "schoolsInfo" => $schools];
+return ["withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections];
 }
 
 

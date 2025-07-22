@@ -73,9 +73,11 @@ if ($thisSurvey->status === 1)
     {
         $thisSchool = $request->schoolSegmentation;
     }
-     $schoolInfo =$this->adminService->schools($thisSchool); 
+    $dropDown =$this->adminService->dropDown();
+    $schoolInfo =$this->adminService->sections($thisSchool); 
     $dashboard = $this->adminService->dashboard($thisSchool);
     $lowerAndHigher = $this->adminService->lowerAndHigher($thisSchool);
+    dd($dropDown,$schoolInfo,$dashboard,$lowerAndHigher);
      return view("admin.adminDashboard",compact("dashboard","schoolInfo","lowerAndHigher"));
     }
 

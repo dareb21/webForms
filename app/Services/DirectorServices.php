@@ -5,26 +5,24 @@ use Carbon\Carbon;
 
 Class DirectorServices
 {
-//    public function dashboardSubmits($schoolId)
-//    {
-// $sections = DB::table('schools')
-//     ->join('courses', 'schools.id', '=', 'courses.school_id')
-//     ->join('sections', 'courses.id', '=', 'sections.course_id')
-//     ->leftJoin('survey_submits', 'sections.id', '=', 'survey_submits.section_id')
-//     ->where('schools.id', $schoolId)
-//     ->select(
-//         'schools.id as schoolsId',
-//         'schools.name as schoolsName',
-//         DB::raw('COUNT(DISTINCT sections.id) as section_count'),
-//         DB::raw('COUNT(DISTINCT CASE WHEN survey_submits.id IS NOT NULL THEN sections.id END) as sections_with_submits')
-//     )
-//     ->groupBy('schools.id')
-//     ->get();
-// $allSections=$sections->sum("section_count");
-// $sectionsWithSubmits=$sections->sum("sections_with_submits");
-// $sectionsLeft = $allSections -$sectionsWithSubmits;
-// return ["withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections];
-// }
+   public function sections($schoolId)
+   {
+$sections = DB::table('schools')
+    ->join('courses', 'schools.id', '=', 'courses.school_id')
+    ->join('sections', 'courses.id', '=', 'sections.course_id')
+    ->leftJoin('survey_submits', 'sections.id', '=', 'survey_submits.section_id')
+    ->where('schools.id', $schoolId)
+    ->select(
+        DB::raw('COUNT(DISTINCT sections.id) as section_count'),
+        DB::raw('COUNT(DISTINCT CASE WHEN survey_submits.id IS NOT NULL THEN sections.id END) as sections_with_submits')
+    )
+    ->groupBy('schools.id')
+    ->get();
+$allSections=$sections->sum("section_count");
+$sectionsWithSubmits=$sections->sum("sections_with_submits");
+$sectionsLeft = $allSections -$sectionsWithSubmits;
+return ["withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections];
+}
 
 
     public function dashboard($userId)

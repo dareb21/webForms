@@ -2,13 +2,25 @@
 namespace App\Services;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Cache;
+use App\Models\School;
 Class AcademicServices
 {
-   public function schools($thisSchool)
+    public function dropdown()
+{
+    return Cache::remember('schools', 600, function () {
+        return School::select('id', 'name')->get()
+            ->map(function ($school) {
+              return [
+                    'id' => $school->id,
+                    'name' => $school->name,
+                ];
+            })->toArray();
+    });
+}
+
+   public function sections($thisSchool)
    {
-
-
 $sections = DB::table('schools')
     ->join('courses', 'schools.id', '=', 'courses.school_id')
     ->join('sections', 'courses.id', '=', 'sections.course_id')
@@ -17,20 +29,11 @@ $sections = DB::table('schools')
         $query->where('schools.id', $thisSchool);
     })
     ->select(
-        'schools.id as schoolsId',
-        'schools.name as schoolsName',
         DB::raw('COUNT(DISTINCT sections.id) as section_count'),
         DB::raw('COUNT(DISTINCT CASE WHEN survey_submits.id IS NOT NULL THEN sections.id END) as sections_with_submits')
     )
     ->groupBy('schools.id')
     ->get();
-$schoolsCollection=$sections->pluck("schoolsId","schoolsName");
-$schools = $schoolsCollection->map(function ($id, $name) {
-    return [
-        'id' => $id,
-        'name' => $name,
-    ];
-})->values()->toArray();
 $allSections=$sections->sum("section_count");
 $sectionsWithSubmits=$sections->sum("sections_with_submits");
 return ["withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections, "schoolsInfo" => $schools];

@@ -21,7 +21,8 @@ class DcaController extends Controller
     {
         $thisSchool = $request->schoolSegmentation;
     }
-     $schoolInfo =$this->dcaService->schools($thisSchool); 
+    $dropDown =$this->adminService->dropDown();
+     $schoolInfo =$this->dcaService->sections($thisSchool); 
     $dashboard = $this->dcaService->dashboard($thisSchool);
     $lowerAndHigher = $this->dcaService->lowerAndHigher($thisSchool);
     return view("adminDCA.dcaDashboard", compact("dashboard","schoolInfo","lowerAndHigher"));

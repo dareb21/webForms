@@ -31,7 +31,8 @@ public function deanDashboard(Request $request)
     {
         $thisSchool = $request->schoolSegmentation;
     }
-     $schoolInfo =$this->deanService->schools($thisSchool); 
+    $dropDown =$this->adminService->dropDown();
+     $schoolInfo =$this->deanService->sections($thisSchool); 
     $dashboard = $this->deanService->dashboard($thisSchool);
     $lowerAndHigher = $this->deanService->lowerAndHigher($thisSchool);
 

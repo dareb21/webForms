@@ -5,7 +5,7 @@ use Carbon\Carbon;
 
 Class DirectorServices
 {
-   public function dashboardSubmits($schoolId)
+   public function sections($schoolId)
    {
 $sections = DB::table('schools')
     ->join('courses', 'schools.id', '=', 'courses.school_id')
@@ -13,8 +13,6 @@ $sections = DB::table('schools')
     ->leftJoin('survey_submits', 'sections.id', '=', 'survey_submits.section_id')
     ->where('schools.id', $schoolId)
     ->select(
-        'schools.id as schoolsId',
-        'schools.name as schoolsName',
         DB::raw('COUNT(DISTINCT sections.id) as section_count'),
         DB::raw('COUNT(DISTINCT CASE WHEN survey_submits.id IS NOT NULL THEN sections.id END) as sections_with_submits')
     )

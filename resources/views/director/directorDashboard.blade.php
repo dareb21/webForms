@@ -190,8 +190,8 @@
 
 
         // Gráfico de clases evaluados
-        const value = {{ $schoolInfo['withSubmits'] }};
-        const remaining = {{ $schoolInfo['sections'] }} - value;
+        const value = 55;
+        const remaining = 325 - value;
 
         new Chart(document.getElementById('progressChart'), {
             type: 'doughnut',

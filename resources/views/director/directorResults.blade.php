@@ -18,6 +18,25 @@
                         EVALUACIONES POR CATEDRÁTICOS
                     </h1>
                 </div>
+                <br>
+                <div>
+                    <form action="">
+                        <div>
+                            <label for="schoolSegmentation" class="text-gray-700 font-bold">Segmentación: </label>
+                            <form action="{{ route('deanDashboard') }}" method="GET" class="inline-block">
+                                <select name="schoolSegmentation" id="schoolSegmentation" onchange="this.form.submit()"
+                                    class="rounded-sm p-1 md:w-80 shadow-md">
+                                    {{-- @foreach ($schoolInfo['schoolsInfo'] as $school)
+                                        <option value="{{ $school['id'] }}"
+                                            {{ request('schoolSegmentation') == $school['id'] ? 'selected' : '' }}>
+                                            {{ $school['name'] }}
+                                        </option>
+                                    @endforeach --}}
+                                </select>
+                            </form>
+                        </div>
+                    </form>
+                </div>
                 <!-- Búsqueda segmentada por nombre, años y períodos -->
                 <div class="w-full h-full mt-6 overflow-x-auto">
                     <div class="w-full flex flex-col items-start pt-3">

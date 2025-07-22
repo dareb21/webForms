@@ -7,6 +7,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DeanController;
+use App\Http\Controllers\DcaController;
 use App\Http\Controllers\LogOutController;
 
 Route::get('/', function () {
@@ -63,9 +64,10 @@ Route::post('/adminControlCourses/unblock/{sectionId}', [AdminController::class,
 Route::get('/adminSearchCourses', [AdminController::class,"searchCourse"])->name("searchCourse");
 
 #Rutas admin DCA
-Route::get('/adminDcaDashboard', [AdminController::class, "adminDcaDashboard"])->name("adminDcaDashboard");
-Route::get('/adminDcaResults', [AdminController::class, "adminDcaResults"])->name("adminDcaResults");
-Route::get('/adminDcaStudentView', [AdminController::class, "adminDcaStudentView"])->name("adminDcaStudentView");
+Route::get('/adminDcaDashboard', [DcaController::class, "dcaDashboard"])->name("adminDcaDashboard");
+Route::get('/adminDcaResults', [DcaController::class, "dcaResults"])->name("adminDcaResults");
+Route::get('/adminDcaStudentView/{sectionId}', [DcaController::class, "dcaStudentView"])->name("adminDcaStudentView");
+Route::get('/adminDcaViewAnswer/{submitId}',[DcaController::class, "dcaViewAnswer"])->name("adminDcaViewAnswer");
 
 #Rutas decanos
 Route::get('/deanDashboard', [DeanController::class, "deanDashboard"])->name("deanDashboard");

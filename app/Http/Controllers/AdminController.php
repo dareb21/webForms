@@ -18,16 +18,16 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\adminResultsExcel;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Cache;
-use App\Services\AdminServices;
+use App\Services\AcademicServices;
 
 
 class AdminController extends Controller
 {
 
-  private $adminServices;
-  public function __construct(AdminServices $adminServices)
+  private $adminService;
+  public function __construct(AcademicServices $adminService)
   {
-      $this->adminServices = $adminServices;
+      $this->adminService = $adminService;
   }
 
   public function enableEvaluation($surveyId)
@@ -49,7 +49,7 @@ class AdminController extends Controller
       "status" =>1,
     ]);
     Survey::CacheActiveSurvey();
-    return redirect()->route("adminEvaluation");
+    return redirect()->back();
   }
 
 
@@ -62,24 +62,20 @@ if ($thisSurvey->status === 1)
    $thisSurvey->status = 0;
     $thisSurvey->save();
   Survey::ForgetCache();
-  } 
-    
-    return redirect()->route("adminEvaluation");
+  }
+   
+  return redirect()->back();
 }
-
-
-
   public function adminDashboard(Request $request)
     {
     $thisSchool = 0;
-    if ($request)
+    if ($request->schoolSegmentation > 0)
     {
-        $thisSchool = $request->schoolId;
+        $thisSchool = $request->schoolSegmentation;
     }
-     $schoolInfo =$this->adminServices->schools($thisSchool); 
-    $dashboard = $this->adminServices->dashboard($thisSchool);
-    $lowerAndHigher = $this->adminServices->lowerAndHigher($thisSchool);
-    
+     $schoolInfo =$this->adminService->schools($thisSchool); 
+    $dashboard = $this->adminService->dashboard($thisSchool);
+    $lowerAndHigher = $this->adminService->lowerAndHigher($thisSchool);
      return view("admin.adminDashboard",compact("dashboard","schoolInfo","lowerAndHigher"));
     }
 
@@ -428,7 +424,7 @@ switch ($action){
 
    public function adminStudentView($sectionId)
    {
-  $adminStudentView = $this->adminServices->adminStudentView($sectionId);
+  $adminStudentView = $this->adminService->studentView($sectionId);
   $years = Survey::selectRAW("Year(dateStart)")
       ->distinct()
       ->get(); 
@@ -438,12 +434,12 @@ switch ($action){
 
 public function adminViewAnswer($submitId)
 {
-    return $this->adminServices->adminViewAnswer($submitId);
+    return $this->adminService->viewAnswer($submitId);
      
 }
 
 public function adminResults(){
-$adminResults = $this->adminServices->adminResults();
+$adminResults = $this->adminService->results();
 $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();

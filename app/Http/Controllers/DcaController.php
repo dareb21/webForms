@@ -3,41 +3,54 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\AdminServices;
+use App\Services\AcademicServices;
 
 class DcaController extends Controller
 {
-    private $adminServices;
-    public function __construct(AdminServices $adminServices)
+   private $dcaService;
+  public function __construct(AcademicServices $dcaService)
+  {
+      $this->dcaService = $dcaService;
+  }
+
+
+    public function dcaDashboard(Request $request)
     {
-        $this->adminServices = $adminServices;
-    }
-    public function dcaDashboard()
+    $thisSchool = 0;
+    if ($request->schoolSegmentation > 0)
     {
-        $dashboard = $this->adminServices->dashboard();
-        return view("adminDCA.dcaDashboard", compact("dashboard"));
+        $thisSchool = $request->schoolSegmentation;
     }
+     $schoolInfo =$this->dcaService->schools($thisSchool); 
+    $dashboard = $this->dcaService->dashboard($thisSchool);
+    $lowerAndHigher = $this->dcaService->lowerAndHigher($thisSchool);
+    return view("adminDCA.dcaDashboard", compact("dashboard","schoolInfo","lowerAndHigher"));
+    }
+
+
     public function dcaResults()
     {
-        $adminResults = $this->adminServices->adminResults();
+        $results = $this->dcaService->results();
         $years = Survey::selectRAW("Year(dateStart)")
             ->distinct()
             ->get();
-        return view("adminDCA.dcaResults", compact("dashboard"));
+        return view("adminDCA.dcaResults", compact("results"));
 
     }
-    public function dcaStudenView()
+
+    public function dcaStudentView($courseId)
     {
-        $adminStudentView = $this->adminServices->adminStudentView($courseId);
+        $studentView = $this->dcaService->studentView($courseId);
         $years = Survey::selectRAW("Year(dateStart)")
             ->distinct()
             ->get();
+        
         return view('admin.adminStudentView', compact("years", "resultados", "data"));
     }
 
-    public function dcaAnswerView()
+    public function dcaViewAnswer($submitId)
     {
-        return $this->adminServices->adminViewAnswer($submitId);
+        return $this->dcaService->viewAnswer($submitId);
     }
 
 }

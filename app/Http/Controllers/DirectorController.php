@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\School;
 use App\Models\Section;
 use App\Models\SurveySubmit;
+use App\Services\DirectorServices;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\directorResultsExcel;
 use Maatwebsite\Excel\Facades\Excel;
@@ -17,61 +18,25 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class DirectorController extends Controller
 {
- 
+  private $directorService;
+  public function __construct(DirectorServices $directorService)
+  {
+      $this->directorService = $directorService;
+  }
 
     public function directorDashboard(){
+$thisSchool = School::select("id")->where("director_id",61)->first();        
+$dashboard = $this->directorService->dashboardSubmits($thisSchool);
+$higherOrLower=$this->directorService->higherOrLower($thisSchool);
+return view('director.directorDashboard',compact("submits","dashboard","higherOrLower"));
 
-  $i=1;
-  $user = User::with('school.courses.sections.professor')->find(64);  
-  $thisSchool =$user->school;  
-  $schoolId = $thisSchool->id;
-
-    $resultados = collect();
-    $thisYear= now()->year;
-
-    $data = DB::table("surveys as s")
-    ->join("survey_submits as sb", "s.id", "=", "sb.survey_id")
-    ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
-    ->join("question_options as qo", "rs.question_option_id", "=", "qo.id")
-    ->whereYear("s.dateStart", $thisYear)
-    ->select(
-        "s.id as survey_id",
-        DB::raw("SUM(qo.calification) as SumaNotaPeriodo"),
-        DB::raw("COUNT(DISTINCT sb.id) as Divisor")
-    )
-    ->groupBy("s.id")
-    ->get();
-    
-    $numerador=$data->pluck("SumaNotaPeriodo");
-    $divisor=$data->pluck("Divisor");
-   if($divisor[0] == 0)
-   {
-    $notaperiodo=0;
-   }else
-   {
-    $notaperiodo=ceil($numerador[0]/$divisor[0]);
-   }
-   $resultados->push([
-        "termScore" => $notaperiodo,
-        "term" => $i,
-    ]);
-    $i+=1;    
-    $anual = round(($resultados->pluck("termScore"))->sum() / count($surveysOfThisYear));
-    $coursesofThisSchool=$thisSchool->courses;
-    $allProfessor = count($coursesofThisSchool->pluck("user_id")->unique());
-   $coursesId = $coursesofThisSchool->pluck("id")->toArray();
-  $professorsEvaluated =count(Course::has('submits')->whereIn("id",$coursesId)->pluck("user_id")->unique());
-  $schoolName = $thisSchool->name;
-
-      return view('director.directorDashboard',compact("resultados","anual","allProfessor","professorsEvaluated" ,"schoolName"));
     }
 
 
 
     public function directorResults(){
-$user = User::with('school.courses.sections.professor')->find(68);    //Mejorar con inner join ya el with es muy grande
-   $thisYear = session()->pull('year', now()->year);
-        //$professorId = ($thisSchool->courses->pluck("professor.id"))->toArray();
+$thisSchool = School::select("id")->where("director_id",61)->first();        
+$thisYear = session()->pull('year', now()->year);
         $data = DB::table('survey_submits as sb')
             ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
             ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
@@ -80,7 +45,7 @@ $user = User::with('school.courses.sections.professor')->find(68);    //Mejorar 
             ->join('users as prof', 'sec.user_id', '=', 'prof.id')
             ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
             ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-            ->where('c.school_id', $user->school->id)
+            ->where('c.school_id', $thisSchool)
             ->whereYear('s.created_at', $thisYear)
             ->select(
                 'prof.name as professorName',
@@ -120,19 +85,15 @@ $user = User::with('school.courses.sections.professor')->find(68);    //Mejorar 
             ];
 
         }
-
+        
  $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-  return view("director.directorResults",compact("years","dataResults"));
+  return view("director.directorResults",compact("years","dataResults","data"));
   
     }
     
 public function directorStudentView($sectionId){
-  $section = Section::with("professor", "course")->find($sectionId);
-        $profesor = $section->professor->name;
-        $courseName = $section->course->name;
-
         $data = DB::table('survey_submits as sb')
             ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
             ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
@@ -141,7 +102,7 @@ public function directorStudentView($sectionId){
             ->join('users as prof', 'sec.user_id', '=', 'prof.id')
             ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
             ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-            ->where('sec.id', $section->id)
+            ->where('sec.id', $sectionId)
             ->whereYear('s.created_at', now()->year)
             ->select(
                 'c.name as course',
@@ -160,18 +121,17 @@ public function directorStudentView($sectionId){
         foreach ($data as $item) {
             $resultados[] = [
                 "score" => $item->scoreStudent,
-                "profesor" => $profesor,
-                "course" => $courseName,
+                "profesor" => $item->professorName,
+                "course" => $iemte->course,
                 "nameStudent" => $item->student,
                 "submitId" => $item->submitId,
             ];
         }
-      
   $years = Survey::selectRAW("Year(dateStart)")
       ->distinct()
       ->get();
   
-      return view('director.directorStudentView',compact("resultados"));
+      return view('director.directorStudentView',compact("resultados","data","years"));
     }
 
     public function directorViewAnswer($submitId)
@@ -184,9 +144,7 @@ public function directorStudentView($sectionId){
             ->join('survey_submits as sb', 'rs.survey_submit_id', '=', 'sb.id')
             ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
             ->join('users as u', 'sb.user_id', '=', 'u.id')
-            ->where('s.id', $submit->survey_id)
-            ->where('u.id', $submit->user_id)
-            ->where('sec.id', $submit->section_id)
+            ->where('sb.id', $submitId)
             ->select(
                 'qg.groupName as indicator',
                 'qo.option as answer',

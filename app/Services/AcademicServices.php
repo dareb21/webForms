@@ -3,7 +3,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-Class AdminServices
+Class AcademicServices
 {
    public function schools($thisSchool)
    {
@@ -33,8 +33,7 @@ $schools = $schoolsCollection->map(function ($id, $name) {
 })->values()->toArray();
 $allSections=$sections->sum("section_count");
 $sectionsWithSubmits=$sections->sum("sections_with_submits");
-$sectionsLeft = $allSections -$sectionsWithSubmits;
-return ["schoolsInfo"=>$schools,"withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections];
+return ["withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections];
 }
 
 
@@ -123,7 +122,7 @@ $lower10=$lower10Query->toArray();
 return ["lower10"=>$lower10,"higher15"=>$higher15];
 }
 
-public function adminResults()
+public function results()
 {
 $thisYear = session()->pull('year', now()->year);    
         $data = DB::table('survey_submits as sb')
@@ -178,9 +177,9 @@ if($data->isEmpty()){
         }
     return ["dataResults"=> $dataResults,"dataPaginate"=>$data];
 }
-public function adminStudentView($sectionId)
+public function studentView($sectionId)
 {
-     //$section = Section::with("professor", "course")->find($sectionId);
+    
         $data = DB::table('survey_submits as sb')
             ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
             ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
@@ -219,7 +218,7 @@ public function adminStudentView($sectionId)
    return ['adminStudentView' => $resultados,'paginate' => $data];     
 }
 
-public function adminViewAnswer($submitId)
+public function viewAnswer($submitId)
 {
     $data = DB::table('question_groups as qg')
         ->join('question_options as qo', 'qg.id', '=', 'qo.question_group_id')

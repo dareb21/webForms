@@ -132,7 +132,7 @@
                                                     </span>
                                                     <span>
                                                         <strong>Evaluaciones estudiantes &rarr;</strong>
-                                                        <a href="{{ route('directorStudentView', ['courseId' => $course['courseId'] ?? '0', 'Professor' => $results['professorName'], 'courses' => $course['course']]) }}"
+                                                        <a href="{{ route('directorStudentView', ['sectionId' => $course['sectionId'] ?? '0', 'Professor' => $results['professorName'], 'courses' => $course['course']]) }}"
                                                             class="ml-2 p-1 bg-white text-orange-600 rounded-sm border border-blue-600 hover:bg-blue-100 transition">
                                                             <strong>Ver más</strong>
                                                         </a>

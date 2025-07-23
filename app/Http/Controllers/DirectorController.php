@@ -37,7 +37,7 @@ return view('director.directorDashboard',compact("sections","dashboard","higherO
 
 
     public function directorResults(){
-$thisSchool = School::select("id")->where("director_id",61)->first();        
+$thisSchool = School::select("id")->where("director_id",63)->first();        
 $thisYear = session()->pull('year', now()->year);
         $data = DB::table('survey_submits as sb')
             ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
@@ -47,7 +47,7 @@ $thisYear = session()->pull('year', now()->year);
             ->join('users as prof', 'sec.user_id', '=', 'prof.id')
             ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
             ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-            ->where('c.school_id', $thisSchool)
+            ->where('c.school_id', $thisSchool->id)
             ->whereYear('s.created_at', $thisYear)
             ->select(
                 'prof.name as professorName',
@@ -124,7 +124,7 @@ public function directorStudentView($sectionId){
             $resultados[] = [
                 "score" => $item->scoreStudent,
                 "profesor" => $item->professorName,
-                "course" => $iemte->course,
+                "course" => $item->course,
                 "nameStudent" => $item->student,
                 "submitId" => $item->submitId,
             ];

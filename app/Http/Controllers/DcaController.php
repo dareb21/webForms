@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Survey;
 use App\Services\AcademicServices;
 
 class DcaController extends Controller
@@ -21,7 +22,7 @@ class DcaController extends Controller
     {
         $thisSchool = $request->schoolSegmentation;
     }
-    $dropDown =$this->adminService->dropDown();
+    $dropDown =$this->dcaService->dropDown();
      $schoolInfo =$this->dcaService->sections($thisSchool); 
     $dashboard = $this->dcaService->dashboard($thisSchool);
     $lowerAndHigher = $this->dcaService->lowerAndHigher($thisSchool);

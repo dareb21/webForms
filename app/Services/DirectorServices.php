@@ -5,13 +5,13 @@ use Carbon\Carbon;
 
 Class DirectorServices
 {
-   public function sections($schoolId)
+   public function sections($directorId)
    {
 $sections = DB::table('schools')
     ->join('courses', 'schools.id', '=', 'courses.school_id')
     ->join('sections', 'courses.id', '=', 'sections.course_id')
     ->leftJoin('survey_submits', 'sections.id', '=', 'survey_submits.section_id')
-    ->where('schools.id', $schoolId)
+    ->where('schools.director_id', $directorId)
     ->select(
         DB::raw('COUNT(DISTINCT sections.id) as section_count'),
         DB::raw('COUNT(DISTINCT CASE WHEN survey_submits.id IS NOT NULL THEN sections.id END) as sections_with_submits')
@@ -25,10 +25,10 @@ return ["withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections];
 }
 
 
-    public function dashboard($userId)
+    public function dashboard($directorId)
     {
 
-  $thisYear= now()->year;
+  
   
     $data = DB::table("surveys as s")
     ->join("survey_submits as sb", "s.id", "=", "sb.survey_id")
@@ -37,8 +37,8 @@ return ["withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections];
     ->join("sections as sec","sb.section_id","=","sec.id")
     ->join("courses as c","sec.course_id","=","c.id")
     ->join("schools as sc","c.school_id","sc.id")
-    ->whereYear("s.dateStart", $thisYear)
-    ->where("sc.director_id",$userId)
+    ->whereYear("s.dateStart", now()->year)
+    ->where("sc.director_id",$directorId)
     ->select(
         "s.id as survey_id",
         DB::raw("SUM(qo.calification) as SumaNotaPeriodo"),
@@ -63,9 +63,9 @@ foreach ($data as $item) {
 $anualScore = round($infoPerTerm->pluck("termScore")->sum() / max(count($infoPerTerm), 1));
 $infoPerTermArray=$infoPerTerm->toArray();
 return ["resultsPerTerm" =>$infoPerTermArray,"anual" =>$anualScore];
-
 }
-public function higherOrLower($schoolId)
+
+public function higherOrLower($directorId)
 {
 $lower10Query = DB::table('users as prof')
     ->join('sections as sec', 'prof.id', '=', 'sec.user_id')
@@ -75,7 +75,7 @@ $lower10Query = DB::table('users as prof')
     ->join('surveys as s', 'sb.survey_id', '=', 's.id')
     ->join("courses as c","sec.course_id","=","c.id")
     ->join("schools as sc", "c.school_id", "=", "sc.id")
-    ->where('sc.id', $schoolId)
+    ->where('sc.director_id', $directorId)
         ->select('prof.name', DB::raw('AVG(qo.calification) * 10 as Calification'))
     ->groupBy('prof.id', 'prof.name')
     ->having('Calification', '<', 10)
@@ -91,7 +91,7 @@ $higher15Query = DB::table('users as prof')
     ->join('surveys as s', 'sb.survey_id', '=', 's.id')
     ->join("courses as c","sec.course_id","=","c.id")
     ->join("schools as sc", "c.school_id", "=", "sc.id")
-    ->where('sc.id', $schoolId)
+    ->where('sc.director_id', $directorId)
         ->select('prof.name', DB::raw('AVG(qo.calification) * 10 as Calification'))
     ->groupBy('prof.id', 'prof.name')
     ->having('Calification', '>', 15)
@@ -105,4 +105,71 @@ $lower10=$lower10Query->toArray();
 return ["lower10"=>$lower10,"higher15"=>$higher15];
 }
 
+public function filter(Array $request)
+{
+    $dataResults = [];
+    $thisProfessor= $request["catedraticoBusqueda"] ?? null ;
+    $thisYear = $request["annualYear"] ?? null;
+    $thisTerm = $request["annualPeriod"] ?? null;
+
+    $data = DB::table('survey_submits as sb')
+            ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+            ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
+            ->join('courses as c', 'sec.course_id', '=', 'c.id')
+            ->join("schools as sc","c.school_id","=","sc.id")
+            ->join('users as prof', 'sec.user_id', '=', 'prof.id')
+            ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+            ->join('surveys as s', 'sb.survey_id', '=', 's.id') 
+            ->when($thisProfessor != null, function ($query) use ($thisProfessor) {
+            $query->where('schools.id', $thisSchool); //aqui que busque por el input
+            })
+            ->when($thisYear != null, function ($query) use ($thisYear) {
+            $query->whereYear('s.dateStart', $thisYear);        
+        })
+       ->when($thisTerm != null && $thisTerm>0, function ($query) use ($thisTerm) {
+        $query->where('s.term', $thisTerm);
+    })
+            ->where('sc.director_id', 65) 
+            
+            ->select(
+                'prof.name as professorName',
+                'prof.id as professorId',
+                'c.name as courses',
+                'sec.id as sectionId',
+                'sec.code as sectionCode',
+                DB::raw('SUM(qo.calification) as totSurvey'),
+                DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
+            )
+            ->groupBy('prof.id', 'sec.id')
+            ->paginate(10);
+
+            if ($data->isEmpty())
+         {
+            return False;       
+            }
+        $professors = $data->groupBy('professorId');
+        foreach($professors as $professor => $sections) 
+         {
+         $coursesData = $sections->map(function ($i) {
+             $totPerCourse = round($i->totSurvey / $i->totStudents);
+                return [
+                "sectionId" => $i->sectionId,
+                "sectionCode" => $i->sectionCode,
+                "course" => $i->courses,
+                "totPerCourse" => $totPerCourse
+            ];            
+      });
+    $dataResults[] = [
+        "professorName" => $sections->first()->professorName,
+        "professorScoreAvg" =>  round($sections->pluck("totSurvey")->sum()  / $sections->pluck("totStudents")->sum()),
+        "coursesData" => $coursesData->toArray(),
+    ];
+        } 
+return collect($dataResults);
+}
+
+public function lastFive()
+{
+
+}
 }

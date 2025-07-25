@@ -29,8 +29,9 @@ class Survey extends Model
 
     public static function CacheActiveSurvey() 
     {
-      $cacheActiveSurvey=self::with(["QuestionGroup.QuestionOption"])->where("status",1)->first();
-      Cache::forever("cacheActiveSurvey",$cacheActiveSurvey);
+   return  Cache::remember('ActiveSurvey', 3600, function () {
+    return self::with(["QuestionGroup.QuestionOption"])->where("status",1)->first();
+      });
     }
     public static function ForgetCache()
     {

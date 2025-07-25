@@ -77,6 +77,7 @@ Route::get('/deanStudentView/{sectionId}', [DeanController::class, "deanStudentV
 Route::get("/deanViewAnswer/{submitId}", [DeanController::class, "deanViewAnswer"])->name("deanViewAnswer");
 Route::get('/deanSchools/Filter', [DeanController::class, "deanSchoolFilter"])->name("deanSchoolFilter");
 Route::get('/deanResult/Filter', [DeanController::class, "deanResultsFilter"])->name("deanResultsFilter");
+Route::get("/deanLastFive",[DeanController::class, "deanLastFive"])->name("deanLastFive");
 
 #Rutas directores
 Route::get('/directorDashboard', [DirectorController::class, "directorDashboard"])->name("directorDashboard");
@@ -101,6 +102,5 @@ Route::get('/admin/excel', [AdminController::class, 'adminResultsExcel'])->name(
 
 #ruta no autorizado
 Route::get('/unauthorized',[LoginController::class,"unauthorized"])->name('unauthorized');
-
 #Ruta sesion muerta
 Route::get('/endedSession',[LoginController::class,"sessionDead"])->name('sessionDead');

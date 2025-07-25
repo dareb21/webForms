@@ -48,7 +48,6 @@ class AdminController extends Controller
     $thisSurvey->update([
       "status" =>1,
     ]);
-    Survey::CacheActiveSurvey();
     return redirect()->back();
   }
 

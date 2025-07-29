@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\Enrollment;
-
+use App\Models\Survey;
 
 class LoginController extends Controller
 {
@@ -28,22 +28,23 @@ public function handdleCallBack()
                 ->join('users as Prof', 'sections.user_id', '=', 'Prof.id')
                 ->join('users as Student','enrollments.user_id','=','Student.id')
                 ->select('courses.name as course_name','sections.id as section_id','sections.code as sections_code','Prof.name as Teacher')
-                ->where('enrollments.user_id',24)
+                ->where('enrollments.user_id',1)
                 ->where('sections.status',1)
                 ->get(); 
             
                 $courseNames = $classes->pluck('course_name');  
-                $sections=$classes->pluck('sections_code','section_id');
+                $sectionId=$classes->pluck('section_id');
                 $teacher=$classes->pluck('Teacher');
-                session([
+                session([    
                 'userInfo' => [
                    'nameUser' => $googleUser->getName(),
                     'email' => $googleUser->getEmail(),
                     'courses'=>$courseNames,
-                    'coursesId'=>$coursesId,
+                    'coursesId'=>$sectionId,
                     'teacher'=>$teacher,
                     ]
                  ]);
+            Survey::CacheActiveSurvey();
         return redirect()->route('studentDashboard');
         break;
     

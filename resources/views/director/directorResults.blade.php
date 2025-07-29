@@ -64,7 +64,7 @@
 
                                     <label for="annualPeriod">Período</label>
                                     <select name="annualPeriod" id="annualPeriod" class="shadow-md border border-gray-200">
-                                        <option value="4" {{ request('annualPeriod') == 4 ? 'selected' : '' }}>Anual
+                                        <option value="0" {{ request('annualPeriod') == 4 ? 'selected' : '' }}>Anual
                                         </option>
                                         <option value="1" {{ request('annualPeriod') == 1 ? 'selected' : '' }}>Período
                                             1</option>

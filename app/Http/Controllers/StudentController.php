@@ -19,7 +19,7 @@ class StudentController extends Controller
 
     public function __construct()
     {
-    $this->cacheSurvey =  Cache::get("cacheActiveSurvey");   
+    $this->cacheSurvey =  Cache::get("ActiveSurvey");   
     }
 
     public function studentDashboard()
@@ -39,7 +39,7 @@ class StudentController extends Controller
 
     $courseArrayPosition = $request->query('courseArrayPosition');
     $coursesId = $request->query('courseId');
-    if(SurveySubmit::where("user_id",24)->where("section_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
+    if(SurveySubmit::where("user_id",2)->where("section_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
     {
               return view("student.thankyouView");
      }
@@ -60,33 +60,37 @@ class StudentController extends Controller
 $data = collect($data)->groupBy('groupName');
 return view('student.studentEvaluation', compact('courseArrayPosition','coursesId','data'));
     }
-    public Function studentSubmit(Request $request, $courseId)
+
+public Function studentSubmit(Request $request, $courseId)
     {
-         $thisSurvey = $this->cacheSurvey;  
-        $surveySubmit=SurveySubmit::create([
+ $thisSurvey = $this->cacheSurvey;    
+ $replies = [];
+$repliesSended = $request->only(array_filter(array_keys($request->all()), fn($key) => str_starts_with($key, 'option')));
+    if (count($repliesSended) != count($thisSurvey->QuestionGroup) )
+    {
+        dd("deajte de loqueras");
+        return redirect()->back()->with('alert','Favor llenar todos los campos disponibles');
+    }
+
+foreach ($repliesSended as $clave => $valor) {
+        $replies[] =[ 
+        "question_option_id"=>Str::after($clave,"option_"),
+        ];
+    }
+
+ $surveySubmit=SurveySubmit::create([
         "DateSubmmited"=>now(),
         "survey_id"=>$thisSurvey->id,
         "section_id"=>$courseId,
-        "user_id"=>24,
+        "user_id"=>2,
         "observations"=>$request->observaciones,
       ]);
-      
- $seleccionados = [];
- foreach ($request->all() as $clave => $valor) {
- if (Str::startsWith($clave,"option_"))
-    {
-         $optionPicked= Str::after($clave,"option_");
-    }else
-    {
-        continue;
-    }
-    $seleccionados[] =[ 
-        "survey_submit_id" =>$surveySubmit->id,
-        "question_option_id"=>$optionPicked,
-    ];
-        }
-ResponseSubmit::insert($seleccionados);
 
+foreach ($replies as &$reply) {
+    $reply["survey_submit_id"] = $surveySubmit->id;
+   }
+    unset($reply);
+    ResponseSubmit::insert($replies);
     return redirect()->route("studentThanks");
 
     }

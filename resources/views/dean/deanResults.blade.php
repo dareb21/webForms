@@ -34,7 +34,7 @@
                                     </select>
                                     <label for="anualPeriod">Período</label>
                                     <select name="anualPeriod" id="anualPeriod" class="shadow-md border border-gray-200">
-                                        <option value="4">Anual</option>
+                                        <option value="0">Anual</option>
                                         <option value="1">Período 1</option>
                                         <option value="2">Período 2</option>
                                         <option value="3">Período 3</option>

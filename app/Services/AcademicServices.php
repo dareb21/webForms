@@ -8,7 +8,7 @@ Class AcademicServices
 {
     public function dropDown()
 {
-    return Cache::remember('schools', 600, function () {
+    return Cache::remember('schools', 3600, function () {
         return School::select('id', 'name')->get()
             ->map(function ($school) {
               return [
@@ -127,7 +127,6 @@ return ["lower10"=>$lower10,"higher15"=>$higher15];
 
 public function results()
 {
-$thisYear = session()->pull('year', now()->year);    
         $data = DB::table('survey_submits as sb')
             ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
                 ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
@@ -136,7 +135,7 @@ $thisYear = session()->pull('year', now()->year);
                 ->join('users as prof', 'sec.user_id', '=', 'prof.id')
                 ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
                 ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-            ->whereYear('s.created_at',$thisYear)
+            ->whereYear('s.created_at', now()->year)
             ->select(
                 'prof.name as professorName',
                     'prof.id as professorId',
@@ -148,7 +147,6 @@ $thisYear = session()->pull('year', now()->year);
                 )
             ->groupBy('prof.name', 'sec.id')
         ->paginate(10);
-
 if($data->isEmpty()){
   return $noInfo=True;
 }
@@ -248,4 +246,127 @@ public function viewAnswer($submitId)
     return $answer; 
 }
 
+public function filterSchoolDean($schoolId)
+{
+ $school = [];
+        $dataQuery = DB::table("schools as sc")
+            ->join("courses as c", "sc.id", "=", "c.school_id")
+            ->join("sections as sec", "c.id", "=", "sec.course_id")
+            ->join("survey_submits as sb", "sec.id", "=", "sb.section_id")
+            ->join("surveys as s", "sb.survey_id", "=", "s.id")
+            ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
+            ->join("question_options as qo", "rs.question_option_id", "=", "qo.id")
+            ->select(
+                "sc.id as schoolId",
+                "sc.name as schoolName",
+                DB::raw('SUM(qo.calification) as totEscuela'),
+                DB::raw('count(distinct(sb.id)) as Alumnos'),
+            )
+            ->where("s.status",1)
+            ->where("sc.id",$schoolId)
+            ->groupBy('sc.id')
+            ->get();
+        $data = $dataQuery->values();
+        
+        foreach ($data as $item) {
+            $school[] = [
+                "id" => $item->schoolId,
+                "Name" => $item->schoolName,
+                "score" => round($item->totEscuela / $item->Alumnos),
+            ];
+        }
+        return $school;
+}
+
+public function filterResults(Array $request)
+{
+  $dataResults = [];
+
+    $thisProfessor= $request["catedraticoBusqueda"] ?? null ;
+    $thisYear = $request["anualYear"] ?? null;
+    $thisTerm = $request["anualPeriod"] ?? null;
+    $thisSchool = $request["schoolId"] ?? null;
+    $data = DB::table('survey_submits as sb')
+            ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+            ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
+            ->join('courses as c', 'sec.course_id', '=', 'c.id')
+            ->join("schools as sc","c.school_id","=","sc.id")
+            ->join('users as prof', 'sec.user_id', '=', 'prof.id')
+            ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+            ->join('surveys as s', 'sb.survey_id', '=', 's.id') 
+            ->when($thisProfessor != null, function ($query) use ($thisProfessor) {
+            $query->where('prof.name', 'LIKE', '%' . $thisProfessor . '%');
+             })
+            ->when($thisYear != null, function ($query) use ($thisYear) {
+            $query->whereYear('s.dateStart', $thisYear);        
+        })
+       ->when($thisTerm != null && $thisTerm>0, function ($query) use ($thisTerm) {
+        $query->where('s.term', $thisTerm);
+    })
+    ->when($thisSchool != null && $thisSchool>0, function ($query) use ($thisSchool) {
+        $query->where('sc.id', $thisSchool);
+    })
+            ->select(
+                'prof.name as professorName',
+                'prof.id as professorId',
+                'c.name as courses',
+                'sec.id as sectionId',
+                "sc.Name as schoolName",
+                "sc.id as schoolId",
+                'sec.code as sectionCode',
+                DB::raw('SUM(qo.calification) as totSurvey'),
+                DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
+            )
+            ->groupBy('prof.id', 'sec.id')
+            ->paginate(10);
+            if ($data->isEmpty())
+         {
+            return False;       
+            }
+        $professors = $data->groupBy('professorId');
+        foreach($professors as $professor => $sections) 
+         {
+        
+         $coursesData = $sections->map(function ($i) {
+             $totPerCourse = round($i->totSurvey / $i->totStudents);
+                return [
+                "sectionId" => $i->sectionId,
+                "sectionCode" => $i->sectionCode,
+                "course" => $i->courses,
+                "totPerCourse" => $totPerCourse
+            ];            
+      });
+    $dataResults[] = [
+        "schoolId" => $sections->first()->schoolId,
+        "professorName" => $sections->first()->professorName,
+        "professorScoreAvg" =>  round($sections->pluck("totSurvey")->sum()  / $sections->pluck("totStudents")->sum()),
+        "coursesData" => $coursesData->toArray(),
+        "schoolName" =>$sections->first()->schoolName,
+    ];
+        }
+return collect($dataResults);
+}
+
+public function lastFive()
+{
+$data = DB::table('users as prof')
+    ->join('sections as sec', 'prof.id', '=', 'sec.user_id')
+    ->join('survey_submits as sb', 'sec.id', '=', 'sb.section_id')
+    ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+    ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+    ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+    ->where('s.term', 1)
+    ->groupBy('prof.name')
+    ->select(
+        'prof.name as professorName',
+        DB::raw('ROUND(SUM(qo.calification) / COUNT(DISTINCT sb.id)) as avgScore'),
+        DB::raw('MAX(sb.created_at) as lastSurveyDate')
+    )
+    ->orderByDesc('lastSurveyDate')
+    ->limit(5)
+    ->get();
+    $lastFive=$data->toArray();
+
+return $lastFive;
+}
 }

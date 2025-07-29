@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Survey;
 use App\Services\AcademicServices;
@@ -24,35 +24,28 @@ class DcaController extends Controller
     }
     $dropDown =$this->dcaService->dropDown();
      $schoolInfo =$this->dcaService->sections($thisSchool); 
-    $dashboard = $this->dcaService->dashboard($thisSchool);
-    $lowerAndHigher = $this->dcaService->lowerAndHigher($thisSchool);
-    return view("adminDCA.dcaDashboard", compact("dashboard","schoolInfo","lowerAndHigher"));
+     
+$topHigher = DB::table('schools as sc')
+    ->join('courses as c', 'sc.id', '=', 'c.school_id')
+    ->join('sections as sec', 'c.id', '=', 'sec.course_id')
+    ->join('survey_submits as sb', 'sec.id', '=', 'sb.section_id')
+    ->select('sc.Name as NombreEscuela', DB::raw('COUNT(sb.id) as Entregas'))
+    ->groupBy('sc.id', 'sc.Name')
+    ->orderByDesc('Entregas')
+    ->limit(3)
+    ->get();
+
+$topLower = DB::table('schools as sc')
+    ->join('courses as c', 'sc.id', '=', 'c.school_id')
+    ->join('sections as sec', 'c.id', '=', 'sec.course_id')
+    ->join('survey_submits as sb', 'sec.id', '=', 'sb.section_id')
+    ->select('sc.Name as NombreEscuela', DB::raw('COUNT(sb.id) as Entregas'))
+    ->groupBy('sc.id', 'sc.Name')
+    ->orderBy('Entregas', 'asc') 
+    ->limit(3)
+    ->get();
+    return view("adminDCA.dcaDashboard", compact("dropDown","schoolInfo","topHigher","topLower"));
     }
 
-
-    public function dcaResults()
-    {
-        $results = $this->dcaService->results();
-        $years = Survey::selectRAW("Year(dateStart)")
-            ->distinct()
-            ->get();
-        return view("adminDCA.dcaResults", compact("results"));
-
-    }
-
-    public function dcaStudentView($courseId)
-    {
-        $studentView = $this->dcaService->studentView($courseId);
-        $years = Survey::selectRAW("Year(dateStart)")
-            ->distinct()
-            ->get();
-        
-        return view('admin.adminStudentView', compact("years", "resultados", "data"));
-    }
-
-    public function dcaViewAnswer($submitId)
-    {
-        return $this->dcaService->viewAnswer($submitId);
-    }
 
 }

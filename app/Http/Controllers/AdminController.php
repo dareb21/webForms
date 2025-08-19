@@ -439,11 +439,14 @@ public function adminViewAnswer($submitId)
 }
 
 public function adminResults(){
-$adminResults = $this->adminService->results();
-$years = Survey::selectRAW("Year(dateStart)")
-    ->distinct()
-    ->get();
-  return view('admin.adminResults',compact("years","adminResults"));}
+  
+  $adminResults =  $this->adminService->results();
+  if ($adminResults === false)
+  {
+    $noInfo=true;
+    return view('admin.adminResults',compact("noInfo"));
+  }
+  return view('admin.adminResults',compact("adminResults"));}
 
 
 
@@ -677,17 +680,5 @@ public function adminResultsExcel()
       }
   return Excel::download(new adminResultsExcel($resultados), 'reporteAdmin-resultados.xlsx');
 }
-
-public function adminDcaDashboard(){
-  return view("adminDCA.dcaDashboard");
-}
-public function adminDcaResults(){
-  return view("adminDCA.dcaResults");
-}
-
-public function adminDcaStudentView(){
-  return view("adminDCA.dcaStudentView");
-}
-
 
 }

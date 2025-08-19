@@ -93,7 +93,7 @@
 
                         @if (isset($noInfo) && $noInfo)
                             <tbody x-data="{ open: false }" class="border-b border-gray-300">
-                                @for ($i = 1; $i <= 4; $i++)
+                                @for ($i = 1; $i < 4; $i++)
                                     <td class="px-4 py-2 text-center"></td>
                                 @endfor
                             @else

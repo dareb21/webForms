@@ -443,7 +443,6 @@ $adminResults = $this->adminService->results();
 $years = Survey::selectRAW("Year(dateStart)")
     ->distinct()
     ->get();
-
   return view('admin.adminResults',compact("years","adminResults"));}
 
 

@@ -148,7 +148,7 @@ public function results()
             ->groupBy('prof.name', 'sec.id')
         ->paginate(10);
 if($data->isEmpty()){
-  return $noInfo=True;
+  return false;
 }
     $dataResults = [];
     $dataId = $data->pluck("professorId")->unique();

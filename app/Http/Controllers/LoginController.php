@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\Enrollment;
 use App\Models\Survey;
@@ -16,51 +17,52 @@ class LoginController extends Controller
      
 public function handdleCallBack()
 {
-        $googleUser = Socialite::driver('google')->stateless()->user();
-        if (str_contains($googleUser->getEmail(), 'a')) {
-            $pase=True;
-            }
+    $googleUser = Socialite::driver('google')->stateless()->user();   
 
-        switch ($pase) {
-        case True:
-                $classes = Enrollment::join('sections', 'enrollments.section_id', '=', 'sections.id')
-                ->join('courses','sections.course_id','=','courses.id')
-                ->join('users as Prof', 'sections.user_id', '=', 'Prof.id')
-                ->join('users as Student','enrollments.user_id','=','Student.id')
-                ->select('courses.name as course_name','sections.id as section_id','sections.code as sections_code','Prof.name as Teacher')
-                ->where('enrollments.user_id',1)
-                ->where('sections.status',1)
-                ->get(); 
-            
-                $courseNames = $classes->pluck('course_name');  
-                $sectionId=$classes->pluck('section_id');
-                $teacher=$classes->pluck('Teacher');
-                session([    
-                'userInfo' => [
-                   'nameUser' => $googleUser->getName(),
-                    'email' => $googleUser->getEmail(),
-                    'courses'=>$courseNames,
-                    'coursesId'=>$sectionId,
-                    'teacher'=>$teacher,
-                    ]
-                 ]);
-            Survey::CacheActiveSurvey();
-        return redirect()->route('studentDashboard');
-        break;
+    //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/".$googleUser->getEmail()."/roles");
+    //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.garcia@usap.edu/roles");
+    //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.euceda@usap.edu/roles");
+    $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/rigoberto.paz@usap.edu/roles");
     
-    default:
-        abort(401);
-        break;
-}
+    $role = $roleApi->json();
 
+    switch ($role[0]["Rol"]) {
+        case 'Alumno':
+            $sectionsAPI = Http::get("https://melioris.usap.edu/api/evaldoc/v1/estudiantes/2240378@usap.edu/secciones");
+            $sections = collect($sectionsAPI->json());
+            $sectionsName = $sections->pluck('Curso');
+            $sectionId    = $sections->pluck('id');
+            $teacher = "jaun pablo"; // Placeholder for teacher name, replace with actual logic to fetch teacher name
+            session([    
+                'userInfo' => [
+                    'nameUser'  => $googleUser->getName(),
+                    'email'     => $googleUser->getEmail(),
+                    'avatar'   => $googleUser->getAvatar(),
+                    'courses'   => $sectionsName,
+                    'coursesId' => $sectionId,
+                    'teacher'   => $teacher,
+                ]
+            ]);
 
+            Survey::CacheActiveSurvey();
+            return redirect()->route('studentDashboard');
+            break;
 
-    /*try {
-       
-        } catch (\Exception $e) {
-           return redirect('/login')->with('error', 'Error al autenticar con Google');
-         }
-    */
+        case 'Director de Docencia':
+               return redirect()->route('adminDashboard');
+            break;
+
+        case 'Director de Escuela':
+               return redirect()->route('directorDashboard');
+            break;
+
+        case 'Decano de Facultad':
+               return redirect()->route('deanDashboard');
+            break;
+        default:
+            abort(401);
+            break;
+    }
 }
 
 public function unauthorized()
@@ -72,4 +74,5 @@ public function sessionDead()
 {
     return view('endedSessionPage');
 }
+
 }

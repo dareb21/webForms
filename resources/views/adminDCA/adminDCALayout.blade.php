@@ -15,6 +15,9 @@
     <link rel="preload" as="image" href="{{ asset('img/pfp.jpg') }}">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js">
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         [x-cloak] {
@@ -71,18 +74,14 @@
                         </svg>
                         <span class="text-gray-400">Evaluaciones</span>
                     </li>
-
-                    <li class="hover:bg-blue-700 hover:text-white">
-                        <a href="{{ route('adminDcaResults') }}"
-                            class="group flex items-center p-2 space-x-3 rounded-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                class="w-5 h-5 fill-current text-gray-700 transition duration-300 group-hover:invert">
-                                <path d="M5 9h2v10H5V9zm6 4h2v6h-2v-6zm6-8h2v14h-2V5z" />
-                            </svg>
-                            <span>Resultados</span>
-                        </a>
+                    <li class="group flex items-center p-2 space-x-3 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            class="w-5 h-5 fill-current text-gray-400 transition duration-300">
+                            <path
+                                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2H3V4zm0 4h18v12a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm5 2v2h2v-2H8zm0 4v2h2v-2H8zm4-4v2h6v-2h-6zm0 4v2h6v-2h-6z" />
+                        </svg>
+                        <span class="text-gray-400">Resultados</span>
                     </li>
-
 
                     <li class="group flex items-center p-2 space-x-3 rounded-md">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -122,7 +121,8 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
 </body>
 
 </html>

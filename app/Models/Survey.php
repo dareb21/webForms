@@ -35,7 +35,7 @@ class Survey extends Model
     }
     public static function ForgetCache()
     {
-      Cache::Forget("cacheActiveSurvey");
+      return Cache::forget("ActiveSurvey");
     }
 
 }

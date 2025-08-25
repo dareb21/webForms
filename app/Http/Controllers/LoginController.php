@@ -19,10 +19,10 @@ public function handdleCallBack()
 {
     $googleUser = Socialite::driver('google')->stateless()->user();   
 
-    //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/".$googleUser->getEmail()."/roles");
+    $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/".$googleUser->getEmail()."/roles");
     //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.garcia@usap.edu/roles");
     //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.euceda@usap.edu/roles");
-    $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/rigoberto.paz@usap.edu/roles");
+    // $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/rigoberto.paz@usap.edu/roles");
     
     $role = $roleApi->json();
 

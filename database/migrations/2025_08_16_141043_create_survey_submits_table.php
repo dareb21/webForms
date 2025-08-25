@@ -16,8 +16,9 @@ return new class extends Migration
             $table->date("DateSubmmited");
             $table->foreignId('survey_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('section_id')->constrained();
-            $table->text("observations")->nullable();
+           $table->unsignedBigInteger("section_id");
+            $table->foreign("section_id")->references("sigaId")->on("sections");       
+             $table->text("observations")->nullable();
             $table->timestamps();
         });
     }

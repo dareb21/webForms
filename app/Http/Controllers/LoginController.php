@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Enrollment;
 use App\Models\Survey;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -25,10 +28,26 @@ public function handdleCallBack()
     $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/rigoberto.paz@usap.edu/roles");
     
     $role = $roleApi->json();
-
+    if (empty($role)) {
+        return redirect()->route('unauthorized');
+    }
     switch ($role[0]["Rol"]) {
         case 'Alumno':
             $sectionsAPI = Http::get("https://melioris.usap.edu/api/evaldoc/v1/estudiantes/2240378@usap.edu/secciones");
+            if ($user = User::where("email", $googleUser->getEmail())->first())
+            {
+                  Auth::login($user);
+          
+            }else
+            {
+                $user = new User();
+                $user->name = $googleUser->getName();
+                $user->email = $googleUser->getEmail();
+                $user->role = "Alumno";     
+                $user->save();
+                Auth::login($user);
+            }
+            
             $sections = collect($sectionsAPI->json());
             $sectionsName = $sections->pluck('Curso');
             $sectionId    = $sections->pluck('id');
@@ -43,8 +62,9 @@ public function handdleCallBack()
                     'teacher'   => $teacher,
                 ]
             ]);
+               Cache::forget('ActiveSurvey');
+                Survey::CacheActiveSurvey();
 
-            Survey::CacheActiveSurvey();
             return redirect()->route('studentDashboard');
             break;
 

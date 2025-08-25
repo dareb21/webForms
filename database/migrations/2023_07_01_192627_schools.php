@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
     Schema::create('schools', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('sigaId')->primary();
             $table->string("name");
-            $table->foreignId('director_id')->constrained('users');
+            $table->foreignId('director_id')->constrained('users')->nullable();
             $table->timestamps();
         });
     }

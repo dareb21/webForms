@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Auth;
 use App\Models\QuestionOption;
 use App\Models\QuestionGroup;
 use App\Models\SurveySubmit;
@@ -81,15 +82,15 @@ foreach ($repliesSended as $clave => $valor) {
  $surveySubmit=SurveySubmit::create([
         "DateSubmmited"=>now(),
         "survey_id"=>$thisSurvey->id,
-        "section_id"=>$courseId,
-        "user_id"=>2,
+        "section_id"=>$courseId, 
+        "user_id" => Auth::user()->id,
         "observations"=>$request->observaciones,
       ]);
 
 foreach ($replies as &$reply) {
     $reply["survey_submit_id"] = $surveySubmit->id;
    }
-    unset($reply);
+    dd($replies);
     ResponseSubmit::insert($replies);
     return redirect()->route("studentThanks");
 

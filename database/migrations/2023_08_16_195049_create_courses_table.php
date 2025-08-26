@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->unsignedBigInteger('sigaId')->primary();
             $table->string("DESCRIPCION_CURSO");
-            $table->string("CODIGO_CURSO");
             //$table->foreignId("school_id")->constrained();
             $table->timestamps();
         });

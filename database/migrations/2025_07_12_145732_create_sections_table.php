@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('sections', function (Blueprint $table) {
             $table->unsignedBigInteger('sigaId')->primary();
-            $table->string("code");
             $table->unsignedBigInteger("course_id");
             $table->foreign("course_id")->references("sigaId")->on("courses");       
-            $table->boolean("status");
+            $table->boolean("status")->default(1);
             $table->timestamps();
           /*
           Indexar los campos

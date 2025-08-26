@@ -13,8 +13,9 @@ return new class extends Migration
     {
     Schema::create('schools', function (Blueprint $table) {
             $table->unsignedBigInteger('sigaId')->primary();
-            $table->string("name");
-            $table->foreignId('director_id')->constrained('users')->nullable();
+            $table->string("DESCRIPCION_ESCUELA");
+            $table->foreignId('director_id')->nullable()->constrained('users');
+
             $table->timestamps();
         });
     }

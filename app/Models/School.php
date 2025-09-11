@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class School extends Model
 {
       protected $fillable = [
-        'name',
+        'sigaId',
+        'DESCRIPCION_ESCUELA',
         'director_id',
     ];
 

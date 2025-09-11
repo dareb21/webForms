@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('sections', function (Blueprint $table) {
             $table->unsignedBigInteger('sigaId')->primary();
             $table->unsignedBigInteger("course_id");
-            $table->foreign("course_id")->references("sigaId")->on("courses");       
+            $table->unSignedBigInteger("professor_id")->nullable();
+            $table->foreign("course_id")->references("sigaId")->on("courses");
+            $table->foreign("professor_id")->references("account")->on("professors");       
             $table->boolean("status")->default(1);
             $table->timestamps();
           /*

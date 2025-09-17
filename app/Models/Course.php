@@ -9,7 +9,8 @@ class Course extends Model
 {
   use HasFactory;
   protected $fillable=[
-        "name",
+        "sigaId",
+        "DESCRIPCION_CURSO",
         "school_id"
   ];
 

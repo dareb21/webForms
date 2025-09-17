@@ -9,7 +9,7 @@ Class AcademicServices
     public function dropDown()
 {
     return Cache::remember('schools', 3600, function () {
-        return School::select('id', 'name')->get()
+        return School::select('sigaId', 'DESCRIPCION_ESCUELA')->get()
             ->map(function ($school) {
               return [
                     'id' => $school->id,
@@ -22,7 +22,7 @@ Class AcademicServices
    public function sections($thisSchool)
    {
 $sections = DB::table('schools')
-    ->join('courses', 'schools.id', '=', 'courses.school_id')
+    ->join('courses', 'schools.sigaId', '=', 'courses.school_id')
     ->join('sections', 'courses.id', '=', 'sections.course_id')
     ->leftJoin('survey_submits', 'sections.id', '=', 'survey_submits.section_id')
     ->when($thisSchool >0, function ($query) use ($thisSchool) {
@@ -49,10 +49,10 @@ $data = DB::table("surveys as s")
     ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
     ->join("question_options as qo", "rs.question_option_id", "=", "qo.id")
     ->when($thisSchool >0, function ($query) use ($thisSchool) {
-        $query->join("sections as sec","sb.section_id","=","sec.id")
-        ->join("courses as c","sec.course_id","=","c.id")
-        ->join("schools as sc","c.school_id","sc.id")
-        ->where('sc.id', $thisSchool);
+        $query->join("sections as sec","sb.section_id","=","sec.sigaId")
+        ->join("courses as c","sec.course_id","=","c.sigaId")
+        ->join("schools as sc","c.school_id","sc.sigaId")
+        ->where('sc.sigaId', $thisSchool);
     })
     ->whereYear("s.dateStart", $thisYear)
     ->select(

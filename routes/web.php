@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DeanController;
 use App\Http\Controllers\DcaController;
 use App\Http\Controllers\LogOutController;
+use App\Http\Controllers\AcademicChargeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -62,6 +63,7 @@ Route::get('/adminControlCourses', [AdminController::class,"adminControlCourses"
 Route::post('/adminControlCourses/block/{sectionId}', [AdminController::class,"blockCourse"])->name("blockCourse");
 Route::post('/adminControlCourses/unblock/{sectionId}', [AdminController::class,"unblockCourse"])->name("unblockCourse");
 Route::get('/adminSearchCourses', [AdminController::class,"searchCourse"])->name("searchCourse");
+Route::get('/academicCharge', [AcademicChargeController::class,"charge"])->name("charge");
 
 #Rutas admin DCA
 Route::get('/adminDcaDashboard', [DcaController::class, "dcaDashboard"])->name("adminDcaDashboard");

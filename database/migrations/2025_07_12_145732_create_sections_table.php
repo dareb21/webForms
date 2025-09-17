@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sections', function (Blueprint $table) {
-            $table->id();
-            $table->string("code");
-            $table->foreignId("course_id")->constrained();
-            $table->foreignId("user_id")->constrained();
-            $table->boolean("status");
+            $table->unsignedBigInteger('sigaId')->primary();
+            $table->unsignedBigInteger("course_id");
+            $table->unSignedBigInteger("professor_id")->nullable();
+            $table->foreign("course_id")->references("sigaId")->on("courses");
+            $table->foreign("professor_id")->references("account")->on("professors");       
+            $table->boolean("status")->default(1);
             $table->timestamps();
           /*
           Indexar los campos

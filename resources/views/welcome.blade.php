@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WEBFORMS</title>
+    <title>Evaluación docente</title>
 
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
@@ -36,7 +36,7 @@
             </div>
             <!-- Texto inferior centrado -->
             <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full text-center">
-                <p class="text-white font-bold text-xl sm:text-2xl">
+                <p class="text-white font-bold text-xl sm:text-3xl">
                     Evaluación docente
                 </p>
             </div>

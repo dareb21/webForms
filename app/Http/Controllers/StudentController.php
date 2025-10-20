@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Auth;
 use App\Models\QuestionOption;
 use App\Models\QuestionGroup;
 use App\Models\SurveySubmit;
@@ -24,7 +25,7 @@ class StudentController extends Controller
 
     public function studentDashboard()
     {
-    
+
     return view("student.studentDashboard");
     }
 
@@ -39,7 +40,7 @@ class StudentController extends Controller
 
     $courseArrayPosition = $request->query('courseArrayPosition');
     $coursesId = $request->query('courseId');
-    if(SurveySubmit::where("user_id",2)->where("section_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
+    if(SurveySubmit::where("user_id",Auth::user()->id)->where("section_id",$coursesId)->where("survey_id",$thisSurvey->id)->exists())
     {
               return view("student.thankyouView");
      }
@@ -68,7 +69,6 @@ public Function studentSubmit(Request $request, $courseId)
 $repliesSended = $request->only(array_filter(array_keys($request->all()), fn($key) => str_starts_with($key, 'option')));
     if (count($repliesSended) != count($thisSurvey->QuestionGroup) )
     {
-        dd("deajte de loqueras");
         return redirect()->back()->with('alert','Favor llenar todos los campos disponibles');
     }
 
@@ -82,7 +82,7 @@ foreach ($repliesSended as $clave => $valor) {
         "DateSubmmited"=>now(),
         "survey_id"=>$thisSurvey->id,
         "section_id"=>$courseId,
-        "user_id"=>2,
+        "user_id"=>Auth::user()->id,
         "observations"=>$request->observaciones,
       ]);
 

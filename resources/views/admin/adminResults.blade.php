@@ -122,11 +122,6 @@
                                                         <strong>Clase:</strong> {{ $courses['course'] }}
                                                     </div>
 
-                                                    <!-- Columna 2: Sección -->
-                                                    <div class="text-left truncate">
-                                                        <strong>Sección:</strong> {{ $courses['sectionCode'] }}
-                                                    </div>
-
                                                     <!-- Columna 3: Calificación -->
                                                     <div class="text-left truncate">
                                                         <strong>Calificación:</strong> {{ $courses['totPerCourse'] }}
@@ -140,7 +135,6 @@
                                                             'profesor' => $resultado['professorName'],
                                                             'annualYear' => request('annualYear'),
                                                             'annualPeriod' => request('annualPeriod'),
-                                                            'sectionCode' => $courses['sectionCode'],
                                                         ]) }}"
                                                             class="px-2 py-0.5 bg-blue-600 text-white rounded-sm hover:bg-blue-700 text-xs transition whitespace-nowrap">
                                                             Ver más

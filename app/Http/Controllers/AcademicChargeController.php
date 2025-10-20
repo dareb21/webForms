@@ -48,7 +48,7 @@ $schools = $schoolsInfo
     ->all(); // Se convierte a array
 School::insert($schools); // Se insertan los datos en la tabla schools
 
-$response = Http::get('https://melioris.usap.edu/api/evaldoc/v1/periodo-academico/2025-2/oferta-academica');
+$response = Http::get('https://melioris.usap.edu/api/evaldoc/v1/periodo-academico/2025-1/oferta-academica');
 $chargeInfo = collect($response->json());
 $uniqueCourses = $chargeInfo
     ->unique('ID_CURSO')

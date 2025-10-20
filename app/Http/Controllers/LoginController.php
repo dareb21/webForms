@@ -8,6 +8,7 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Models\Enrollment;
 use App\Models\Survey;
 use App\Models\User;
+use App\Models\Section;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -49,11 +50,19 @@ public function handdleCallBack()
         Auth::login($user);
         switch ($role[0]["Rol"]) {
             case 'Alumno':
-            $sectionsAPI = Http::get("https://melioris.usap.edu/api/evaldoc/v1/estudiantes/2240378@usap.edu/secciones");
+            $sectionsAPI = Http::get("https://melioris.usap.edu/api/evaldoc/v1/estudiantes/". $googleUser->getEmail() ."/secciones");
             $sections = collect($sectionsAPI->json());
-            $sectionsName = $sections->pluck('Curso');
             $sectionId    = $sections->pluck('id');
             $teacher = $sections->pluck('NOMBRE_CATEDRATICO');
+            $aca=Section::join("courses","sections.course_id","courses.id")
+            ->whereIn("sections.id",$sectionId)
+            ->having("sections.status",1)
+            ->select("sections.id","courses.name as courseName")
+            ->get();
+            dd($aca);
+            $isActive = Section::whereIn('id', $sectionId)->having("status",1)->get();
+            
+            dd($isActive);
             session([    
                 'userInfo' => [
                     'nameUser'  => $googleUser->getName(),

@@ -19,8 +19,6 @@ use App\Exports\adminResultsExcel;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Cache;
 use App\Services\AcademicServices;
-
-
 class AdminController extends Controller
 {
 
@@ -439,14 +437,21 @@ public function adminViewAnswer($submitId)
 }
 
 public function adminResults(){
-  
+
   $adminResults =  $this->adminService->results();
   if ($adminResults === false)
   {
     $noInfo=true;
     return view('admin.adminResults',compact("noInfo"));
   }
-  return view('admin.adminResults',compact("adminResults"));}
+  $years = Survey::selectRaw("YEAR(dateStart) as year")
+    ->distinct()
+    ->orderBy('year', 'desc')
+    ->get();
+
+
+
+  return view('admin.adminResults',compact("adminResults","years"));}
 
 
 
@@ -560,7 +565,7 @@ return back()->with('success', 'Curso activado correctamente');
 
 public function searchCourse(Request $request)
 {
-$userSearch = User::where("name", "LIKE", $request->courseSearch. "%")->where("role","professor")->select("id","name")->first(); /*$request->courseSearch*/
+$userSearch = User::where("name", "LIKE","%". $request->courseSearch. "%")->where("role","Catedrático")->select("id","name")->first();
 $data = User::with(["section.Course"])->findOrFail($userSearch->id);
 if(!$data->section)
   {

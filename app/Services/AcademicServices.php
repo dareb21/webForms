@@ -141,7 +141,6 @@ public function results()
                     'prof.id as professorId',
                     'c.name as courses',
                     'sec.id as sectionId',
-                    'sec.code as sectionCode',
                 DB::raw('SUM(qo.calification) as totSurvey'),
                 DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
                 )
@@ -164,7 +163,6 @@ if($data->isEmpty()){
                 $totPerCourse = round($totSurveyPerCourse / $totStudentPerCourse);
                 return [
                     "sectionId" => $i->sectionId,
-                    "sectionCode" => $i->sectionCode,
                     "course" => $i->courses,
                     "totPerCourse" => $totPerCourse
                 ];
@@ -193,7 +191,6 @@ public function studentView($sectionId)
             ->whereYear('s.created_at', now()->year)
             ->select(
                 'c.name as course',
-                'sec.code as section',
                 'sb.id as submitId',
                 'prof.name as professorName',
                 'u.name as student',
@@ -213,7 +210,6 @@ public function studentView($sectionId)
                 "course" => $item->course,
                 "nameStudent" => $item->student,  
                 "submitId" => $item->submitId,
-                "sectionCode" => $item->section,
             ];
         }
    return ['adminStudentView' => $resultados,'paginate' => $data];     
@@ -313,7 +309,6 @@ public function filterResults(Array $request)
                 'sec.id as sectionId',
                 "sc.Name as schoolName",
                 "sc.id as schoolId",
-                'sec.code as sectionCode',
                 DB::raw('SUM(qo.calification) as totSurvey'),
                 DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
             )
@@ -331,7 +326,6 @@ public function filterResults(Array $request)
              $totPerCourse = round($i->totSurvey / $i->totStudents);
                 return [
                 "sectionId" => $i->sectionId,
-                "sectionCode" => $i->sectionCode,
                 "course" => $i->courses,
                 "totPerCourse" => $totPerCourse
             ];            

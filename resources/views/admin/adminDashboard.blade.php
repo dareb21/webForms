@@ -6,6 +6,23 @@
         $p2 = isset($dashboard['resultsPerTerm'][1]['termScore']) ? $dashboard['resultsPerTerm'][1]['termScore'] : 0;
         $p3 = isset($dashboard['resultsPerTerm'][2]['termScore']) ? $dashboard['resultsPerTerm'][2]['termScore'] : 0;
     @endphp
+    @if (session('alert'))
+        <script>
+            Swal.fire({
+                title: "Advertencia",
+                text: {!! json_encode(session('alert')) !!},
+                icon: "warning"
+            });
+        </script>
+    @elseif(session('success'))
+        <script>
+            Swal.fire({
+                title: "Exitoso",
+                text: {!! json_encode(session('success')) !!},
+                icon: "success"
+            });
+        </script>
+    @endif
     <!-- Main Content -->
     <!-- Chart de períodos -->
     <div class="flex-1 ml-0 md:h-full md:ml-64 p-4 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto"

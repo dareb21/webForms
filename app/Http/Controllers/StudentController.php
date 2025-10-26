@@ -69,7 +69,7 @@ public Function studentSubmit(Request $request, $courseId)
 $repliesSended = $request->only(array_filter(array_keys($request->all()), fn($key) => str_starts_with($key, 'option')));
     if (count($repliesSended) != count($thisSurvey->QuestionGroup) )
     {
-        return redirect()->back()->with('alert','Favor llenar todos los campos disponibles');
+        return redirect()->back()->with('alert','Favor llenar adecuadamente los campos disponibles');
     }
 
 foreach ($repliesSended as $clave => $valor) {

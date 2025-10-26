@@ -99,6 +99,19 @@
                             <span>Control Cursos</span>
                         </a>
                     </li>
+                    <li class="hover:bg-blue-700 hover:text-white">
+                        <a href="{{ route('charge') }}"  id="charge-link"
+                            class="group flex items-center p-2 space-x-3 rounded-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                class="w-5 h-5 text-gray-700 transition duration-300 group-hover:invert">
+                                 <path stroke-linecap="round" stroke-linejoin="round"
+          d="M16.023 9.348h4.992v-.001M2.985 12a9.015 9.015 0 0115.932-5.715l2.098 2.064M12 20.985a9.015 9.015 0 01-9.015-9.015" />
+
+                            </svg>
+                            <span>Actualizar carga academica</span>
+                        </a>
+                    </li>
                 </ul>
 
                 <ul class="pt-4 pb-2 space-y-1 text-sm">
@@ -116,13 +129,6 @@
                 </ul>
             </div>
 
-            <div class="flex justify-center items-center mt-10 md:mt-36">
-                <button id="chargeButton"
-                    class="sidebar-exempt rounded p-1 text-xl bg-orange-500 text-white hover:cursor-pointer hover:bg-blue-700">
-                    Cargar
-                </button>
-
-            </div>
             <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2">
                 <img src="{{ asset('img/usapblue.png') }}" alt="Logo" class="h-14">
             </div>
@@ -134,25 +140,18 @@
         </main>
     </div>
 </body>
-
 <script>
-    function toggleChargeButton(k) {
-        const btn = document.getElementById('chargeButton');
-        if (!btn) return;
-        btn.disabled = !!k;
-        if (k) {
-            btn.className = "sidebar-exempt rounded p-1 text-xl opacity-50 cursor-not-allowed";
-        } else {
-            btn.className =
-                "sidebar-exempt rounded p-1 text-xl bg-orange-500 text-white hover:cursor-pointer hover:bg-blue-700";
+document.addEventListener('DOMContentLoaded', () => {
+    const chargeLink = document.getElementById('charge-link');
+    chargeLink.addEventListener('click', function (event) {
+        event.preventDefault(); // evita que navegue de inmediato
+
+        const confirmed = confirm("¿Está seguro que desea realizar la carga? Este proceso tomará unos segundos.");
+        if (confirmed) {
+            // redirige solo si el usuario confirma
+            window.location.href = this.href;
         }
-    }
-
-    let k = true;
-    toggleChargeButton(k);
-
-    // let k = false; 
-    // toggleChargeButton(k);
+    });
+});
 </script>
-
 </html>

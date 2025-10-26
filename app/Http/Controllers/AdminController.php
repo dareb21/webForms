@@ -147,11 +147,11 @@ if ($thisSurvey->status === 1)
 
    public function createNewEvaluation(Request $request)
    {
-  
+  try {  
 $request->validate([
     "evaluationName" => "required|string",
     "term" => "required|integer|in:1,2,3",
-    "dateStart" => "required|date|after:today",
+    "dateStart" => "required|date|after_or_equal:today",
     "dateEnd" => "required|date|after:dateStart",
     "cal" => "required|array",
     "cal.*.c1" => "required|numeric|min:0",
@@ -185,7 +185,11 @@ $request->validate([
     "questions.*.p2.min" => "La pregunta P2 debe tener al menos 5 caracteres.",
 ]);
 
-
+  } catch (\Illuminate\Validation\ValidationException $e) {
+    return response()->json([
+        'errors' => $e->validator->errors(),
+    ], 422);
+  }
   $year = Carbon::parse($request->dateStart)->year;
   $thisYears = Survey::whereYear('dateStart', $year)->count();  
     if ($thisYears==3)
@@ -439,6 +443,7 @@ public function adminViewAnswer($submitId)
 public function adminResults(){
 
   $adminResults =  $this->adminService->results();
+  dd($adminResults);
   if ($adminResults === false)
   {
     $noInfo=true;
@@ -448,7 +453,6 @@ public function adminResults(){
     ->distinct()
     ->orderBy('year', 'desc')
     ->get();
-
 
 
   return view('admin.adminResults',compact("adminResults","years"));}
@@ -467,19 +471,19 @@ public function resultSearch(Request $request)
      {
        return redirect()->route("adminResults")->with(['year' => $thisYear]);;
      }
-$courses = Course::has('submits')->withCount('submits')->paginate(10);
+$sections = Section::has('submits')->withCount('submits')->paginate(10);
 
 $hasData = False;
-foreach ($courses as $course)
+foreach ($sections as $section)
 {
   $data = DB::table('survey_submits as sb')
     ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
-    ->join('courses as c', 'sb.course_id', '=', 'c.id')
+    ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
     ->join('users as u', 'sb.user_id', '=', 'u.id') 
-    ->join('users as prof', 'c.user_id', '=', 'prof.id') 
+    ->join('users as prof', 'sec.user_id', '=', 'prof.id') 
     ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
     ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-    ->where('c.id', $course->id) 
+    ->where('sec.id', $section->id) 
     ->where('s.term',$term)
     ->whereYear('s.created_at',$thisYear)
     ->select(
@@ -557,7 +561,7 @@ return back()->with('success', 'Curso bloqueado correctamente');
 
 public function unblockCourse($sectionId)
 {
-   $thisCourse = Course::findOrFail($sectionId);
+   $thisCourse = Section::findOrFail($sectionId);
 $thisCourse->update(["status" => 1]);
 return back()->with('success', 'Curso activado correctamente');
 
@@ -566,6 +570,12 @@ return back()->with('success', 'Curso activado correctamente');
 public function searchCourse(Request $request)
 {
 $userSearch = User::where("name", "LIKE","%". $request->courseSearch. "%")->where("role","Catedrático")->select("id","name")->first();
+if (!$userSearch)
+{
+  $noInfo = True;
+  $changePagination = false;
+  return view("admin.adminControlCourses",compact("noInfo","changePagination"));
+}
 $data = User::with(["section.Course"])->findOrFail($userSearch->id);
 if(!$data->section)
   {
@@ -616,7 +626,7 @@ $thisYear = session()->pull('year', now()->year);
                 'prof.id as professorId',
                 'c.name as courses',
                 'sec.id as sectionId',
-                'sec.code as sectionCode',
+             
             DB::raw('SUM(qo.calification) as totSurvey'),
             DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
             )
@@ -636,7 +646,7 @@ $thisYear = session()->pull('year', now()->year);
                 $totPerCourse = round($totSurveyPerCourse / $totStudentPerCourse);
                 return [
                     "sectionId" => $i->sectionId,
-                    "sectionCode" => $i->sectionCode,
+                   
                     "course" => $i->courses,
                     "totPerCourse" => $totPerCourse
                 ];
@@ -655,18 +665,18 @@ $thisYear = session()->pull('year', now()->year);
 
 public function adminResultsExcel()
 {
-  $courses = Course::has('submits')->paginate(10);
+  $courses = Section::has('submits')->paginate(10);
   $thisYear = session()->pull('year', now()->year);
     foreach ($courses as $course)
      {
         $data = DB::table('survey_submits as sb')
         ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
-        ->join('courses as c', 'sb.course_id', '=', 'c.id')
+        ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
         ->join('users as u', 'sb.user_id', '=', 'u.id') 
-        ->join('users as prof', 'c.user_id', '=', 'prof.id') 
+        ->join('users as prof', 'sec.user_id', '=', 'prof.id') 
         ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
         ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-        ->where('c.id', $course->id) 
+        ->where('sec.id', $course->id) 
         ->whereYear('s.created_at',$thisYear)
         ->select(
             'prof.name as professorName',

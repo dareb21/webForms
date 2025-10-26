@@ -51,7 +51,6 @@ return view('director.directorDashboard',compact("sections","dashboard","higherO
                 'prof.id as professorId',
                 'c.name as courses',
                 'sec.id as sectionId',
-                'sec.code as sectionCode',
                 DB::raw('SUM(qo.calification) as totSurvey'),
                 DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
             )
@@ -65,7 +64,6 @@ return view('director.directorDashboard',compact("sections","dashboard","higherO
              $totPerCourse = round($i->totSurvey / $i->totStudents);
                 return [
                 "sectionId" => $i->sectionId,
-                "sectionCode" => $i->sectionCode,
                 "course" => $i->courses,
                 "totPerCourse" => $totPerCourse
             ];            

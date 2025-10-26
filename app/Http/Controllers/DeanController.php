@@ -95,7 +95,6 @@ public function deanSchools()
                 'prof.id as professorId',
                 'c.name as courses',
                 'sec.id as sectionId',
-                'sec.code as sectionCode',
                 "sc.Name as schoolName",
                 DB::raw('SUM(qo.calification) as totSurvey'),
                 DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
@@ -117,7 +116,7 @@ public function deanSchools()
                 $totPerCourse = round($totSurveyPerCourse / $totStudentPerCourse);
                 return [
                     "sectionId" => $i->sectionId,
-                    "sectionCode" => $i->sectionCode,
+                    "sectionCode" => "placeholder",
                     "course" => $i->courses,
                     "totPerCourse" => $totPerCourse
                 ];
@@ -186,7 +185,8 @@ public function deanLastFive()
         $school = [];
         $dataQuery = DB::table("schools as sc")
             ->join("courses as c", "sc.id", "=", "c.school_id")
-            ->join("survey_submits as sb", "c.id", "=", "sb.course_id")
+            ->join("sections as sec", "c.id", "=", "sec.course_id")
+            ->join("survey_submits as sb", "sec.id", "=", "sb.section_id")
             ->join("surveys as s", "sb.survey_id", "=", "s.id")
             ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
             ->join("question_options as qo", "rs.question_option_id", "=", "qo.id")

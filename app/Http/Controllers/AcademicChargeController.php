@@ -32,7 +32,6 @@ class AcademicChargeController extends Controller
     ['name'=>'Juan Euceda','id'=>9998,'email'=>'juan.euceda@usap.edu','role'=>'Decano de Facultad'],
     ];
 
-User::insert($directorsInfo);
     
 $schoolsApi = Http::get('https://melioris.usap.edu/api/evaldoc/v1/escuelas'); //Se obtiene la info de la api
 $schoolsInfo = collect($schoolsApi->json()); //Se convierte a colección
@@ -46,9 +45,9 @@ $schools = $schoolsInfo
     })
     ->values() // Se obtienen los valores
     ->all(); // Se convierte a array
-School::insert($schools); // Se insertan los datos en la tabla schools
+ // Se insertan los datos en la tabla schools
 
-$response = Http::get('https://melioris.usap.edu/api/evaldoc/v1/periodo-academico/2025-1/oferta-academica');
+$response = Http::get('https://melioris.usap.edu/api/evaldoc/v1/periodo-academico/2025-2/oferta-academica');
 $chargeInfo = collect($response->json());
 $uniqueCourses = $chargeInfo
     ->unique('ID_CURSO')
@@ -61,8 +60,6 @@ $uniqueCourses = $chargeInfo
     })
     ->values()
     ->all();
-Course::insert($uniqueCourses);
-
 $sectionsArray = collect($chargeInfo)->map(function ($item) {
     return [
         'id'       => $item['ID_SECCION'],
@@ -80,19 +77,19 @@ $professorsArray = collect($chargeInfo)
             'role' => 'Catedrático',
         ];
     })->toArray();
+User::insert($directorsInfo);
+School::insert($schools);
+Course::insert($uniqueCourses);
 User::insert($professorsArray);
 Section::insert($sectionsArray);
 
 DB::commit();
-return response()->json("Carga académica cargada con éxito");
     }
      catch (\Exception $e) {
         DB::rollBack();
-        return response()->json([
-            "error" => "Ocurrió un error en la carga académica",
-            "message" => $e->getMessage()
-        ], 500);
-    }
+        return redirtect()->back()->with('alert','Ha ocurrido un error durante la carga académica, por favor intente de nuevo.');
 }
+    return redirect()->back()->with('success','Carga académica realizada con éxito.');
+    }
 }
 

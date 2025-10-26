@@ -41,36 +41,52 @@ Route::post('/studentSubmit/{courseId}', [StudentController::class,"studentSubmi
 Route::get('/studentThankyou', [StudentController::class,"studentThanks"])->name("studentThanks");
 
 
-#Rutas admin
-Route::get('/adminDashboard', [AdminController::class, "adminDashboard"])->name("adminDashboard");
-Route::get('/adminEvaluation', [AdminController::class, "adminEvaluation"])->name("adminEvaluation");
-Route::get('/adminNewEvaluation', [AdminController::class, "adminNewEvaluation"])->name("adminNewEvaluation");
-Route::post("/adminNewEvaluation/create",[AdminController::class, "createNewEvaluation"])->name("createNewEvaluation");
-Route::get('/adminEvaluationEdit/{id}', [AdminController::class, "adminEvaluationEdit"])->name("adminEvaluationEdit");
-Route::post('/adminUpdateOrReuse', [AdminController::class, "adminUpdateOrReuse"])->name("adminUpdateOrReuse");
-Route::get('/adminDelete/{surveyId}', [AdminController::class, "adminDelete"])->name("adminDelete");
-Route::get('/adminEvaluationEdit/', [AdminController::class, "adminEvaluationEdited"])->name("adminEvaluationEdited");
-Route::get("/admiEnableEvaluation/{surveyId}",[AdminController::class, "enableEvaluation"])->name("enableEvaluation");
-Route::get("/admiUnableEvaluation/{surveyId}",[AdminController::class, "UnableEvaluation"])->name("unableEvaluation");
-Route::get("/adminReUseSurvey",[AdminController::class, "reUseSurvey"])->name("reUseSurvey");
-Route::get('/adminResults', [AdminController::class, "adminResults"])->name("adminResults");
-Route::get('/adminStudentView/{courseId}', [AdminController::class,"adminStudentView"])->name("adminStudentView");
-Route::get('/adminViewAnswer/{submitId}',[AdminController::class,"adminViewAnswer"])->name("adminViewAnswer");
-Route::get('/adminEvaluation/search', [AdminController::class,"evaluationSearch"])->name("adminEvaluationSearch");
-Route::get('/adminResults/search', [AdminController::class,"resultSearch"])->name("adminResultSearch");
-Route::get('/adminStudent/search', [AdminController::class,"studentSearch"])->name("adminStudentSearch");
-Route::get('/adminControlCourses', [AdminController::class,"adminControlCourses"])->name("adminControlCourses");
-Route::post('/adminControlCourses/block/{sectionId}', [AdminController::class,"blockCourse"])->name("blockCourse");
-Route::post('/adminControlCourses/unblock/{sectionId}', [AdminController::class,"unblockCourse"])->name("unblockCourse");
-Route::get('/adminSearchCourses', [AdminController::class,"searchCourse"])->name("searchCourse");
-Route::get('/academicCharge',[AcademicChargeController::class, "charge"])->name("charge");
 #Rutas admin DCA
 Route::get('/adminDcaDashboard', [DcaController::class, "dcaDashboard"])->name("adminDcaDashboard");
 Route::get('/adminDcaResults', [DcaController::class, "dcaResults"])->name("adminDcaResults");
 Route::get('/adminDcaStudentView/{sectionId}', [DcaController::class, "dcaStudentView"])->name("adminDcaStudentView");
 Route::get('/adminDcaViewAnswer/{submitId}',[DcaController::class, "dcaViewAnswer"])->name("adminDcaViewAnswer");
 
+Route::controller(AdminController::class)->group(function () {
+    Route::prefix('admin')->group(function () {
+        Route::get('/Dashboard', 'adminDashboard')->name('adminDashboard');
+        Route::get('/Evaluation', 'adminEvaluation')->name('adminEvaluation');
+        Route::get('/NewEvaluation', 'adminNewEvaluation')->name('adminNewEvaluation');
+        Route::post('/NewEvaluation/create', 'createNewEvaluation')->name('createNewEvaluation');
+        Route::get('/EvaluationEdit/{id}', 'adminEvaluationEdit')->name('adminEvaluationEdit');
+        Route::post('/UpdateOrReuse', 'adminUpdateOrReuse')->name('adminUpdateOrReuse');
+        Route::get('/Delete/{surveyId}', 'adminDelete')->name('adminDelete');
+        Route::get('/EvaluationEdit/', 'adminEvaluationEdited')->name('adminEvaluationEdited');
+        Route::get('/EnableEvaluation/{surveyId}', 'enableEvaluation')->name('enableEvaluation');
+        Route::get('/UnableEvaluation/{surveyId}', 'UnableEvaluation')->name('unableEvaluation');
+        Route::get('/ReUseSurvey', 'reUseSurvey')->name('reUseSurvey');
+        Route::get('/Results', 'adminResults')->name('adminResults');
+        Route::get('/StudentView/{courseId}', 'adminStudentView')->name('adminStudentView');
+        Route::get('/ViewAnswer/{submitId}', 'adminViewAnswer')->name('adminViewAnswer');
+        Route::get('/Evaluation/search', 'evaluationSearch')->name('adminEvaluationSearch');
+        Route::get('/Results/search', 'resultSearch')->name('adminResultSearch');
+        Route::get('/Student/search', 'studentSearch')->name('adminStudentSearch');
+        Route::get('/ControlCourses', 'adminControlCourses')->name('adminControlCourses');
+        Route::post('/ControlCourses/block/{sectionId}', 'blockCourse')->name('blockCourse');
+        Route::post('/ControlCourses/unblock/{sectionId}', 'unblockCourse')->name('unblockCourse');
+        Route::get('/SearchCourses', 'searchCourse')->name('searchCourse');
+    });
+});
+Route::get('/academicCharge',[AcademicChargeController::class, "charge"])->name("charge");
+
+
+Route::controller(DeanController::class)->group(function () {
+    Route::get('/deanDashboard', 'deanDashboard')->name('deanDashboard');
+    Route::get('/deanResults/{schoolId}', 'deanResults')->name('deanResults');
+    Route::get('/deanSchools', 'deanSchools')->name('deanSchools');
+    Route::get('/deanStudentView/{sectionId}', 'deanStudentView')->name('deanStudentView');
+    Route::get('/deanViewAnswer/{submitId}', 'deanViewAnswer')->name('deanViewAnswer');
+    Route::get('/deanSchools/Filter', 'deanSchoolFilter')->name('deanSchoolFilter');
+    Route::get('/deanResult/Filter', 'deanResultsFilter')->name('deanResultsFilter');
+    Route::get('/deanLastFive', 'deanLastFive')->name('deanLastFive');
+});
 #Rutas decanos
+/*
 Route::get('/deanDashboard', [DeanController::class, "deanDashboard"])->name("deanDashboard");
 Route::get('/deanResults/{schoolId}', [DeanController::class, "deanResults"])->name("deanResults");
 Route::get('/deanSchools', [DeanController::class, "deanSchools"])->name("deanSchools");
@@ -79,7 +95,7 @@ Route::get("/deanViewAnswer/{submitId}", [DeanController::class, "deanViewAnswer
 Route::get('/deanSchools/Filter', [DeanController::class, "deanSchoolFilter"])->name("deanSchoolFilter");
 Route::get('/deanResult/Filter', [DeanController::class, "deanResultsFilter"])->name("deanResultsFilter");
 Route::get("/deanLastFive",[DeanController::class, "deanLastFive"])->name("deanLastFive");
-
+*/
 #Rutas directores
 Route::get('/directorDashboard', [DirectorController::class, "directorDashboard"])->name("directorDashboard");
 Route::get('/directorResults', [DirectorController::class, "directorResults"])->name("directorResults");

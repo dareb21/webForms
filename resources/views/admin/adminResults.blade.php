@@ -36,12 +36,12 @@
                                         @if (isset($noInfo) && $noInfo)
                                             <option value="noInfo">None</option>
                                         @else
-                                            @foreach ($years as $year)
-                                                <option value="{{ $year->{'Year(dateStart)'} }}"
-                                                    {{ request('annualYear') == $year->{'Year(dateStart)'} ? 'selected' : '' }}>
-                                                    {{ $year->{'Year(dateStart)'} }}
-                                                </option>
-                                            @endforeach
+                                        @foreach ($years as $year)
+                                                <option value="{{ $year->year }}"
+                                                {{ request('annualYear') == $year->year ? 'selected' : '' }}>
+                                                {{ $year->year }}
+                                          </option>
+                                        @endforeach
                                         @endif
                                     </select>
 

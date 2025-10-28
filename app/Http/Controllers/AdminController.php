@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\adminResultsExcel;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use App\Services\AcademicServices;
 class AdminController extends Controller
@@ -216,7 +217,7 @@ if ($sumtot!=20)
     $survey->dateStart = $request->dateStart;
     $survey->dateEnd = $request->dateEnd;
     $survey->term = $request->term;
-    $survey->author = "admin1";
+    $survey->author ="RIGOBERTO PAZ"; //Auth::user()->name;
     $survey->status = 0;
     $survey->save();
     $i=1;
@@ -426,24 +427,22 @@ switch ($action){
 
    public function adminStudentView($sectionId)
    {
+    
   $adminStudentView = $this->adminService->studentView($sectionId);
   $years = Survey::selectRAW("Year(dateStart)")
       ->distinct()
       ->get(); 
-
   return view('admin.adminStudentView',compact("years","adminStudentView"));
   }
 
 public function adminViewAnswer($submitId)
 {
-    return $this->adminService->viewAnswer($submitId);
-     
+    return $this->adminService->viewAnswer($submitId);    
 }
 
 public function adminResults(){
 
   $adminResults =  $this->adminService->results();
-  dd($adminResults);
   if ($adminResults === false)
   {
     $noInfo=true;
@@ -462,64 +461,75 @@ public function adminResults(){
 
 public function resultSearch(Request $request)
    {
-     $years = Survey::selectRAW("Year(dateStart)")
+    $years = Survey::selectRaw("YEAR(dateStart) as year")
     ->distinct()
+    ->orderBy('year', 'desc')
     ->get();
-     $thisYear=$request->annualYear;
+
+     $thisYear=$request->annualYear ? $request->annualYear : now()->year;
      $term=$request->annualPeriod;
+     $nameProf=$request->catedraticoBusqueda;
      if ($term==4)
      {
        return redirect()->route("adminResults")->with(['year' => $thisYear]);;
      }
-$sections = Section::has('submits')->withCount('submits')->paginate(10);
+$data = DB::table('survey_submits as sb')
+            ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+                ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
+                ->join('courses as c', 'sec.course_id', '=', 'c.id')
+                ->join('users as u', 'sb.user_id', '=', 'u.id')
+                ->join('users as prof', 'sec.user_id', '=', 'prof.id')
+                ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+                ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+            ->whereYear('s.created_at', $thisYear)
+            ->where('s.term', $term)
+            ->when($nameProf, function ($query, $nameProf) {
+               $query->where('prof.name', 'LIKE', '%' . $nameProf . '%');
+            })
+            ->select(
+                'prof.name as professorName',
+                    'prof.id as professorId',
+                    'c.name as courses',
+                    'sec.id as sectionId',
+                DB::raw('SUM(qo.calification) as totSurvey'),
+                DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
+                )
+            ->groupBy('prof.name', 'sec.id')
+        ->paginate(10);
 
-$hasData = False;
-foreach ($sections as $section)
-{
-  $data = DB::table('survey_submits as sb')
-    ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
-    ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
-    ->join('users as u', 'sb.user_id', '=', 'u.id') 
-    ->join('users as prof', 'sec.user_id', '=', 'prof.id') 
-    ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
-    ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-    ->where('sec.id', $section->id) 
-    ->where('s.term',$term)
-    ->whereYear('s.created_at',$thisYear)
-    ->select(
-        'prof.name as professorName',
-        DB::raw('SUM(qo.calification) as totSurvey'),
-        DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
-    )
-    ->groupBy('prof.name')
-    ->first();
-
-if (!$data)
-    {
-        continue;
-    }  
-$hasData=True;
-$score = round(($data->totSurvey / $data->totStudents));
-$resultados[] = [
-           "score" => $score,
-            "profesor" => $data->professorName,
-            "course" => $course->name,
-            "courseId" =>$course->id
- ];
+if($data->isEmpty()){
+  $noInfo = True;
+  return view("admin.adminResults",compact("noInfo","years"));
 }
-if (!$hasData)  
- {
-  return redirect()->back()->with('alert','No hay info en ese período.');
-}
+    $dataResults = [];
+    $dataId = $data->pluck("professorId")->unique();
+     foreach ($dataId as $index => $id) {
+            $thisItem = $data->where("professorId", $id);
+            $totsurvey = ($thisItem->pluck("totSurvey"))->sum();
+            $divisor = ($thisItem->pluck("totStudents"))->sum();
+            $avgScore = round($totsurvey / $divisor);
 
-
-    return view('admin.adminResults',compact("years","resultados","courses"));  
-}
-
-
-
-
-
+            $coursesData = $thisItem->map(function ($i) {
+                $totSurveyPerCourse = $i->totSurvey;
+                $totStudentPerCourse = $i->totStudents;
+                $totPerCourse = round($totSurveyPerCourse / $totStudentPerCourse);
+                return [
+                    "sectionId" => $i->sectionId,
+                    "course" => $i->courses,
+                    "totPerCourse" => $totPerCourse
+                ];
+            });
+            $coursesDataArray = $coursesData->toArray();
+            $dataResults[] = [
+                "professorName" => $data[$index]->professorName,
+                "professorScoreAvg" => $avgScore,
+                "coursesData" => $coursesDataArray,
+            ];}
+            $adminResults = 
+            [
+            "dataResults"=>$dataResults
+            ];
+    return view("admin.adminResults",compact("adminResults","years"));}
 
   public function adminDelete($id){
       $survey = Survey::findOrFail($id);

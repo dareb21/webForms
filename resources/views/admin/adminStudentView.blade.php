@@ -139,7 +139,7 @@
                 fetchAnswers(submitId) {
                     this.open = true;
                     this.loading = true;
-                    fetch(`/adminViewAnswer/${submitId}`)
+                    fetch(`/admin/ViewAnswer/${submitId}`)
                         .then(res => res.json())
                         .then(data => {
                             this.observation = '';

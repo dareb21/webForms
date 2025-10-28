@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\School;
 use App\Models\Section;
 use App\Models\SurveySubmit;
+use Facade\Auth;
 use App\Services\DirectorServices;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\directorResultsExcel;
@@ -25,9 +26,9 @@ class DirectorController extends Controller
   }
 
     public function directorDashboard(){
-$sections = $this->directorService->sections(65);
-$dashboard = $this->directorService-> dashboard(65);
-$higherOrLower=$this->directorService->higherOrLower(65);
+        $sections = $this->directorService->sections(Auth()->id());
+$dashboard = $this->directorService-> dashboard(Auth()->id());
+$higherOrLower=$this->directorService->higherOrLower(Auth()->id());
 return view('director.directorDashboard',compact("sections","dashboard","higherOrLower"));
 
     }
@@ -44,7 +45,7 @@ return view('director.directorDashboard',compact("sections","dashboard","higherO
             ->join('users as prof', 'sec.user_id', '=', 'prof.id')
             ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
             ->join('surveys as s', 'sb.survey_id', '=', 's.id')
-            ->where('sc.director_id', 65) 
+            ->where('sc.director_id', Auth()->id()) 
             ->whereYear('s.dateStart', now()->year)
             ->select(
                 'prof.name as professorName',
@@ -95,7 +96,6 @@ public function directorStudentView($sectionId){
             ->whereYear('s.created_at', now()->year)
             ->select(
                 'c.name as course',
-                'sec.code as section',
                 'sb.id as submitId',
                 'prof.name as professorName',
                 'u.name as student',
@@ -192,7 +192,7 @@ public function directorStudentView($sectionId){
 public function directorPDF()
 {
     $thisYear = session()->pull('year', now()->year);
-  $user = User::with('school.courses.professor')->find(64);    
+  $user = User::with('school.courses.professor')->find(auth()->id());    
   $data = DB::table('survey_submits as sb')
         ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
         ->join('courses as c', 'sb.course_id', '=', 'c.id')
@@ -240,7 +240,7 @@ $dataResults[] = [
 public function directorResultsExcel()
 {
     $thisYear = session()->pull('year', now()->year);
-    $user = User::with('school.courses.professor')->find(64);    
+    $user = User::with('school.courses.professor')->find(auth()->id());    
     $school_id = $user->school->id;
     $professors = $user->school->courses->pluck('professor')->unique();
 

@@ -23,7 +23,7 @@ class AcademicChargeController extends Controller
     ['name'=>'Director 3','id'=>388,'email'=>null,'role'=>'Director de Escuela'],
     ['name'=>'Director 4','id'=>459,'email'=>null,'role'=>'Director de Escuela'],
     ['name'=>'Director 5','id'=>40,'email'=>null,'role'=>'Director de Escuela'],
-    ['name'=>'Director 6','id'=>465,'email'=>null,'role'=>'Director de Escuela'],
+    ['name'=>'Director 6','id'=>465,'email'=>"joscar.garcia@usap.edu",'role'=>'Director de Escuela'],
     ['name'=>'Director 7','id'=>450,'email'=>null,'role'=>'Director de Escuela'],
     ['name'=>'Director 8','id'=>137,'email'=>null,'role'=>'Director de Escuela'],
     ['name'=>'Director 9','id'=>124,'email'=>null,'role'=>'Director de Escuela'],
@@ -87,7 +87,7 @@ DB::commit();
     }
      catch (\Exception $e) {
         DB::rollBack();
-        return redirtect()->back()->with('alert','Ha ocurrido un error durante la carga académica, por favor intente de nuevo.');
+        return redirect()->back()->with('alert','Ha ocurrido un error durante la carga académica, por favor intente de nuevo.');
 }
     return redirect()->back()->with('success','Carga académica realizada con éxito.');
     }

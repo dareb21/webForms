@@ -23,9 +23,9 @@ public function handdleCallBack()
     $googleUser = Socialite::driver('google')->stateless()->user();   
 
     //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/2240378@usap.edu/roles");
-    //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.garcia@usap.edu/roles");
+    $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.garcia@usap.edu/roles");
     //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.euceda@usap.edu/roles");
-  $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/rigoberto.paz@usap.edu/roles");
+  //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/rigoberto.paz@usap.edu/roles");
     
     $role = $roleApi->json();
         if(empty($role)){
@@ -38,8 +38,8 @@ public function handdleCallBack()
         }
          
          
-        $user = User::where('id', intval(explode('@',$googleUser->getEmail())[0]))->first();
-        //dd( $user,$googleUser->getEmail(),intval(explode('@',$googleUser->getEmail())[0]));
+        //$user = User::where('email', $googleUser->getEmail())->first();
+   $user = User::where('email', 'joscar.garcia@usap.edu')->first();
         if (!$user)
         {
             $user = User::create([

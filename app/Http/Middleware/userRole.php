@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class userRole
@@ -15,12 +16,14 @@ class userRole
      */
     public function handle(Request $request, Closure $next, ...$roleArray): Response
     { 
-        $user = (object) session('userInfo');
-
-         if (in_array($user->nameUser,$roleArray))
-            {
-                return $next($request);
-            }
-       return redirect()->route("unauthorized");
+      $user = Auth::user();
+    $userRole = $user->role;
+    
+    if (in_array($userRole, $roleArray)) {
+        return $next($request);
     }
+
+    return redirect()->route('unauthorized');
 }
+    }
+

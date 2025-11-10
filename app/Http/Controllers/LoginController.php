@@ -9,6 +9,7 @@ use App\Models\Enrollment;
 use App\Models\Survey;
 use App\Models\User;
 use App\Models\Section;
+use App\Services\StudentClasses;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -18,7 +19,7 @@ class LoginController extends Controller
     return Socialite::driver("google")->redirect();
     }
      
-public function handdleCallBack()
+public function handdleCallBack(StudentClasses $studentClasses)
 {
     $googleUser = Socialite::driver('google')->stateless()->user();   
 
@@ -31,47 +32,37 @@ public function handdleCallBack()
         if(empty($role)){
           return abort(401);
         }
-          $allowRoles = ['Alumno','Director de Docencia','Director de Escuela','Decano de Facultad'];
+        $roleName = $role[0]["Rol"];
+         $allowRoles = ['Alumno','Director de Docencia','Director de Escuela','Decano de Facultad'];
         
-        if (!in_array($role[0]["Rol"], $allowRoles)) {
-            return abort(401);
+       if (!in_array($roleName, $allowRoles)) {
+            return abort(403);
         }
+        $thisEmail = $googleUser->getEmail();
          
-         
-        //$user = User::where('email', $googleUser->getEmail())->first();
+        //$user = User::where('email', $thisEmail)->first();
    $user = User::where('email', 'joscar.garcia@usap.edu')->first();
         if (!$user)
         {
             $user = User::create([
                 'id' => intval(explode('@',$googleUser->getEmail())[0]),
-                'email'=>  $googleUser->getEmail(),   
+                'email'=>  $thisEmail,   
                 'name' => $googleUser->getName(),
-                'role' => 'Alumno',
+                'role' => "Alumno",
             ]);
         }
         Auth::login($user);
-        
-        switch ($role[0]["Rol"]) {
+        switch ($roleName) {
             case 'Alumno': 
-            $sectionsAPI = Http::get("https://melioris.usap.edu/api/evaldoc/v1/estudiantes/2240378@usap.edu/secciones");
-            $sections = collect($sectionsAPI->json());
-            $sectionId    = $sections->pluck('id');
-            $teacher = $sections->pluck('NOMBRE_CATEDRATICO');
-            $studentClasses=Section::join("courses","sections.course_id","courses.id")
-            ->join("users","sections.user_id","users.id")
-            ->whereIn("sections.id",$sectionId)
-            ->where("sections.status",1)
-            ->select("sections.id as sectionId","courses.name as courseName","users.name as teacherName")
-            ->get();
-                
-            session([    
+                $classes = $studentClasses->getClasses($thisEmail);
+                session([     
                 'userInfo' => [
                     'nameUser'  => $googleUser->getName(),
                     'email'     => $googleUser->getEmail(),
                     'avatar'   => $googleUser->getAvatar(),
-                    'courses'   => $studentClasses->pluck('courseName'),
-                    'coursesId' => $studentClasses->pluck('sectionId'),
-                    'teacher'   => $studentClasses->pluck('teacherName'),
+                    'courses'   => $classes->pluck('courseName'),
+                    'coursesId' => $classes->pluck('sectionId'),
+                    'teacher'   => $classes->pluck('teacherName'),
                 ]
             ]);
             Survey::CacheActiveSurvey();

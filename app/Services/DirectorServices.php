@@ -136,7 +136,6 @@ public function filter(Array $request)
                 'prof.id as professorId',
                 'c.name as courses',
                 'sec.id as sectionId',
-                'sec.code as sectionCode',
                 DB::raw('SUM(qo.calification) as totSurvey'),
                 DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
             )

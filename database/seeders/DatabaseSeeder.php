@@ -7,6 +7,7 @@ use App\Models\QuestionGroup;
 use App\Models\QuestionOption;
 use App\Models\SurveySubmit;
 use App\Models\ResponseSubmit;
+use App\Models\Role;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,15 +18,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-      
+/*
+        $roles = [
+    ["role" => "Alumno"],
+    ["role" => "Director de Docencia"],
+    ["role" => "Director de Escuela"],
+    ["role" => "Decano de Facultad"],
+    ["role" => "DCA"],
+];
+
+Role::insert($roles);
+*/
  Survey::create([
-            'revision' => 'Evaluacion #2 Mayo 2026',
-            'dateStart' => '2025-10-12',
-            'dateEnd' => '2025-11-12',
-            'Author' => 'admin1',
+            'revision' => 'Evaluacion #1 Enero 2025',
+            'dateStart' => '2025-01-12',
+            'dateEnd' => '2025-04-12',
+            'Author' => 'Rigoberto Paz',
             'term' => '1',
-            'status' =>1,
+            'status' =>0,
         ]);
+        
 //seeder question group
 for ($i=1; $i<=10;$i++)
 {
@@ -69,7 +81,7 @@ for ($i=1; $i<=10;$i++)
 
             QuestionOption::create([
                 'question_group_id' => $i,
-                'calification' => 1,
+                'calification' => 2,
                 'option' => $pos,
             ]);
 

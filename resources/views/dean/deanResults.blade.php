@@ -100,11 +100,6 @@
                                                                 <strong>Clase:</strong> {{ $course['course'] }}
                                                             </div>
 
-                                                            <!-- Columna 2: Sección -->
-                                                            <div class="text-left truncate">
-                                                                <strong>Sección:</strong> {{ $course['sectionCode'] }}
-                                                            </div>
-
                                                             <!-- Columna 3: Calificación -->
                                                             <div class="text-left truncate">
                                                                 <strong>Calificación:</strong>
@@ -117,7 +112,7 @@
                                                                     'courseId' => $course['sectionId'],
                                                                     'course' => $course['course'],
                                                                     'sectionId' => $course['sectionId'],
-                                                                    'sectionCode' => $course['sectionCode'],
+                                                                   
                                                                     'profesor' => $results['professorName'],
                                                                     'annualYear' => request('annualYear'),
                                                                     'annualPeriod' => request('annualPeriod'),

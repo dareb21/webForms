@@ -14,9 +14,11 @@ class AcademicChargeController extends Controller
 {
     public function charge()
     {
+
+  //AQUI IRA EL ENDPOINT DE SIGA PARA OBTENER EL PERDIODO ACADEMICO ACTUAL      
   DB::beginTransaction();
     try {
-
+    //Datos de directores y decanos hardcodeados temporalmente a la espera de la ruta de SIGA
   $directorsInfo =[
     ['name'=>'Juan Gabriel Garcia','email'=>'juan.garcia@usap.edu','id'=>58,'role'=>'Director de Escuela'],
     ['name'=>'Director 2','id'=>451,'email'=>null,'role'=>'Director de Escuela'],
@@ -46,8 +48,8 @@ $schools = $schoolsInfo
     ->values() // Se obtienen los valores
     ->all(); // Se convierte a array
  // Se insertan los datos en la tabla schools
-
-$response = Http::get('https://melioris.usap.edu/api/evaldoc/v1/periodo-academico/2025-2/oferta-academica');
+                                                                             //Aqui se pondra la respuesta del periodo academico actual   
+$response = Http::get('https://melioris.usap.edu/api/evaldoc/v1/periodo-academico/2025-1/oferta-academica');
 $chargeInfo = collect($response->json());
 $uniqueCourses = $chargeInfo
     ->unique('ID_CURSO')
@@ -87,6 +89,8 @@ DB::commit();
     }
      catch (\Exception $e) {
         DB::rollBack();
+        return response()->json($e);
+
         return redirect()->back()->with('alert','Ha ocurrido un error durante la carga académica, por favor intente de nuevo.');
 }
     return redirect()->back()->with('success','Carga académica realizada con éxito.');

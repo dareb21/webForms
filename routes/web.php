@@ -67,9 +67,9 @@ Route::middleware(['role:Director de Docencia'])->group(function() {
         });
     });
    
-    Route::get('/academicCharge',[AcademicChargeController::class, "charge"])->name("charge");
+  
 });
-
+  Route::get('/academicCharge',[AcademicChargeController::class, "charge"])->name("charge");
 
 Route::middleware(['role:Decano de Facultad'])->group(function() {
     Route::controller(DeanController::class)->group(function () {

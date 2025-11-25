@@ -21,7 +21,10 @@ class LoginController extends Controller
      
 public function handdleCallBack(StudentClasses $studentClasses)
 {
+    if (User::where("role","admin")->exists())
+
     $googleUser = Socialite::driver('google')->stateless()->user();   
+
 
     //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/2240378@usap.edu/roles");
     $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.garcia@usap.edu/roles");

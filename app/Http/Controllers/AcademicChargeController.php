@@ -15,25 +15,25 @@ class AcademicChargeController extends Controller
     public function charge()
     {
 
-  //AQUI IRA EL ENDPOINT DE SIGA PARA OBTENER EL PERDIODO ACADEMICO ACTUAL      
   DB::beginTransaction();
     try {
-    //Datos de directores y decanos hardcodeados temporalmente a la espera de la ruta de SIGA
-  $directorsInfo =[
-    ['name'=>'Juan Gabriel Garcia','email'=>'juan.garcia@usap.edu','id'=>58,'role'=>'Director de Escuela'],
-    ['name'=>'Director 2','id'=>451,'email'=>null,'role'=>'Director de Escuela'],
-    ['name'=>'Director 3','id'=>388,'email'=>null,'role'=>'Director de Escuela'],
-    ['name'=>'Director 4','id'=>459,'email'=>null,'role'=>'Director de Escuela'],
-    ['name'=>'Director 5','id'=>40,'email'=>null,'role'=>'Director de Escuela'],
-    ['name'=>'Director 6','id'=>465,'email'=>"joscar.garcia@usap.edu",'role'=>'Director de Escuela'],
-    ['name'=>'Director 7','id'=>450,'email'=>null,'role'=>'Director de Escuela'],
-    ['name'=>'Director 8','id'=>137,'email'=>null,'role'=>'Director de Escuela'],
-    ['name'=>'Director 9','id'=>124,'email'=>null,'role'=>'Director de Escuela'],
-    ['name'=>'Director 10','id'=>386,'email'=>null,'role'=>'Director de Escuela'],
-    ['name'=>'Rigoberto Paz','id'=>9999,'email'=>'rigoberto.paz@usap.edu','role'=>'Director de Docencia'],
-    ['name'=>'Juan Euceda','id'=>9998,'email'=>'juan.euceda@usap.edu','role'=>'Decano de Facultad'],
-    ];
+$currentTermAPI = Http::get('https://melioris.usap.edu/api/evaldoc/v1/periodo-actual');
+$currentTermJSON = $currentTermAPI->json();
+$currentTerm= $currentTermJSON[0]["periodo-actual"];
 
+$authoritiesApi = Http::get('https://melioris.usap.edu/api/evaldoc/v1/autoridades'); 
+$authoritiesJson = collect($authoritiesApi->json());
+$authoritiesInfo = $authoritiesJson
+    ->map(function ($item) { 
+        return [
+            'id'            =>  $item['id_usuario'], // Se saca el id del usuario
+            'name' => $item['nombre_usuario'], // Se saca el nombre completo
+            'email' => $item['email'],
+            'role'      => $item['rol_usuario'], // Se asigna el rol de director
+        ];
+    })
+    ->values() 
+    ->all(); 
     
 $schoolsApi = Http::get('https://melioris.usap.edu/api/evaldoc/v1/escuelas'); //Se obtiene la info de la api
 $schoolsInfo = collect($schoolsApi->json()); //Se convierte a colección
@@ -48,8 +48,8 @@ $schools = $schoolsInfo
     ->values() // Se obtienen los valores
     ->all(); // Se convierte a array
  // Se insertan los datos en la tabla schools
-                                                                             //Aqui se pondra la respuesta del periodo academico actual   
-$response = Http::get('https://melioris.usap.edu/api/evaldoc/v1/periodo-academico/2025-1/oferta-academica');
+                                                                                
+$response = Http::get('https://melioris.usap.edu/api/evaldoc/v1/periodo-academico/' . $currentTerm . '/oferta-academica');
 $chargeInfo = collect($response->json());
 $uniqueCourses = $chargeInfo
     ->unique('ID_CURSO')
@@ -67,6 +67,7 @@ $sectionsArray = collect($chargeInfo)->map(function ($item) {
         'id'       => $item['ID_SECCION'],
         'course_id'    => $item['ID_CURSO'],
         'user_id' => $item['CUENTA_CATEDRATICO'],
+        'dayHour' => $item['HORARIO_SECCION'],
     ];
 })->toArray();
 
@@ -79,7 +80,8 @@ $professorsArray = collect($chargeInfo)
             'role' => 'Catedrático',
         ];
     })->toArray();
-User::insert($directorsInfo);
+  
+User::insert($authoritiesInfo);
 School::insert($schools);
 Course::insert($uniqueCourses);
 User::insert($professorsArray);
@@ -93,6 +95,7 @@ DB::commit();
 
         return redirect()->back()->with('alert','Ha ocurrido un error durante la carga académica, por favor intente de nuevo.');
 }
+return response()->json('Carga académica realizada con éxito.');
     return redirect()->back()->with('success','Carga académica realizada con éxito.');
     }
 }

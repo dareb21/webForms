@@ -15,7 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id')->primary();
             $table->foreignId("course_id")->constrained();
             $table->foreignId("user_id")->constrained();
-            $table->string("dayHour");
+            $table->string("schedule");
             $table->boolean("status")->default(1);
             $table->timestamps();
           /*

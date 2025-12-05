@@ -27,28 +27,23 @@ class AcademicChargeController extends Controller
       
   $thisTermAPI = Http::get('https://melioris.usap.edu/api/evaldoc/v1/periodo-actual')->json();
   $thisTerm = $thisTermAPI[0]["periodo-actual"];
-  
+
   $schoolsData = $this->academicCharge->getSchoolData(); 
   $termClassesData =$this->academicCharge->getTermClassesData($thisTerm);
-  
-  return response()->json($termClassesData);
-
-User::insert($authoritiesInfo);
-School::insert($schools);
-Course::insert($uniqueCourses);
-User::insert($professorsArray);
-Section::insert($sectionsArray);
-
+  $authorities = $this->academicCharge->getAuthorities(); 
+  User::insert($authorities);
+School::insert($schoolsData);
+Course::insert($termClassesData["courses"]);
+User::insert($termClassesData["professors"]);
+Section::insert($termClassesData["sections"]);
 DB::commit();
     }
      catch (\Exception $e) {
         DB::rollBack();
-        return response()->json($e);
-
+     
         return redirect()->back()->with('alert','Ha ocurrido un error durante la carga académica, por favor intente de nuevo.');
 }
-return response()->json('Carga académica realizada con éxito.');
-    return redirect()->back()->with('success','Carga académica realizada con éxito.');
+   return redirect()->back()->with('success','Carga académica realizada con éxito.');
     }
 }
 

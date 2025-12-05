@@ -4,16 +4,22 @@ class SortService
 {
     public function sortSchools($schoolsArray)
     {
-        //Aqui si llego con un return
-    
      $schoolsSorted = [];
      foreach ($schoolsArray as $school)
         {
+            if ($school["ID_USUARIO"] == "386")
+                {
+                    $directorTemporal = 137;
+                }else
+                {
+                    $directorTemporal =$school["ID_USUARIO"];
+                }
+
             
         $schoolsSorted[]=[
             "id"=> $school["ID_ESCUELA"],
             "name"=> $school["DESCRIPCION_ESCUELA"],
-            "director_id"=> $school["ID_USUARIO"],
+            "director_id"=> $directorTemporal ? $directorTemporal: 88 ,
         ];  
     }
     
@@ -34,8 +40,9 @@ class SortService
 
         foreach ($classesArray as $class)
             {
-                return $class;
-                $professorId = $class["CUENTA_CATEDRATICO"];
+                
+            $professorId = $class["CUENTA_CATEDRATICO"];
+
                 if (!isset($validateProfessor[$professorId]))
                     {
                         $validateProfessor[$professorId]=true;
@@ -45,9 +52,58 @@ class SortService
                             "role"=>"Catedrático",    
                         ];  
                     }
-                return $professors;
-            }
+
+             
+            $courseId = $class["ID_CURSO"];
+
+            if (!isset($validateCourse[$courseId]))
+                {
+                $validateCourse[$courseId] = true;
+                $courses[]= [
+                    "id"=>$courseId,
+                    "name"=>$class["DESCRIPCION_CURSO"],
+                    "school_id"=>$class["ID_ESCUELA"],
+                ];
+           }           
+                
+            $sectionId = $class["ID_SECCION"];
+            if (!isset($validateSection[$sectionId]))
+                {
+                    $validateSection[$sectionId] = true;
+                    $sections[] = [
+                        
+                        "id" =>$sectionId,
+                        "course_id"=>$courseId,
+                        "user_id"=> $professorId,
+                        "schedule"=>$class["HORARIO_SECCION"],
+                    ];
+                }
+
+             }
         
+    return [
+        "professors"=>$professors,
+        "courses"=>$courses,
+        "sections"=>$sections,
+    ];
 
     }
+
+
+    public function sortAuthorities($authoritiesArray)
+        {
+            $authorities = [];
+
+            foreach ($authoritiesArray as $item)
+                {
+                    $authorities[] = [
+                        "id" =>$item["ID_USUARIO"],
+                        "name"=>$item["nombre_usuario"],
+                        "email"=>$item["email"],
+                        "role"=>$item["rol_usuario"],
+                    ];
+
+                }
+            return $authorities;
+        }
 }

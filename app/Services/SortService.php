@@ -28,7 +28,7 @@ class SortService
      
      
 
-    public function sortTermClasses($classesArray)
+    public function sortTermClasses($classesArray,$newTermId)
     {
         $validateProfessor = [];
         $validateCourse = [];
@@ -63,6 +63,7 @@ class SortService
                     "id"=>$courseId,
                     "name"=>$class["DESCRIPCION_CURSO"],
                     "school_id"=>$class["ID_ESCUELA"],
+                    "term_id"=>$newTermId,
                 ];
            }           
                 

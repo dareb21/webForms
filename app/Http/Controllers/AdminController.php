@@ -541,6 +541,7 @@ public function adminControlCourses()
 {
   $courses = [];
   $data = Section::with(["professor","course"])->paginate(10);
+
   if(!$data)
   {
     $noInfo = True;
@@ -552,7 +553,7 @@ public function adminControlCourses()
       "courseName" => $item->course->name,
       "courseProfessor"=>$item->professor->name,
       "sectionId" =>$item->id,
-      "sectionCode"=>$item->code,
+      "sectionSchedule"=>$item->schedule,
       "courseStatus"=>$item->status,
     ];
   }
@@ -600,7 +601,7 @@ if(!$data->section)
       "courseProfessor"=>$data->name,
       "sectionId" =>$item->id,
       "courseStatus"=>$item->status,
-      "sectionCode"=>$item->code,
+      "sectionSchedule"=>$item->schedule,
     ];
   }
   

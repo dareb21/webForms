@@ -84,7 +84,7 @@
                                             {{ $course['courseProfessor'] }}</td>
                                         <td class="border-b border-gray-400 px-4 py-2 text-center">{{ $course['courseName'] }}
                                         </td>
-                                        <td class="border-b border-gray-400 px-4 py-2 text-center">{{ $course['sectionCode'] }}</td>
+                                        <td class="border-b border-gray-400 px-4 py-2 text-center">{{ $course['sectionSchedule'] }}</td>
                                         @if ($course['courseStatus'] === 1)
                                             <td class="border-b border-gray-400 px-4 py-2 text-center">Activo</td>
                                         @else

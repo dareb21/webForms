@@ -22,12 +22,12 @@ class LoginController extends Controller
 public function handdleCallBack(StudentClasses $studentClasses)
 {
     $googleUser = Socialite::driver('google')->stateless()->user();   
-    $thisEmail = $googleUser->getEmail();
-
-    $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/2240378@usap.edu/roles");
+    //$thisEmail = $googleUser->getEmail();
+    $thisEmail = "rigoberto.paz@usap.edu";
+    //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/2240378@usap.edu/roles");
     //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.garcia@usap.edu/roles");
     //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.euceda@usap.edu/roles");
-  //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/rigoberto.paz@usap.edu/roles");
+  $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/rigoberto.paz@usap.edu/roles");
     
     $role = $roleApi->json();
         if(empty($role)){
@@ -40,8 +40,8 @@ public function handdleCallBack(StudentClasses $studentClasses)
             return abort(403);
         }
          
-        //$user = User::where('email', $thisEmail)->first();
-   $user = User::where('email', 'joscar.garcia@usap.edu')->first();
+        $user = User::where('email', $thisEmail)->first();
+   //$user = User::where('email', 'joscar.garcia@usap.edu')->first();
         if (!$user)
         {
             $user = User::create([

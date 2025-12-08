@@ -18,14 +18,8 @@ return new class extends Migration
             $table->string("schedule");
             $table->boolean("status")->default(1);
             $table->timestamps();
-          /*
-          Indexar los campos
-            $table->integer("term");
-            $table->integer("year");
-            $table->index('year');
-            $table->index('term');
-            $table->index(['term', 'year'], 'idx_term_year');
-        */ 
+             $table->softDeletes();
+          
             });
     }
 

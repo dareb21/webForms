@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("name");
             $table->foreignId('director_id')->constrained('users');
             $table->timestamps();
+             $table->softDeletes();
         });
     }
 

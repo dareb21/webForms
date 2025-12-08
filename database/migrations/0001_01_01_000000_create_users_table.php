@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->nullable()->unique();
             $table->string("role");
-            $table->timestamp('email_verified_at')->nullable();
             //$table->string('password');
             $table->rememberToken();
             $table->timestamps();
+             $table->softDeletes();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

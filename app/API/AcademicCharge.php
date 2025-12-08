@@ -3,6 +3,12 @@ namespace App\API;
 use Illuminate\Support\Facades\Http;
 use App\Services\SortService;
 use App\Services\ValidatedTerm;
+use Illuminate\Support\Facades\DB;
+use App\Models\School;
+use App\Models\Course;
+use App\Models\Section;
+use App\Models\User;
+
 
 class AcademicCharge
 {
@@ -39,9 +45,33 @@ class AcademicCharge
     $thisTermAPI = Http::get('https://melioris.usap.edu/api/evaldoc/v1/periodo-actual')->json();
   $thisTerm = $thisTermAPI[0]["periodo-actual"];
   return $this->validatedTerm->validatedTerm($thisTerm);
-
     }
 
+    public function updateCharge($authorities,$schoolsData,$termClassesData)
+    {
+        DB::beginTransaction();
+        try{
+            User::query()->delete();
+            School::query()->delete();
+            Course::query()->delete();
+            Section::query()->delete();
+        
+            User::insert($authorities);
+            School::insert($schoolsData);
+            Course::insert($termClassesData["courses"]);
+            User::insert($termClassesData["professors"]);
+            Section::insert($termClassesData["sections"]);
+
+        DB::commit();
+        
+    }
+        catch(\Exception $e)
+        {
+                DB::rollBack();
+                return false;
+        }
+        return true;
+    }
 
 
 }

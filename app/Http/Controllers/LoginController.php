@@ -46,7 +46,7 @@ public function handdleCallBack(StudentClasses $studentClasses)
         {
             $user = User::create([
                 'id' => intval(explode('@',$googleUser->getEmail())[0]),
-                'email'=>  $thisEmail,   
+                'email'=>  $googleUser->getEmail(),   
                 'name' => $googleUser->getName(),
                 'role' => "Alumno",
             ]);

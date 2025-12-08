@@ -30,7 +30,7 @@ if ($termInfo["exists"])
   $termClassesData =$this->academicCharge->getTermClassesData($termInfo);
   $authorities = $this->academicCharge->getAuthorities(); 
 
-$succesfullUpdate = $this->academicCharge->updateCharge($authorities, $schoolsData, $termClassesData);
+$succesfullUpdate = $this->academicCharge->updateCharge($authorities, $schoolsData, $termClassesData,$termInfo["newTermId"]);
 if (!$succesfullUpdate)
 {
     return redirect()->back()->with('alert','Ocurrio un error al actualizar la carga, intente nuevamente.'); 

@@ -210,14 +210,14 @@ $sumtot=0;
    }
 if ($sumtot!=20)
 {
-  return redirect()->back()->with('alert','La calificacion no cuadra con los 20 puntos, favor revise.')->withInput();
+  return redirect()->back()->with('alert','La calificacion no coincide con los 20 puntos, favor revise.')->withInput();
 }
     $survey = new Survey;
     $survey->revision= $request->evaluationName;
     $survey->dateStart = $request->dateStart;
     $survey->dateEnd = $request->dateEnd;
     $survey->term = $request->term;
-    $survey->author ="RIGOBERTO PAZ"; //Auth::user()->name;
+    $survey->author = Auth::user()->name;
     $survey->status = 0;
     $survey->save();
     $i=1;
@@ -259,7 +259,7 @@ $sumtot=0;
 
 if ($sumtot!=20)
 {
-  return redirect()->back()->with('alert','La calificacion no cuadra con los 20 puntos, favor revise.')->withInput();
+  return redirect()->back()->with('alert','La calificacion no coincide con los 20 puntos, favor revise.')->withInput();
 }
   $thisSurvey = Survey::findOrFail($request->surveyId);
   $dateNow = Carbon::now('etc/GMT+6');

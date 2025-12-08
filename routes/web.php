@@ -21,7 +21,7 @@ Route::get("/auth/callback",[LoginController::class,"handdleCallBack"]);
  
 
 Route::middleware(['role:Alumno'])->group(function() {
-#Rutas estudiantes
+
 Route::get('/studentDashboard', [StudentController::class,"studentDashboard"])->name("studentDashboard");
 Route::get('/studentEvaluation', [StudentController::class,"studentEvaluation"])->name("studentEvaluation");
 Route::post('/studentSubmit/{courseId}', [StudentController::class,"studentSubmit"])->name("studentSubmit");
@@ -30,7 +30,7 @@ Route::get('/studentThankyou', [StudentController::class,"studentThanks"])->name
 
 
 Route::middleware(['role:DCA'])->group(function() {
-#Rutas admin DCA
+
 Route::get('/adminDcaDashboard', [DcaController::class, "dcaDashboard"])->name("adminDcaDashboard");
 Route::get('/adminDcaResults', [DcaController::class, "dcaResults"])->name("adminDcaResults");
 Route::get('/adminDcaStudentView/{sectionId}', [DcaController::class, "dcaStudentView"])->name("adminDcaStudentView");
@@ -66,11 +66,9 @@ Route::middleware(['role:Director de Docencia'])->group(function() {
             Route::get('/excel', 'adminResultsExcel')->name('reporte.adminResultsExcel');
         });
     });
-   
-  
+   Route::get('/academicCharge',[AcademicChargeController::class, "charge"])->name("charge");  
 });
-  Route::get('/academicCharge',[AcademicChargeController::class, "charge"])->name("charge");
-
+  
 Route::middleware(['role:Decano de Facultad'])->group(function() {
     Route::controller(DeanController::class)->group(function () {
         Route::get('/deanDashboard', 'deanDashboard')->name('deanDashboard');

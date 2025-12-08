@@ -8,7 +8,7 @@ use App\Models\School;
 use App\Models\Course;
 use App\Models\Section;
 use App\Models\User;
-
+use App\Models\Term;
 
 class AcademicCharge
 {
@@ -47,7 +47,7 @@ class AcademicCharge
   return $this->validatedTerm->validatedTerm($thisTerm);
     }
 
-    public function updateCharge($authorities,$schoolsData,$termClassesData)
+    public function updateCharge($authorities,$schoolsData,$termClassesData,$newTerm)
     {
         DB::beginTransaction();
         try{
@@ -67,7 +67,8 @@ class AcademicCharge
     }
         catch(\Exception $e)
         {
-                DB::rollBack();
+           Term::where("id",$newTerm)->delete();
+                            DB::rollBack();
                 return false;
         }
         return true;

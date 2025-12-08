@@ -16,14 +16,22 @@ class userRole
      */
     public function handle(Request $request, Closure $next, ...$roleArray): Response
     { 
-      $user = Auth::user();
-    $userRole = $user->role;
-    
+
+        $user = Auth::user();
+
+        if (!$user )
+        {
+            return redirect()->route('login');
+        }
+
+      $userRole = $user->role;
+
     if (in_array($userRole, $roleArray)) {
         return $next($request);
     }
 
     return redirect()->route('unauthorized');
+    
 }
     }
 

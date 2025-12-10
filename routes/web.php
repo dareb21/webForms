@@ -11,9 +11,7 @@ use App\Http\Controllers\DcaController;
 use App\Http\Controllers\LogOutController;
 use App\Http\Controllers\AcademicChargeController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Route::get('/login',[LoginController::class,"login"])->name("login");
 Route::get("/auth/callback",[LoginController::class,"handdleCallBack"]);

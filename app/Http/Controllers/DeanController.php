@@ -156,7 +156,6 @@ public function deanResultsFilter(Request $request)
   $dataResults =$this->deanService->filterResults($request->all());
     if (!$dataResults)
     {
-        DD("NO HAY INFO");
      return redirect()->back()->with('alert','No hay info en ese período.');
     }
 

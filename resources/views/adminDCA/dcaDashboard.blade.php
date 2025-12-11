@@ -1,27 +1,5 @@
 @extends('adminDCA.adminDCALayout')
 @section('content')
-    @php
-        //Top Higher
-        $school1 = $topHigher[0]->NombreEscuela;
-        $class1 = $topHigher[0]->Entregas;
-
-        $school2 = $topHigher[1]->NombreEscuela;
-        $class2 = $topHigher[1]->Entregas;
-
-        $school3 = $topHigher[2]->NombreEscuela;
-        $class3 = $topHigher[2]->Entregas;
-
-        //Top Lower
-        $school1L = $topLower[0]->NombreEscuela;
-        $class1L = $topLower[0]->Entregas;
-
-        $school2L = $topLower[1]->NombreEscuela;
-        $class2L = $topLower[1]->Entregas;
-
-        $school3L = $topLower[2]->NombreEscuela;
-        $class3L = $topLower[2]->Entregas;
-
-    @endphp
 
     <!-- Main Content -->
     <!-- Chart de períodos -->
@@ -65,30 +43,31 @@
 
             <!-- Stats por período -->
             <div class="grid grid-rows-1 bg-orange-100 text-center sm:grid-rows-2 gap-4 md:w-64">
-                <!-- Escuelas con más clases -->
-                <div class="flex justify-center items-center bg-white p-2 rounded-lg shadow-md cursor-pointer hover:bg-green-50 transition"
-                    @click="showSchoolModal(
-                        'Escuelas con más clases Evaluadas',
-                        {{ json_encode([$school1, $school2, $school3]) }},
-                        {{ json_encode([$class1, $class2, $class3]) }}
-                    )">
-                    <p class="text-center font-bold text-gray-800 text-xl">
-                        Escuelas con más clases Evaluadas
-                    </p>
-                </div>
-
+    <!-- Escuelas con más clases -->
+    <div class="flex justify-center items-center bg-white p-2 rounded-lg shadow-md cursor-pointer hover:bg-green-50 transition"
+        @click="showSchoolModal(
+            'Escuelas con más clases Evaluadas',
+            {{ json_encode($topHigher->pluck('NombreEscuela')->take(3)) }},
+            {{ json_encode($topHigher->pluck('Entregas')->take(3)) }}
+        )">
+        
+        <p class="text-center font-bold text-gray-800 text-xl">
+            Escuelas con más clases Evaluadas
+        </p>
+    </div>
+</div>
                 <!-- Escuelas con menos clases -->
-                <div class="flex justify-center items-center bg-white p-2 rounded-lg shadow-md cursor-pointer hover:bg-red-50 transition"
-                    @click="showSchoolModal(
-                        'Escuelas con menos clases Evaluadas',
-                        {{ json_encode([$school1, $school2, $school3]) }},
-                        {{ json_encode([$class1, $class2, $class3]) }}
-                    )">
-                    <p class="text-center font-bold text-gray-800 text-xl">
-                        Escuelas con menos clases Evaluadas
-                    </p>
-                </div>
-            </div>
+            <!-- Escuelas con menos clases -->
+<div class="flex justify-center items-center bg-white p-2 rounded-lg shadow-md cursor-pointer hover:bg-red-50 transition"
+    @click="showSchoolModal(
+        'Escuelas con menos clases Evaluadas',
+        {{ json_encode($topLower->pluck('NombreEscuela')->take(3)) }},
+        {{ json_encode($topLower->pluck('Entregas')->take(3)) }}
+    )">
+    <p class="text-center font-bold text-gray-800 text-xl">
+        Escuelas con menos clases Evaluadas
+    </p>
+</div>
 
             <!-- Modal -->
             <div x-show="openModal" x-cloak x-transition

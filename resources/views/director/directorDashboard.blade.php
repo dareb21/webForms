@@ -16,7 +16,7 @@
             <!-- Gráfico principal -->
             <div class="bg-white rounded-lg shadow-md p-6 flex-1">
                 <div class="flex justify-between items-center mt-4 mb-4">
-                    <h2 class="text-2xl text-gray-800 font-bold">Bienvenido Administrador</h2>
+                    <h2 class="text-2xl text-gray-800 font-bold">Bienvenido Director</h2>
                 </div>
                 <div
                     class="flex flex-col md:flex-row justify-between md:items-center space-y-2 md:space-y-0 md:space-x-1 w-full mt-10 mb-2">

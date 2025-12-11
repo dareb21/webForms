@@ -23,20 +23,20 @@ public function handdleCallBack(StudentClasses $studentClasses)
 {
     $googleUser = Socialite::driver('google')->stateless()->user();   
     //$thisEmail = "2240378@usap.edu";
-    //$thisEmail = "juan.garcia@usap.edu";
     $thisEmail = "juan.euceda@usap.edu";
     //$thisEmail="rigoberto.paz@usap.edu";
     //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/2240378@usap.edu/roles");
-    //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.garcia@usap.edu/roles");
-    $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.euceda@usap.edu/roles");
-  //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/rigoberto.paz@usap.edu/roles");
+    $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.garcia@usap.edu/roles");
+    //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.euceda@usap.edu/roles");
+    //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/rigoberto.paz@usap.edu/roles");
     
     $role = $roleApi->json();
         if(empty($role)){
           return abort(401);
         }
         $roleName = $role[0]["Rol"];
-         $allowRoles = ['Alumno','Director de Docencia','Director de Escuela','Decano de Facultad'];
+       
+         $allowRoles = ['Alumno','Director de Docencia','Director de Escuela','Decano de Facultad','DCA'];
         
        if (!in_array($roleName, $allowRoles)) {
             return abort(403);
@@ -81,6 +81,10 @@ public function handdleCallBack(StudentClasses $studentClasses)
 
         case 'Decano de Facultad':
                return redirect()->route('deanDashboard');
+            break;
+
+        case 'DCA':
+               return redirect()->route('adminDcaDashboard');
             break;
         default:
             abort(401);

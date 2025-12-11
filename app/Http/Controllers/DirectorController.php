@@ -69,7 +69,6 @@ return view('director.directorDashboard',compact("sections","dashboard","higherO
                 "totPerCourse" => $totPerCourse
             ];            
       });
-      //Manejar excepcion de si no hay entregas
     $dataResults[] = [
         "professorName" => $sections->first()->professorName,
         "professorScoreAvg" =>  round($sections->pluck("totSurvey")->sum()  / $sections->pluck("totStudents")->sum()),
@@ -157,7 +156,6 @@ public function directorStudentView($sectionId){
     public function directorFilter(Request $request)
     {
         $dataResults = $this->directorService->filter($request->all()); 
-       
   if (!$dataResults)
     {
      return redirect()->back()->with('alert','No hay info en ese período.');

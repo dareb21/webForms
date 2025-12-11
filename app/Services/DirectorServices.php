@@ -27,9 +27,6 @@ return ["withSubmits" =>$sectionsWithSubmits,"sections" =>$allSections];
 
     public function dashboard($directorId)
     {
-
-  
-  
     $data = DB::table("surveys as s")
     ->join("survey_submits as sb", "s.id", "=", "sb.survey_id")
     ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
@@ -107,11 +104,11 @@ return ["lower10"=>$lower10,"higher15"=>$higher15];
 
 public function filter(Array $request)
 {
+    
     $dataResults = [];
     $thisProfessor= $request["catedraticoBusqueda"] ?? null ;
     $thisYear = $request["annualYear"] ?? null;
     $thisTerm = $request["annualPeriod"] ?? null;
-
     $data = DB::table('survey_submits as sb')
             ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
             ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
@@ -120,28 +117,28 @@ public function filter(Array $request)
             ->join('users as prof', 'sec.user_id', '=', 'prof.id')
             ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
             ->join('surveys as s', 'sb.survey_id', '=', 's.id') 
-            ->when($thisProfessor != null, function ($query) use ($thisProfessor) {
-            $query->where('schools.id', $thisSchool); //aqui que busque por el input
+            ->when($thisProfessor, function ($query) use ($thisProfessor) {
+                $query->where('prof.name', 'like', '%' . $thisProfessor . '%');
             })
-            ->when($thisYear != null, function ($query) use ($thisYear) {
-            $query->whereYear('s.dateStart', $thisYear);        
-        })
-       ->when($thisTerm != null && $thisTerm>0, function ($query) use ($thisTerm) {
-        $query->where('s.term', $thisTerm);
-    })
-            ->where('sc.director_id', 65) 
-            
+            ->when($thisYear, function ($query) use ($thisYear) {
+                $query->whereYear('s.dateStart', $thisYear);        
+             })
+            ->when($thisTerm && $thisTerm>0, function ($query) use ($thisTerm) {
+                $query->where('s.term', $thisTerm);
+            })
+
+            ->where('sc.director_id', Auth()->id()) 
             ->select(
                 'prof.name as professorName',
                 'prof.id as professorId',
                 'c.name as courses',
                 'sec.id as sectionId',
+                "sec.schedule as schedule",
                 DB::raw('SUM(qo.calification) as totSurvey'),
                 DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
             )
             ->groupBy('prof.id', 'sec.id')
             ->paginate(10);
-
             if ($data->isEmpty())
          {
             return False;       
@@ -153,7 +150,7 @@ public function filter(Array $request)
              $totPerCourse = round($i->totSurvey / $i->totStudents);
                 return [
                 "sectionId" => $i->sectionId,
-                "sectionCode" => $i->sectionCode,
+                "sectionCode" => $i->schedule,
                 "course" => $i->courses,
                 "totPerCourse" => $totPerCourse
             ];            

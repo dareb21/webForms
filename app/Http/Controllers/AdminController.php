@@ -187,9 +187,8 @@ $request->validate([
 ]);
 
   } catch (\Illuminate\Validation\ValidationException $e) {
-    return response()->json([
-        'errors' => $e->validator->errors(),
-    ], 422);
+   
+    return redirect()->back()->with('alert',$e->validator->errors());
   }
   $year = Carbon::parse($request->dateStart)->year;
   $thisYears = Survey::whereYear('dateStart', $year)->count();  
@@ -418,7 +417,8 @@ switch ($action){
         return redirect()->route("adminEvaluationEdited")->with(['datos' => $request->all()]);
                 break;
   default:
-        return response()->json("algo salio mal");
+        abort(401);
+        break;
 }
 
 

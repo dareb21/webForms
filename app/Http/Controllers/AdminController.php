@@ -368,7 +368,7 @@ public function reUseSurvey()
   $survey->revision= $request->evaluationName;
   $survey->dateStart = $request->dateStart;
   $survey->dateEnd = $request->dateEnd;
-  $survey->author = "admin1";
+  $survey->author = Auth::user()->name;
   $survey->term = $request->term;
   $survey->status = 0;
   $survey->save();
@@ -491,12 +491,13 @@ $data = DB::table('survey_submits as sb')
                     'prof.id as professorId',
                     'c.name as courses',
                     'sec.id as sectionId',
+                    'sec.schedule as schedule',
                 DB::raw('SUM(qo.calification) as totSurvey'),
                 DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
                 )
             ->groupBy('prof.name', 'sec.id')
         ->paginate(10);
-
+        
 if($data->isEmpty()){
   $noInfo = True;
   return view("admin.adminResults",compact("noInfo","years"));
@@ -516,7 +517,8 @@ if($data->isEmpty()){
                 return [
                     "sectionId" => $i->sectionId,
                     "course" => $i->courses,
-                    "totPerCourse" => $totPerCourse
+                    "totPerCourse" => $totPerCourse,
+                    "schedule" => $i->schedule,
                 ];
             });
             $coursesDataArray = $coursesData->toArray();
@@ -529,6 +531,7 @@ if($data->isEmpty()){
             [
             "dataResults"=>$dataResults
             ];
+
     return view("admin.adminResults",compact("adminResults","years"));}
 
   public function adminDelete($id){

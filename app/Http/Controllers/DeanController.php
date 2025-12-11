@@ -240,7 +240,7 @@ public function deanSchoolExcel() //ponerle parametro
             ->groupBy('sc.id', 's.id')
             ->get();
         $data = $dataQuery->values();
-        //PROBA CON UN MAP HACER ESTO
+
         foreach ($data as $item) {
             $school[] = [
                 "Name" => $item->schoolName,

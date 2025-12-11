@@ -33,16 +33,12 @@
                                 <div>
                                     <label for="annualYear">Año</label>
                                     <select name="annualYear" id="annualYear" class="shadow-md border border-gray-200">
-                                        @if (isset($noInfo) && $noInfo)
-                                            <option value="noInfo">None</option>
-                                        @else
                                         @foreach ($years as $year)
                                                 <option value="{{ $year->year }}"
                                                 {{ request('annualYear') == $year->year ? 'selected' : '' }}>
                                                 {{ $year->year }}
                                           </option>
                                         @endforeach
-                                        @endif
                                     </select>
 
                                     <label for="annualPeriod">Período</label>
@@ -122,6 +118,10 @@
                                                         <strong>Clase:</strong> {{ $courses['course'] }}
                                                     </div>
 
+                                                    <!-- Columna 2: Sección -->
+                                                    <div class="text-left truncate">
+                                                        <strong>Seccion:</strong> {{ $courses['schedule'] }}
+                                                    </div>
                                                     <!-- Columna 3: Calificación -->
                                                     <div class="text-left truncate">
                                                         <strong>Calificación:</strong> {{ $courses['totPerCourse'] }}

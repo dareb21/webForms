@@ -141,6 +141,7 @@ public function results()
                     'prof.id as professorId',
                     'c.name as courses',
                     'sec.id as sectionId',
+                    'sec.schedule as schedule',
                 DB::raw('SUM(qo.calification) as totSurvey'),
                 DB::raw("COUNT(DISTINCT sb.id) AS totStudents"),
                 )
@@ -164,7 +165,8 @@ if($data->isEmpty()){
                 return [
                     "sectionId" => $i->sectionId,
                     "course" => $i->courses,
-                    "totPerCourse" => $totPerCourse
+                    "totPerCourse" => $totPerCourse,
+                    "schedule" => $i->schedule,
                 ];
             });
             $coursesDataArray = $coursesData->toArray();
@@ -282,6 +284,7 @@ public function filterResults(Array $request)
     $thisYear = $request["anualYear"] ?? null;
     $thisTerm = $request["anualPeriod"] ?? null;
     $thisSchool = $request["schoolId"] ?? null;
+    
     $data = DB::table('survey_submits as sb')
             ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
             ->join('sections as sec', 'sb.section_id', '=', 'sec.id')

@@ -23,9 +23,6 @@
                             <thead>
                                 <tr>
                                     <th class="border-b border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">
-                                        Estudiante
-                                    </th>
-                                    <th class="border-b border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">
                                         Calificación
                                     </th>
                                     <th class="border-b border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">
@@ -36,9 +33,6 @@
                             <tbody>
                                 @foreach ($adminStudentView['adminStudentView'] as $resultado)
                                     <tr>
-                                        <td class="border-b border-gray-400 px-4 py-2 text-center">
-                                            {{ $resultado['nameStudent'] }}
-                                        </td>
                                         <td class="border-b border-gray-400 px-4 py-2 text-center">
                                             {{ $resultado['score'] }}
                                         </td>
@@ -61,8 +55,8 @@
                                                             class="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl">
                                                             &times;
                                                         </button>
-                                                        <h2 class="text-xl font-bold mb-4">Evaluación de
-                                                            {{ $resultado['nameStudent'] }}</h2>
+                                                        <h2 class="text-xl font-bold mb-4">Respuestas de evaluación 
+                                                          </h2>
 
                                                         <!-- Spinner -->
                                                         <template x-if="loading">

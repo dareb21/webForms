@@ -17,7 +17,6 @@
                     <table class="table-auto border border-gray-400 w-full min-w-[600px] text-left">
                         <thead>
                             <tr>
-                                <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Estudiante
                                 </th>
                                 <th class="border border-gray-400 px-4 py-2 text-center bg-blue-600 text-white">Puntuación
                                 </th>
@@ -27,7 +26,6 @@
                         <tbody>
                             @foreach ($resultados as $results)
                                 <tr>
-                                    <td class="border border-gray-400 px-4 py-2 text-center">{{ $results['nameStudent'] }}
                                     </td>
                                     <td class="border border-gray-400 px-4 py-2 text-center">{{ $results['score'] }}</td>
                                     <!-- Agrega este bloque dentro de tu <td> en la tabla -->

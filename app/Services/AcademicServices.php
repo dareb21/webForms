@@ -195,7 +195,6 @@ public function studentView($sectionId)
                 'c.name as course',
                 'sb.id as submitId',
                 'prof.name as professorName',
-                'u.name as student',
                 DB::raw('SUM(qo.calification) as scoreStudent'),
             )
             ->groupBy('prof.name', 'c.name', 'submitId')
@@ -210,7 +209,6 @@ public function studentView($sectionId)
                 "score" => $item->scoreStudent,
                 "profesor" => $item->professorName,
                 "course" => $item->course,
-                "nameStudent" => $item->student,  
                 "submitId" => $item->submitId,
             ];
         }

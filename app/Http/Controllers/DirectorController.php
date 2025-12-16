@@ -27,9 +27,9 @@ class DirectorController extends Controller
 
     public function directorDashboard(){
         $sections = $this->directorService->sections(Auth()->id());
-$dashboard = $this->directorService-> dashboard(Auth()->id());
-$higherOrLower=$this->directorService->higherOrLower(Auth()->id());
-return view('director.directorDashboard',compact("sections","dashboard","higherOrLower"));
+        $dashboard = $this->directorService-> dashboard(Auth()->id());
+        $higherOrLower=$this->directorService->higherOrLower(Auth()->id());
+    return view('director.directorDashboard',compact("sections","dashboard","higherOrLower"));
 
     }
 
@@ -87,7 +87,6 @@ public function directorStudentView($sectionId){
             ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
             ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
             ->join("courses as c", "sec.course_id", "=", "c.id")
-            ->join('users as u', 'sb.user_id', '=', 'u.id')
             ->join('users as prof', 'sec.user_id', '=', 'prof.id')
            ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
             ->join('surveys as s', 'sb.survey_id', '=', 's.id')
@@ -97,7 +96,6 @@ public function directorStudentView($sectionId){
                 'c.name as course',
                 'sb.id as submitId',
                 'prof.name as professorName',
-                'u.name as student',
                 DB::raw('SUM(qo.calification) as scoreStudent'),
             )
             ->groupBy('prof.name', 'c.name', 'submitId')
@@ -111,7 +109,6 @@ public function directorStudentView($sectionId){
                 "score" => $item->scoreStudent,
                 "profesor" => $item->professorName,
                 "course" => $item->course,
-                "nameStudent" => $item->student,
                 "submitId" => $item->submitId,
             ];
         }

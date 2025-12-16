@@ -8,6 +8,16 @@
         #$section = $userInfo['section'];
     @endphp
 
+    @if (session('alert'))
+        <script>
+            Swal.fire({
+                title: "Preguntas sin responder",
+                text: {!! json_encode(session('alert')) !!},
+                icon: "error"
+            });
+        </script>
+    @endif
+
     <main class="flex-1 ml-0 md:ml-80 p-6 bg-gray-200 min-h-[calc(100vh-4rem)] overflow-auto">
         <section class="bg-white rounded-xl shadow-lg p-6">
             <!-- Título -->

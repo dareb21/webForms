@@ -710,4 +710,22 @@ public function adminResultsExcel()
   return Excel::download(new adminResultsExcel($resultados), 'reporteAdmin-resultados.xlsx');
 }
 
+public function negativeIndicator($sectionId)
+{
+$badIndicator =  DB::table('response_submits as rs')
+    ->select(
+        'qo.option as badIndicator',
+        DB::raw('COUNT(qo.option) as timesChosen')
+    )
+    ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+    ->join('survey_submits as sb', 'rs.survey_submit_id', '=', 'sb.id')
+    ->join('sections as section', 'sb.section_id', '=', 'section.id')
+    ->where('qo.calification', 0)
+    ->where('section.id', $sectionId)
+    ->groupBy('qo.id')
+    ->get();
+
+    return response()->json($badIndicator);
+}
+
 }

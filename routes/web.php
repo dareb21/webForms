@@ -64,6 +64,7 @@ Route::middleware(['role:Director de Docencia'])->group(function() {
             Route::get('/SearchCourses', 'searchCourse')->name('searchCourse');
             Route::get('/pdf', 'exportarResultadosPDF')->name('admin.adminPDF');
             Route::get('/excel', 'adminResultsExcel')->name('reporte.adminResultsExcel');
+            Route::get('/badIndicator/{sectionId}', 'negativeIndicator')->name('negativeIndicator');
         });
     });
    Route::get('/academicCharge',[AcademicChargeController::class, "charge"])->name("charge");  

@@ -22,13 +22,13 @@ class LoginController extends Controller
 public function handdleCallBack(StudentClasses $studentClasses)
 {
     $googleUser = Socialite::driver('google')->stateless()->user();   
-    $thisEmail = "2240378@usap.edu";
+    //$thisEmail = "2240378@usap.edu";
     //$thisEmail = "juan.euceda@usap.edu";
-    //$thisEmail="rigoberto.paz@usap.edu";
-    $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/2240378@usap.edu/roles");
+    $thisEmail="rigoberto.paz@usap.edu";
+    //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/2240378@usap.edu/roles");
     //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.garcia@usap.edu/roles");
     //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.euceda@usap.edu/roles");
-    //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/rigoberto.paz@usap.edu/roles");
+    $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/rigoberto.paz@usap.edu/roles");
     
     $role = $roleApi->json();
         if(empty($role)){

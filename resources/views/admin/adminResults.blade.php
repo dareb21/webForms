@@ -110,7 +110,10 @@
                                     <td colspan="4" class="py-2 bg-gray-50 text-sm">
                                         <div class="flex flex-col items-center gap-y-3">
                                             @foreach ($resultado['coursesData'] as $courses)
-                                                <div
+                                                <div x-data="{ modalOpen: false, modalData: null, baseUrl: '{{ url("admin/badIndicator") }}', fetchIndicators(sectionId){ fetch(`${this.baseUrl}/${sectionId}`)
+                                                                    .then(res => res.json())
+                                                                    .then(data => { this.modalData = data; this.modalOpen = true })
+                                                                    .catch(err => { this.modalData = { error: err.message }; this.modalOpen = true }) } }"
                                                     class="w-full max-w-4xl grid grid-cols-4 gap-x-6 items-center border border-gray-200 rounded px-4 py-2 bg-white shadow-sm">
 
                                                     <!-- Columna 1: Clase -->
@@ -126,9 +129,15 @@
                                                     <div class="text-left truncate">
                                                         <strong>Calificación:</strong> {{ $courses['totPerCourse'] }}
                                                     </div>
+                                                    
 
-                                                    <!-- Columna 4: Botón Ver más -->
-                                                    <div class="text-right">
+                                                    <!-- Columna 4: Botones -->
+                                                    <div class="text-right flex justify-end items-center">
+                                                        <button type="button" @click="fetchIndicators({{ $courses['sectionId'] }})"
+                                                            class="px-2 py-0.5 bg-red-600 text-white rounded-sm hover:bg-red-700 text-xs mr-2 transition whitespace-nowrap">
+                                                            Indicadores afectados
+                                                        </button>
+
                                                         <a href="{{ route('adminStudentView', [
                                                             'courseId' => $courses['sectionId'],
                                                             'course' => $courses['course'],
@@ -139,6 +148,19 @@
                                                             class="px-2 py-0.5 bg-blue-600 text-white rounded-sm hover:bg-blue-700 text-xs transition whitespace-nowrap">
                                                             Ver más
                                                         </a>
+                                                    </div>
+                                                    <!-- Modal: Indicadores afectados -->
+                                                    <div x-show="modalOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center">
+                                                        <div class="absolute inset-0 bg-black/50" @click="modalOpen = false; modalData = null"></div>
+                                                        <div class="bg-white rounded-lg shadow-lg max-w-3xl w-full mx-4 p-4 z-10">
+                                                            <div class="flex justify-between items-center mb-2">
+                                                                <h3 class="font-bold">Indicadores afectados</h3>
+                                                                <button type="button" class="text-sm text-gray-600 hover:text-gray-900" @click="modalOpen = false; modalData = null">Cerrar</button>
+                                                            </div>
+                                                            <div class="max-h-80 overflow-auto text-sm">
+                                                                <pre class="whitespace-pre-wrap text-xs"> <code x-text="JSON.stringify(modalData, null, 2)"></code> </pre>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -157,4 +179,37 @@
             </div>
         </div>
     </div>
+    <script>
+        function adminAnswers() {
+            return {
+                open: false,
+                loading: false,
+                answers: [],
+                observation: '',
+
+                fetchAnswers(submitId) {
+                    this.open = true;
+                    this.loading = true;
+                    fetch(`/admin/ViewAnswer/${submitId}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            this.observation = '';
+                            this.answers = data.filter(item => item.indicator);
+                            const obsItem = data.find(item => item.observation);
+                            if (obsItem) {
+                                this.observation = obsItem.observation;
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            this.answers = [];
+                            this.observation = '';
+                        })
+                        .finally(() => {
+                            this.loading = false;
+                        });
+                }
+            }
+        }
+    </script>
 @endsection

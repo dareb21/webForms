@@ -441,18 +441,17 @@ public function adminViewAnswer($submitId)
 }
 
 public function adminResults(){
-
-  $adminResults =  $this->adminService->results();
-  if ($adminResults === false)
-  {
-    $noInfo=true;
-    return view('admin.adminResults',compact("noInfo"));
-  }
   $years = Survey::selectRaw("YEAR(dateStart) as year")
     ->distinct()
     ->orderBy('year', 'desc')
     ->get();
 
+  $adminResults =  $this->adminService->results();
+  if ($adminResults === false)
+  {
+    $noInfo=true;
+    return view('admin.adminResults',compact("noInfo","years"));
+  }
 
   return view('admin.adminResults',compact("adminResults","years"));}
 

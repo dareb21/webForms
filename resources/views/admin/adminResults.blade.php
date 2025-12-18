@@ -110,12 +110,27 @@
                                     <td colspan="4" class="py-2 bg-gray-50 text-sm">
                                         <div class="flex flex-col items-center gap-y-3">
                                             @foreach ($resultado['coursesData'] as $courses)
-                                                <div x-data="{ modalOpen: false, modalData: null, baseUrl: '{{ url("admin/badIndicator") }}', fetchIndicators(sectionId){ fetch(`${this.baseUrl}/${sectionId}`)
-                                                                    .then(res => res.json())
-                                                                    .then(data => { this.modalData = data; this.modalOpen = true })
-                                                                    .catch(err => { this.modalData = { error: err.message }; this.modalOpen = true }) } }"
-                                                    class="w-full max-w-4xl grid grid-cols-4 gap-x-6 items-center border border-gray-200 rounded px-4 py-2 bg-white shadow-sm">
+                                          <div
+                                                   x-data="{
+                                                     modalOpen: false,
+                                                     modalData: null,
+                                                    baseUrl: '{{ url('admin/badIndicator') }}',
 
+        fetchIndicators(sectionId) {
+            fetch(`${this.baseUrl}/${sectionId}`)
+                .then(res => res.json())
+                .then(data => {
+                    this.modalData = data;
+                    this.modalOpen = true;
+                })
+                .catch(err => {
+                    this.modalData = { error: err.message };
+                    this.modalOpen = true;
+                });
+        }
+    }"
+    class="w-full max-w-4xl grid grid-cols-4 gap-x-6 items-center border border-gray-200 rounded px-4 py-2 bg-white shadow-sm"
+>
                                                     <!-- Columna 1: Clase -->
                                                     <div class="text-left truncate">
                                                         <strong>Clase:</strong> {{ $courses['course'] }}
@@ -158,7 +173,45 @@
                                                                 <button type="button" class="text-sm text-gray-600 hover:text-gray-900" @click="modalOpen = false; modalData = null">Cerrar</button>
                                                             </div>
                                                             <div class="max-h-80 overflow-auto text-sm">
-                                                                <pre class="whitespace-pre-wrap text-xs"> <code x-text="JSON.stringify(modalData, null, 2)"></code> </pre>
+                                                                <template x-if="modalData && modalData.error">
+                                                                    <div class="text-red-600" x-text="modalData.error"></div>
+                                                                </template>
+
+                                                                <template x-if="modalData && Array.isArray(modalData)">
+                                                                    <table class="min-w-full table-auto text-sm">
+                                                                        <thead class="bg-gray-100">
+                                                                            <tr>
+                                                                                <th class="px-3 py-2 text-left">Indicador</th>
+                                                                                <th class="px-3 py-2 text-left">Veces seleccionado</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <template x-for="(item, idx) in modalData" :key="idx">
+                                                                                <tr class="border-t">
+                                                                                    <td class="px-3 py-2" x-text="item.badIndicator"></td>
+                                                                                    <td class="px-3 py-2" x-text="item.timesChosen"></td>
+                                                                                </tr>
+                                                                            </template>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </template>
+
+                                                                <template x-if="modalData && !Array.isArray(modalData) && !modalData.error">
+                                                                    <table class="min-w-full table-auto text-sm">
+                                                                        <thead class="bg-gray-100">
+                                                                            <tr>
+                                                                                <th class="px-3 py-2 text-left">Indicador</th>
+                                                                                <th class="px-3 py-2 text-left">Veces seleccionado</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr class="border-t">
+                                                                                <td class="px-3 py-2" x-text="modalData.badIndicator"></td>
+                                                                                <td class="px-3 py-2" x-text="modalData.timesChosen"></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </template>
                                                             </div>
                                                         </div>
                                                     </div>

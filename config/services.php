@@ -39,4 +39,13 @@ return [
 'client_secret' => env('GOOGLE_CLIENT_SECRET'),
 'redirect' => env('GOOGLE_REDIRECT_URI'),
 ],
+
+"siga"=>[
+"client_id"=> env("SIGA_CLIENT_ID"),
+"client_secret"=> env("SIGA_CLIENT_SECRET"),
+"refresh_token"=> env("RERESH_TOKEN"),
+"grant_type"=> env("GRANT_TYPE"),
+"token_path"=> env("TOKEN_PATH"),
+],
+
 ];

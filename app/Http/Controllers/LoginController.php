@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
-use App\Models\Enrollment;
 use App\Models\Survey;
 use App\Models\User;
-use App\Models\Section;
 use App\Services\StudentClasses;
+use App\Services\ApiToken;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -19,17 +18,14 @@ class LoginController extends Controller
     return Socialite::driver("google")->redirect();
     }
      
-public function handdleCallBack(StudentClasses $studentClasses)
+public function handdleCallBack(StudentClasses $studentClasses, ApiToken $apiToken)
 {
     $googleUser = Socialite::driver('google')->stateless()->user();   
-    //$thisEmail = "2240378@usap.edu";
-    //$thisEmail = "juan.euceda@usap.edu";
-    $thisEmail="rigoberto.paz@usap.edu";
-    //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/2240378@usap.edu/roles");
-    //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.garcia@usap.edu/roles");
-    //$roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/juan.euceda@usap.edu/roles");
-    $roleApi = Http::get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/rigoberto.paz@usap.edu/roles");
     
+    $token = $apiToken->getToken();
+    dd( $token);
+    $roleApi = Http::withToken($token)->get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/". $googleUser->getEmail() ."/roles");
+        
     $role = $roleApi->json();
         if(empty($role)){
           return abort(401);
@@ -41,12 +37,11 @@ public function handdleCallBack(StudentClasses $studentClasses)
        if (!in_array($roleName, $allowRoles)) {
             return abort(403);
         }
-         
+        $thisEmail = $googleUser->getEmail();     
         $user = User::where('email', $thisEmail)->first();
         if (!$user)
         {
             $user = User::create([
-                //'id' => intval(explode('@',$googleUser->getEmail())[0]),
                 'id' => intval(explode('@',$thisEmail)[0]),
                 'email'=>  $thisEmail,   
                 'name' => $googleUser->getName(),

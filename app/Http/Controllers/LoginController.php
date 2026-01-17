@@ -23,7 +23,6 @@ public function handdleCallBack(StudentClasses $studentClasses, ApiToken $apiTok
     $googleUser = Socialite::driver('google')->stateless()->user();   
     
     $token = $apiToken->getToken();
-    dd( $token);
     $roleApi = Http::withToken($token)->get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/". $googleUser->getEmail() ."/roles");
         
     $role = $roleApi->json();

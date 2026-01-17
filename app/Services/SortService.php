@@ -7,19 +7,11 @@ class SortService
      $schoolsSorted = [];
      foreach ($schoolsArray as $school)
         {
-            if ($school["ID_USUARIO"] == "386")
-                {
-                    $directorTemporal = 137;
-                }else
-                {
-                    $directorTemporal =$school["ID_USUARIO"];
-                }
-
             
         $schoolsSorted[]=[
             "id"=> $school["ID_ESCUELA"],
             "name"=> $school["DESCRIPCION_ESCUELA"],
-            "director_id"=> $directorTemporal ? $directorTemporal: 88 ,
+            "director_id"=> $school["ID_USUARIO"] ,
         ];  
     }
     

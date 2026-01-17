@@ -3,6 +3,7 @@ namespace App\API;
 use Illuminate\Support\Facades\Http;
 use App\Services\SortService;
 use App\Services\ValidatedTerm;
+use App\Services\ApiToken;
 use Illuminate\Support\Facades\DB;
 use App\Models\School;
 use App\Models\Course;
@@ -12,37 +13,34 @@ use App\Models\Term;
 
 class AcademicCharge
 {
-    protected SortService $sortService;
-    protected ValidatedTerm $validatedTerm;
-
-    public function __construct(SortService $sortService, validatedTerm $validatedTerm)
+    private $token;
+    public function __construct(private SortService $sortService, private validatedTerm $validatedTerm, private ApiToken $apiToken)
     {
-        $this->sortService = $sortService;
-        $this->validatedTerm = $validatedTerm;
+        $this->token = $this->apiToken->getToken();
     }
 
     public function getSchoolData()
     {
-        $schoolApiResponse = Http::get("https://melioris.usap.edu/api/evaldoc/v1/escuelas")->json();
+        $schoolApiResponse = Http::withToken($this->token)->get("https://melioris.usap.edu/api/evaldoc/v1/escuelas")->json();
       return $this->sortService->sortSchools($schoolApiResponse);                
     }
 
     public function getTermClassesData($termInfo)
     {
-        $termClassesApiResponse = Http::get("https://melioris.usap.edu/api/evaldoc/v1/periodo-academico/".$termInfo["newTerm"]."/oferta-academica")->json();
+        $termClassesApiResponse = Http::withToken($this->token)->get("https://melioris.usap.edu/api/evaldoc/v1/periodo-academico/".$termInfo["newTerm"]."/oferta-academica")->json();
         return  $this->sortService->sortTermClasses($termClassesApiResponse,$termInfo["newTermId"]);
          
     }
 
     public function getAuthorities()
     {   
-     $authoritiesApiResponse= Http::get("https://melioris.usap.edu/api/evaldoc/v1/autoridades")->json();
+     $authoritiesApiResponse= Http::withToken($this->token)->get("https://melioris.usap.edu/api/evaldoc/v1/autoridades")->json();
     return $this->sortService->sortAuthorities($authoritiesApiResponse);
     }
 
     public function validatedTerm()
     {
-    $thisTermAPI = Http::get('https://melioris.usap.edu/api/evaldoc/v1/periodo-actual')->json();
+    $thisTermAPI = Http::withToken($this->token)->get('https://melioris.usap.edu/api/evaldoc/v1/periodo-actual')->json();
   $thisTerm = $thisTermAPI[0]["periodo-actual"];
   return $this->validatedTerm->validatedTerm($thisTerm);
     }

@@ -11,7 +11,7 @@ class SortService
         $schoolsSorted[]=[
             "id"=> $school["ID_ESCUELA"],
             "name"=> $school["DESCRIPCION_ESCUELA"],
-            "director_id"=> $school["ID_USUARIO"] ,
+            "director_id"=> $school["ID_USUARIO"] ? $school["ID_USUARIO"] : 88,
         ];  
     }
     

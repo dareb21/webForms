@@ -77,7 +77,8 @@ foreach ($repliesSended as $clave => $valor) {
         "question_option_id"=>Str::after($clave,"option_"),
         ];
     }
-
+try {
+    \DB::beginTransaction();    
  $surveySubmit=SurveySubmit::create([
         "DateSubmmited"=>now(),
         "survey_id"=>$thisSurvey->id,
@@ -91,6 +92,13 @@ foreach ($replies as &$reply) {
    }
     unset($reply);
     ResponseSubmit::insert($replies);
+    \DB::commit();
+    
+    } catch (\Exception $e) {
+    \DB::rollBack();
+    return redirect()->back()->with('alert',"Ocurrió un error al enviar la encuesta. Por favor, inténtelo de nuevo.");
+}
+
     return redirect()->route("studentThanks");
 
     }

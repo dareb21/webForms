@@ -23,7 +23,7 @@ class AcademicChargeController extends Controller
   $termInfo = $this->academicCharge->validatedTerm();
   if ($termInfo["exists"])
   {
-    return response()->json(['message' => 'Ya se realizo la carga academico para este periodo.'], 400);
+
      return redirect()->back()->with('alert','Ya se realizo la carga academico para este periodo.');
   }
 

@@ -66,6 +66,7 @@ class AcademicCharge
         catch(\Exception $e)
         {
            Term::where("id",$newTerm)->delete();
+           throw new \Exception("Error updating academic charge: " . $e->getMessage());
                             DB::rollBack();
                 return false;
         }

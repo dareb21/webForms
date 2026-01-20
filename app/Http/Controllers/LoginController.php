@@ -32,7 +32,7 @@ public function handdleCallBack(StudentClasses $studentClasses, ApiToken $apiTok
         }
         $roleName = $role[0]["Rol"];
        
-         $allowRoles = ['Alumno','Director de Docencia','Director de Escuela','Decano de Facultad','DCA'];
+         $allowRoles = ['Alumno','Director de Docencia','Director de Escuela','Decano de Facultad','Docente Coordinador de Área'];
         
        if (!in_array($roleName, $allowRoles)) {
             return abort(403);
@@ -78,7 +78,7 @@ public function handdleCallBack(StudentClasses $studentClasses, ApiToken $apiTok
                return redirect()->route('deanDashboard');
             break;
 
-        case 'DCA':
+        case 'Docente Coordinador de Área':
                return redirect()->route('adminDcaDashboard');
             break;
         default:

@@ -23,20 +23,7 @@
                     <div class="text-gray-700 font-bold">
                         <h3>Satisfacción por períodos</h3>
                     </div>
-                    <div>
-                        <label for="schoolSegmentation" class="text-gray-700 font-bold">Segmentación: </label>
-                        <form action="{{ route('deanDashboard') }}" method="GET" class="inline-block">
-                            <select name="schoolSegmentation" id="schoolSegmentation" onchange="this.form.submit()"
-                                class="rounded-sm p-1 md:w-80 shadow-md">
-                                {{-- @foreach ($schoolInfo['schoolsInfo'] as $school)
-                                    <option value="{{ $school['id'] }}"
-                                        {{ request('schoolSegmentation') == $school['id'] ? 'selected' : '' }}>
-                                        {{ $school['name'] }}
-                                    </option>
-                                @endforeach --}}
-                            </select>
-                        </form>
-                    </div>
+                    
                 </div>
                 <div class="flex justify-center items-center">
                     <div class="w-full h-full md:max-w-[700px] md:h-[350px] relative">

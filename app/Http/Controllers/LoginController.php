@@ -81,6 +81,10 @@ public function handdleCallBack(StudentClasses $studentClasses, ApiToken $apiTok
         case 'Docente Coordinador de Área':
                return redirect()->route('adminDcaDashboard');
             break;
+        
+        case 'Vicerrector Académico':
+               return redirect()->route('deanDashboard');
+            break;    
         default:
             abort(401);
             break;

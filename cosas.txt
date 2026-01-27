@@ -1,9 +1,0 @@
--Descargar archivo
--Actualizar Nombre,desc del archivo
--Borrar (Abogado)
-
-Admin
--Mostrar los usuarios ------Listo
--Editar ------Nombre,correo, numero, rol
--Registar uno nuevo ---- listo 
--Borrarlos----Listo

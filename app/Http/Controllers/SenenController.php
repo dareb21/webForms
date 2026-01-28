@@ -139,7 +139,39 @@ class SenenController extends Controller
 
     public function deanStudentView($sectionId)
     {
-        $resultados = $this->deanService->studentView($sectionId); 
+       $data = DB::table('survey_submits as sb')
+            ->join('response_submits as rs', 'sb.id', '=', 'rs.survey_submit_id')
+            ->join('sections as sec', 'sb.section_id', '=', 'sec.id')
+            ->join("courses as c", "sec.course_id", "=", "c.id")
+            ->join('users as u', 'sb.user_id', '=', 'u.id')
+            ->join('users as prof', 'sec.user_id', '=', 'prof.id')
+            ->join('question_options as qo', 'rs.question_option_id', '=', 'qo.id')
+            ->join('surveys as s', 'sb.survey_id', '=', 's.id')
+            ->where('sec.id', $sectionId)
+            ->whereYear('s.created_at', now()->year)
+            ->select(
+                'c.name as course',
+                "u.name as studentName",
+                'sb.id as submitId',
+                'prof.name as professorName',
+                DB::raw('SUM(qo.calification) as scoreStudent'),
+            )
+            ->groupBy('prof.name', 'c.name', 'submitId')
+            ->paginate(10);
+
+        if ($data->isEmpty()) {
+            return $noInfo = True; 
+        }
+
+        foreach ($data as $item) {
+            $resultados[] = [
+                "student" => $item->studentName,
+                "score" => $item->scoreStudent,
+                "profesor" => $item->professorName,
+                "course" => $item->course,
+                "submitId" => $item->submitId,
+            ];
+        }
         return view('Senen.SenenStudentView', compact("resultados"));
     }
 

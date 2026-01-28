@@ -29,9 +29,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($resultados['adminStudentView'] as $results)
+                            @foreach ($resultados as $results)
                                 <tr>
-                                  <td class="border-b border-gray-300 px-4 py-2 text-center">NOMBEW
+                                  <td class="border-b border-gray-300 px-4 py-2 text-center"> 
+                                        {{ $results['student'] }}
                                     </td>
                                     <td class="border-b border-gray-300 px-4 py-2 text-center">
                                         {{ $results['score'] }}

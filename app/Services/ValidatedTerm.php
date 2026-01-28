@@ -17,11 +17,11 @@ Class ValidatedTerm
             return ["exists"=>true];
 
          }else{
-            $newTerm = Term::create([
-                "term" => $thisTerm,
-            ]);
+            
+            $lastId = Term::latest('id')->value('id');
+            $newIdTerm = $lastId ? $lastId + 1 : 1;
 
-            return ["newTerm"=>$thisTerm,"newTermId"=>$newTerm->id,"exists"=>false];
+            return ["newTerm"=>$thisTerm,"newTermId"=>$newIdTerm,"exists"=>false];
          }
          
     }

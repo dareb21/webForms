@@ -10,7 +10,7 @@ use App\Http\Controllers\DeanController;
 use App\Http\Controllers\DcaController;
 use App\Http\Controllers\LogOutController;
 use App\Http\Controllers\AcademicChargeController;
-
+use App\Http\Controllers\SenenController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -85,6 +85,25 @@ Route::middleware(['role:Decano de Facultad'])->group(function() {
         Route::get('/dean/excel', 'deanSchoolExcel')->name('reporte.deanSchoolExcel');
 });
 });
+
+Route::middleware(['role:Vicerrector Académico'])->group(function () {
+    Route::prefix('senen')->controller(SenenController::class)->group(function () {
+            Route::get('/Dashboard', 'deanDashboard')->name('senen.dashboard');
+            Route::get('/Results/{schoolId}', 'deanResults')->name('senen.results');
+            Route::get('/Schools', 'deanSchools')->name('senen.schools');
+            Route::get('/StudentView/{sectionId}', 'deanStudentView')->name('senen.studentView');
+            Route::get('/ViewAnswer/{submitId}', 'deanViewAnswer')->name('senen.viewAnswer');
+            Route::get('/Schools/Filter', 'deanSchoolFilter')->name('senen.schools.filter');
+            Route::get('/Result/Filter', 'deanResultsFilter')->name('senen.results.filter');
+            Route::get('/LastFive', 'deanLastFive')->name('senen.lastFive');
+            Route::get('/pdf', 'deanSchoolPDF')->name('senen.school.pdf');
+            Route::get('/excel', 'deanSchoolExcel')->name('senen.school.excel');
+
+        });
+});
+
+
+
 
 Route::middleware(['role:Director de Escuela'])->group(function() {
 

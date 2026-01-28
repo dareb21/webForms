@@ -31,7 +31,7 @@ class AcademicChargeController extends Controller
   $termClassesData =$this->academicCharge->getTermClassesData($termInfo);
   $authorities = $this->academicCharge->getAuthorities(); 
 
-$succesfullUpdate = $this->academicCharge->updateCharge($authorities, $schoolsData, $termClassesData,$termInfo["newTermId"]);
+$succesfullUpdate = $this->academicCharge->updateCharge($authorities, $schoolsData, $termClassesData,$termInfo);
 if (!$succesfullUpdate)
 {
     return redirect()->back()->with('alert','Ocurrio un error al actualizar la carga, intente nuevamente.'); 

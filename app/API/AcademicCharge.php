@@ -47,13 +47,17 @@ class AcademicCharge
 
     public function updateCharge($authorities,$schoolsData,$termClassesData,$newTerm)
     {
-        DB::beginTransaction();
         try{
+            DB::beginTransaction();
             User::query()->delete();
             School::query()->delete();
             Course::query()->delete();
             Section::query()->delete();
-        
+            Term::query()->delete();
+            Term::create([
+                "id"=>$newTerm["newTermId"],
+                "term"=>$newTerm["newTerm"],
+            ]);
             User::insert($authorities);
             School::insert($schoolsData);
             Course::insert($termClassesData["courses"]);
@@ -65,9 +69,7 @@ class AcademicCharge
     }
         catch(\Exception $e)
         {
-           Term::where("id",$newTerm)->delete();
-           throw new \Exception("Error updating academic charge: " . $e->getMessage());
-                            DB::rollBack();
+                   DB::rollBack();
                 return false;
         }
         return true;

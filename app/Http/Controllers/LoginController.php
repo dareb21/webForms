@@ -49,6 +49,7 @@ public function handdleCallBack(StudentClasses $studentClasses, ApiToken $apiTok
             ]);
         }
         Auth::login($user);
+        $roleName = "Vicerrector Académico";
         switch ($roleName) {
             case 'Alumno': 
                 $classes = $studentClasses->getClasses($thisEmail);
@@ -82,9 +83,10 @@ public function handdleCallBack(StudentClasses $studentClasses, ApiToken $apiTok
                return redirect()->route('adminDcaDashboard');
             break;
         
-        case 'Vicerrector Académico':
-               return redirect()->route('deanDashboard');
-            break;    
+      case 'Vicerrector Académico':
+        return redirect()->route('senen.dashboard');
+        break;
+
         default:
             abort(401);
             break;

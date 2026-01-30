@@ -25,7 +25,22 @@ services:
       - ./docker-compose/nginx/app.conf:/etc/nginx/conf.d/default.conf
     networks:
       - laravel-network
-
+  db:
+    image: mysql:8.0
+    container_name: laravel-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: laravel_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: laravel_user
+      MYSQL_PASSWORD: password
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - laravel-network
 networks:
   laravel-network:
     driver: bridge
+
+volumes:
+  dbdata:

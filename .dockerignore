@@ -1,0 +1,21 @@
+node_modules
+vendor
+
+.env
+.env.backup
+.git
+.gitignore
+
+storage/logs/*.log
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*.php
+bootstrap/cache/*.php
+
+.DS_Store
+.vscode
+.idea
+docker-compose.yml
+Dockerfile
+Diagrama ER DB.pdf
+Docs.pdf

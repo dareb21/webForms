@@ -15,23 +15,20 @@ class userRole
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next, ...$roleArray): Response
-    { 
-      /*  $user = Auth::user();
+    {    
+        $user = Auth::user();
 
         if (!$user )
         {
             return redirect()->route('login');
         }
 
-      //$userRole = $user->role;
-        $userRole = "Director de Docencia";
+      $userRole = $user->role;
     if (in_array($userRole, $roleArray)) {
-      
+         return $next($request);
     }
-
     return redirect()->route('unauthorized');
-    */
-      return $next($request);
+   
 }
     }
 

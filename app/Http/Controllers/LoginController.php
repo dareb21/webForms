@@ -49,7 +49,6 @@ public function handdleCallBack(StudentClasses $studentClasses, ApiToken $apiTok
             ]);
         }
         Auth::login($user);
-        $roleName = "Vicerrector Académico";
         switch ($roleName) {
             case 'Alumno': 
                 $classes = $studentClasses->getClasses($thisEmail);

@@ -1,8 +1,6 @@
-
-FROM php:8.2-fpm
+FROM php:8.3-fpm
 
 WORKDIR /var/www
-
 
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -16,26 +14,26 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl \
+    nano \
     libonig-dev \
     libzip-dev \
     libicu-dev
 
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
-# Instalación correcta de la librería GD para PHP 8.2
+RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl intl
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-install gd
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-
 COPY . /var/www
 
-
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 EXPOSE 9000
 

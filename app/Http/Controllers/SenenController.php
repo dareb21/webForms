@@ -257,7 +257,8 @@ class SenenController extends Controller
 
         $dataQuery = DB::table("schools as sc")
             ->join("courses as c", "sc.id", "=", "c.school_id")
-            ->join("survey_submits as sb", "c.id", "=", "sb.course_id")
+            ->join("sections as sec","c.id","=","sec.course_id")
+            ->join("survey_submits as sb", "sec.id", "=", "sb.section_id")
             ->join("surveys as s", "sb.survey_id", "=", "s.id")
             ->join("response_submits as rs", "sb.id", "=", "rs.survey_submit_id")
             ->join("question_options as qo", "rs.question_option_id", "=", "qo.id")

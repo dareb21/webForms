@@ -21,7 +21,6 @@ class LoginController extends Controller
 public function handdleCallBack(StudentClasses $studentClasses, ApiToken $apiToken)
 {
     $googleUser = Socialite::driver('google')->stateless()->user();   
-
     $thisEmail = $googleUser->getEmail();
     $token = $apiToken->getToken();
     $roleApi = Http::withToken($token)->get("https://melioris.usap.edu/api/evaldoc/v1/usuarios/". $thisEmail."/roles");

@@ -29,7 +29,7 @@ Route::get('/studentThankyou', [StudentController::class,"studentThanks"])->name
 });
 
 
-Route::middleware(['role:DCA'])->group(function() {
+Route::middleware(['role:Docente Coordinador de Área'])->group(function() {
 
 Route::get('/adminDcaDashboard', [DcaController::class, "dcaDashboard"])->name("adminDcaDashboard");
 Route::get('/adminDcaResults', [DcaController::class, "dcaResults"])->name("adminDcaResults");

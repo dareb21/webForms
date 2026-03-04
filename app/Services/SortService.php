@@ -89,6 +89,10 @@ class SortService
 
             foreach ($authoritiesArray as $item)
                 {
+                    if ($item["ID_USUARIO"] == 88)
+                        {
+                            continue;
+                        }
                     $authorities[] = [
                         "id" =>$item["ID_USUARIO"],
                         "name"=>$item["nombre_usuario"],

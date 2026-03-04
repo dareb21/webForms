@@ -19,11 +19,10 @@ class AcademicChargeController extends Controller
     }
     public function charge()
     {
-  
   $termInfo = $this->academicCharge->validatedTerm();
   if ($termInfo["exists"])
   {
-
+      
      return redirect()->back()->with('alert','Ya se realizo la carga academico para este periodo.');
   }
 
